@@ -5,11 +5,8 @@ export default {
   base,
   // 站点级选项
   title: "BemoDB", // 网站标题
-  description: "BemoBemoBemoBemoBemo", // 网站描述
-
   themeConfig: {
     // 主题级选项
-    logo: '/logo.jpg',
     nav: [
       { text: "关于", link: "/about" },
       {
@@ -47,7 +44,7 @@ export default {
     },
     head: [
       // 配置网站的图标（显示在浏览器的 tab 上）
-      ["link", { rel: "jpg", href: `/logo.jpg` }],
+      ["link", { rel: "jpg", href: `${base}/logo.jpg` }],
     ],
   },
 };

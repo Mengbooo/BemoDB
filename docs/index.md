@@ -6,15 +6,28 @@ hero:
   text: Bolaxious's documentation library
   tagline: 技术 & 生活
   image:
-    src: docs\cat.png
+    src: ./public/cat.png
     alt: 小猫跑了
   actions:
     - theme: brand
-      text: Get Started
-      link: /bigFrontEnd/html/
+      text: 关于
+      link: /about
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/vuejs/vitepress
+      text: Github
+      link: https://github.com/mengbooo
+features:
+  - icon: 🛠️
+    title: Simple and minimal, always
+    details: Lorem ipsum...
+    link: /guide/start
+    linkText: 了解更多
+  - icon: ⚡️
+    title: Another cool feature
+    details: Lorem ipsum...
+  - icon: 🌞
+    title: Another cool feature
+    details: Lorem ipsum...
+
 ---
 
 <style>
