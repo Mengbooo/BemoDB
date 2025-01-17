@@ -6,7 +6,7 @@ hero:
   text: Bolaxious's documentation library
   tagline: 技术 & 生活
   image:
-    src: /cat.png
+    src: docs\cat.png
     alt: 小猫跑了
   actions:
     - theme: brand
