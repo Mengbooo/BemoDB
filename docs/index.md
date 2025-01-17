@@ -6,7 +6,7 @@ hero:
   text: Bolaxious's documentation library
   tagline: 技术 & 生活
   image:
-    src: ./public/cat.png
+    src: cat.png
     alt: 小猫跑了
   actions:
     - theme: brand
@@ -27,9 +27,7 @@ features:
   - icon: 🌞
     title: Another cool feature
     details: Lorem ipsum...
-
 ---
-
 <style>
 :root {
   --vp-home-hero-name-color: transparent;
