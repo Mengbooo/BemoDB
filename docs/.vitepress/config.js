@@ -1,3 +1,5 @@
+import { defineConfig } from 'vitepress'
+
 const base = "/BemoDB/"; 
 
 export default {
@@ -6,6 +8,7 @@ export default {
   // 站点级选项
   title: "BemoDB", // 网站标题
   themeConfig: {
+    logo: '/logo.jpg',
     // 主题级选项
     nav: [
       { text: "关于", link: "/about" },
@@ -44,7 +47,7 @@ export default {
     },
     head: [
       // 配置网站的图标（显示在浏览器的 tab 上）
-      ["link", { rel: "jpg", href: `${base}/logo.jpg` }],
+      ["link", { rel: "jpg", href: '/logo.jpg`'}],
     ],
   },
 };
