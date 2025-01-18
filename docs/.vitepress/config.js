@@ -1,5 +1,3 @@
-import { defineConfig } from 'vitepress'
-
 const base = "/BemoDB/"; 
 
 export default {
