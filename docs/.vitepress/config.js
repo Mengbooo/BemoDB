@@ -1,51 +1,51 @@
-const base = "/BemoDB/"; 
+const base = "/BemoDB/";
 
 export default {
   // 基础路径
   base,
   // 站点级选项
   title: "BemoDB", // 网站标题
+  head: [["link", { rel: "icon", href: "/base/logo.jpg" }]],
   themeConfig: {
-    logo: '/logo.jpg',
+    search: {
+      provider: "local",
+    },
+    logo: "/logo.jpg",
     // 主题级选项
     nav: [
-      { text: "关于", link: "/about" },
+      { text: "主页", link: "/" },
+      { text: "文档", link: "/doc" },
+      { text: "归档", link: "/archive" },
+      { text: "导航", link: "/nav" },
+    ],
+    sidebar: [
+      {text: "文档首页", link: "/doc"},
       {
-        text: "大前端",
+        text: "年记",
+        collapsed: false,
         items: [
-          { text: "html", link: "/bigFrontEnd/html/" },
-          { text: "css", link: "/bigFrontEnd/css/" },
-          { text: "js", link: "/bigFrontEnd/js/" },
+          { text: "2024:Teenager Forever", link: "/nianji/2024" },
+        ],
+      },
+      {
+        text: "随记",
+        collapsed: false,
+        items: [
+          { text: "构建之法", link: "/suiji/goujianzhifa" },
+        ],
+      },
+      {
+        text: "小研究",
+        collapsed: false,
+        items: [
+          { text: "Hello Halo —— 使用Halo搭建个人博客", link: "/xiaoyanjiu/halo" },
+          { text: "subtick简谈", link: "/xiaoyanjiu/subtick" },
         ],
       },
     ],
-    sidebar: {
-      "/bigFrontEnd/html/": {
-        text: "html",
-        items: [
-          { text: "html", link: "/bigFrontEnd/html/" },
-          { text: "html1", link: "/bigFrontEnd/html/html1" },
-          { text: "html2", link: "bigFrontEnd/html/html2" },
-        ],
-      },
-      "/bigFrontEnd/css/": {
-        text: "css",
-        items: [
-          { text: "css1", link: "/bigFrontEnd/css/css1" },
-          { text: "css2", link: "/bigFrontEnd/css/css2" },
-        ],
-      },
-      "/bigFrontEnd/js/": {
-        text: "js",
-        items: [
-          { text: "js1", link: "/bigFrontEnd/js/js1" },
-          { text: "js2", link: "/bigFrontEnd/js/js2" },
-        ],
-      },
+    footer: {
+      message: "Released under the MIT License.",
+      copyright: "Copyright © 2015-present Bolaxious",
     },
-    head: [
-      // 配置网站的图标（显示在浏览器的 tab 上）
-      ["link", { rel: "jpg", href: '/logo.jpg`'}],
-    ],
   },
 };

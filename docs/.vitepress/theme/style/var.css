@@ -12,4 +12,8 @@
     #3370ff 50%
   );
   --vp-home-hero-image-filter: blur(44px);
+
+  --vp-c-brand-1: #02c2bc; /* 设置字体的主题颜色固定为绿色 */
+  --vp-c-brand-2: #2af2ca;
+  --vp-c-brand-3: #12ffa0;
 }
