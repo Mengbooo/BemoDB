@@ -1,6 +1,6 @@
 import { RssPlugin, RSSOptions } from 'vitepress-plugin-rss'
 
-const baseUrl = 'https://mengbooo.github.io/BemoDB/';
+const baseUrl = 'https://mengbooo.github.io';
 const base = "/BemoDB/";
 const RSS:RSSOptions = {
   title: 'BemoDB',
