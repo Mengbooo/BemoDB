@@ -27,7 +27,6 @@ export default {
     nav: [
       { text: "主页", link: "/" },
       { text: "文档", link: "/doc" },
-      { text: "归档", link: "/archive" },
       { text: "导航", link: "/nav" },
     ],
     sidebar: [
@@ -36,22 +35,22 @@ export default {
         text: "年记",
         collapsed: false,
         items: [
-          { text: "2024:Teenager Forever", link: "/nianji/2024" },
+          { text: "2024:Teenager Forever", link: "/posts/2024" },
         ],
       },
       {
         text: "随记",
         collapsed: false,
         items: [
-          { text: "构建之法", link: "/suiji/goujianzhifa" },
+          { text: "构建之法", link: "/posts/goujianzhifa" },
         ],
       },
       {
         text: "小研究",
         collapsed: false,
         items: [
-          { text: "Hello Halo —— 使用Halo搭建个人博客", link: "/xiaoyanjiu/halo" },
-          { text: "subtick简谈", link: "/xiaoyanjiu/subtick" },
+          { text: "Hello Halo —— 使用Halo搭建个人博客", link: "/posts/halo" },
+          { text: "subtick简谈", link: "/posts/subtick" },
         ],
       },
     ],
