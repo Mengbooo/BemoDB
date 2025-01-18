@@ -35,22 +35,36 @@ export default {
         text: "年记",
         collapsed: false,
         items: [
-          { text: "2024:Teenager Forever", link: "/posts/2024" },
+          { text: "2024:Teenager Forever", link: "/posts/annals/2024" },
         ],
       },
       {
         text: "随记",
         collapsed: false,
         items: [
-          { text: "构建之法", link: "/posts/goujianzhifa" },
+          { text: "构建之法", link: "/posts/notes/goujianzhifa" },
         ],
       },
       {
         text: "小研究",
         collapsed: false,
         items: [
-          { text: "Hello Halo —— 使用Halo搭建个人博客", link: "/posts/halo" },
-          { text: "subtick简谈", link: "/posts/subtick" },
+          { text: "Hello Halo —— 使用Halo搭建个人博客", link: "/posts/research/halo" },
+          { text: "subtick简谈", link: "/posts/research/subtick" },
+        ],
+      },
+      {
+        text: "前端 | frontalk",
+        collapsed: false,
+        items: [
+          { text: "浅尝 VitePress 🤗", link: "/posts/frontalk/vitepress_easyUse" },
+        ],
+      },
+      {
+        text: "算法",
+        collapsed: false,
+        items: [
+          { text: "滑动窗口算法", link: "/posts/algorithm/sliding_window" },
         ],
       },
     ],
