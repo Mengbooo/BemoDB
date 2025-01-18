@@ -1,6 +1,5 @@
 ---
 layout: home
-
 hero:
   name: Bolaxious 的文档库
   text: Bolaxious's documentation library
@@ -37,5 +36,4 @@ features:
   --vp-home-hero-image-background-image: linear-gradient(-45deg, #4ad07d 50%, #3370ff 50%);
   --vp-home-hero-image-filter: blur(44px);
 }   
-
 </style>
