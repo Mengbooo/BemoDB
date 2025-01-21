@@ -68,10 +68,6 @@ export default {
         ],
       },
     ],
-    footer: {
-      message: "Released under the MIT License.",
-      copyright: "Copyright © 2025-present Bolaxious",
-    },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/mengbooo' },
       {
