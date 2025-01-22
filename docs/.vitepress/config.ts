@@ -58,6 +58,7 @@ export default {
         collapsed: false,
         items: [
           { text: "浅尝 VitePress 🤗", link: "/posts/frontalk/vitepress_easyUse" },
+          { text: "“头”里面有什么——HTML meta", link: "/posts/frontalk/somethingInHead" },
         ],
       },
       {
@@ -65,6 +66,13 @@ export default {
         collapsed: false,
         items: [
           { text: "滑动窗口算法", link: "/posts/algorithm/sliding_window" },
+        ],
+      },
+      {
+        text: "计算机网络",
+        collapsed: false,
+        items: [
+          { text: "HTTP 笔记", link: "/posts/csnet/http" },
         ],
       },
     ],

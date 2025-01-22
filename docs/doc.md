@@ -1,5 +1,6 @@
 # 你好
-这里是 `Bolaxious` 的文档库。
-::: tip
-Bolaxious这个名字，单纯是因为高中语文作文忘记了某个名人的名字而编篡出来的假名“博拉西奥斯”。结果作文意外的高分，语文老师让我当众读了我这一篇作文。。。
-:::
+这里是 `Bolaxious` 的文档库，用来存储一些有关于`技术|生活|读书`等方面的文章。
+> [!note]
+> Copyright © 2025 Bolaxious. All rights reserved.
+> 
+> **MIT** Licensed.
