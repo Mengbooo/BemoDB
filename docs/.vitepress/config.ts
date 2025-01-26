@@ -43,6 +43,7 @@ export default {
         collapsed: false,
         items: [
           { text: "构建之法", link: "/posts/notes/goujianzhifa" },
+          { text: "AI与中年人", link: "/posts/notes/AI&MiddleAged" },
         ],
       },
       {
@@ -65,6 +66,7 @@ export default {
         text: "算法",
         collapsed: false,
         items: [
+          { text: "相关资料", link: "/posts/algorithm/index" },
           { text: "滑动窗口算法", link: "/posts/algorithm/sliding_window" },
         ],
       },
@@ -72,6 +74,7 @@ export default {
         text: "计算机网络",
         collapsed: false,
         items: [
+          { text: "相关资料", link: "/posts/csnet/index" },
           { text: "HTTP 笔记", link: "/posts/csnet/http" },
         ],
       },
