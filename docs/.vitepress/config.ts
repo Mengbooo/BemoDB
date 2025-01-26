@@ -27,10 +27,10 @@ export default {
     nav: [
       { text: "主页", link: "/" },
       { text: "文档", link: "/doc" },
-      { text: "导航", link: "/nav" },
     ],
     sidebar: [
       {text: "文档首页", link: "/doc"},
+      {text: "导航", link: "/posts/nav"},
       {
         text: "年记",
         collapsed: false,
