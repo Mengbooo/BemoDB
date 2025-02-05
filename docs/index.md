@@ -1,6 +1,5 @@
 ---
 layout: home
-description: 这是 Bolaxious 的文档库，用于各种文章的存放.
 hero:
   name: Bolaxious 的文档库
   text: Bolaxious's documentation library

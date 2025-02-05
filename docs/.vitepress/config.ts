@@ -17,6 +17,7 @@ export default {
   // 站点级选项
   lastUpdated: true,
   title: "BemoDB", // 网站标题
+  description:'这是 Bolaxious 的文档库，用于各种文章的存放',
   head: [["link", { rel: "icon", href: "/base/logo.jpg" }]],
   themeConfig: {
     search: {
