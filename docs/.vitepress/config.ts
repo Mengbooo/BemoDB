@@ -44,6 +44,7 @@ export default {
         items: [
           { text: "构建之法", link: "/posts/notes/goujianzhifa" },
           { text: "AI与中年人", link: "/posts/notes/AI&MiddleAged" },
+          { text: "70% 问题：关于 AI 辅助编码的残酷真相", link: "/posts/notes/70_ai" },
         ],
       },
       {
