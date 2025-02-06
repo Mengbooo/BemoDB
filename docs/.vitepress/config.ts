@@ -73,6 +73,8 @@ export default {
               { text: "HTML、XHTML、HTMX、SGML、XML之间的关系", link: "/posts/frontalk/HTML/htmlHtmlxXhtml" },
               { text: "头里面有什么 - meta标签", link: "/posts/frontalk/HTML/somethingInHead" },
               { text: "URL简介", link: "/posts/frontalk/HTML/URL" },
+              { text: "HTML属性详解", link: "/posts/frontalk/HTML/attribute" },
+              { text: "HTML字符编码规则", link: "/posts/frontalk/HTML/encode" },
             ],
           },
           {
