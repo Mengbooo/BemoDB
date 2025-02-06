@@ -44,4 +44,4 @@ HTML里的meta标签是用来提供网页元数据（metadata）的，功能非�
 - `description`：定义文档的描述 —— 用于SEO，即是搜索用描述
 - `keywords`：定义文档的关键词 —— 用于SEO，即是搜索用关键词
 - `author`：定义文档的作者 —— 用于SEO，即是搜索用作者
-
+- `http-equiv`: 用来补充 HTTP 回应的头信息字段，如果服务器发回的 HTTP 回应缺少某个字段，就可以用它补充

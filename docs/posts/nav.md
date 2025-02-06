@@ -6,3 +6,4 @@
 
 - [dekrt.cn](https://dekrt.cn/)：神秘网址
 - [Frontalk](https://front-talk.com/)：一个包含前端学习路线、视频、资讯的个人网站.
+- [WindRunnerMax](https://blog.touchczy.top/#/)：优秀的博客
