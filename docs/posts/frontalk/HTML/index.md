@@ -1,3 +1,6 @@
-# HTML相关资料
+# HTML篇
 
-- [阮一峰的网道HTML教程](https://wangdoc.com/html/intro)
+复健和拓展HTML知识。
+::: tip
+文章中所有的代码，尽量在[Vue SFC Playground](https://play.vuejs.org/)中粘贴并查看效果
+:::
