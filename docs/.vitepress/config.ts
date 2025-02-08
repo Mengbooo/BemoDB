@@ -47,6 +47,7 @@ export default {
             text: "70% 问题：关于 AI 辅助编码的残酷真相",
             link: "/posts/notes/70_ai",
           },
+          { text: "CSS设计中的缺陷列表", link: "/posts/notes/mistakesOfCSS" },
         ],
       },
       {
@@ -70,18 +71,33 @@ export default {
             items: [
               { text: "HTML文档首页", link: "/posts/frontalk/HTML/index" },
               { text: "HTML基础", link: "/posts/frontalk/HTML/HTML" },
-              { text: "HTML、XHTML、HTMX、SGML、XML之间的关系", link: "/posts/frontalk/HTML/htmlHtmlxXhtml" },
-              { text: "头里面有什么 - meta标签", link: "/posts/frontalk/HTML/somethingInHead" },
+              {
+                text: "HTML、XHTML、HTMX、SGML、XML之间的关系",
+                link: "/posts/frontalk/HTML/htmlHtmlxXhtml",
+              },
+              {
+                text: "头里面有什么 - meta标签",
+                link: "/posts/frontalk/HTML/somethingInHead",
+              },
               { text: "URL简介", link: "/posts/frontalk/HTML/URL" },
               { text: "HTML属性详解", link: "/posts/frontalk/HTML/attribute" },
-              { text: "HTML5语义化标签", link: "/posts/frontalk/HTML/Semanticization" },
+              {
+                text: "HTML5语义化标签",
+                link: "/posts/frontalk/HTML/Semanticization",
+              },
               { text: "HTML文本标签", link: "/posts/frontalk/HTML/text" },
               { text: "HTML列表标签", link: "/posts/frontalk/HTML/list" },
               { text: "HTML图像标签", link: "/posts/frontalk/HTML/image" },
               { text: "HTML超链接", link: "/posts/frontalk/HTML/Hyperlinks" },
               { text: "HTML链接标签", link: "/posts/frontalk/HTML/link" },
-              { text: "script 与 noscript", link: "/posts/frontalk/HTML/script" },
-              { text: "HTML多媒体标签", link: "/posts/frontalk/HTML/multimedia" },
+              {
+                text: "script 与 noscript",
+                link: "/posts/frontalk/HTML/script",
+              },
+              {
+                text: "HTML多媒体标签",
+                link: "/posts/frontalk/HTML/multimedia",
+              },
               { text: "iframe 与 frame", link: "/posts/frontalk/HTML/iframe" },
               { text: "表格 table", link: "/posts/frontalk/HTML/table" },
               { text: "表单 form", link: "/posts/frontalk/HTML/form" },
@@ -89,10 +105,29 @@ export default {
             ],
           },
           {
+            text: "CSS",
+            collapsed: true,
+            items: [
+            ],
+          },
+          {
             text: "SSG",
             collapsed: true,
             items: [
-              { text: "浅尝VitePress🤗", link: "/posts/frontalk/SSG/vitepress_easyUse" },
+              {
+                text: "浅尝VitePress🤗",
+                link: "/posts/frontalk/SSG/vitepress_easyUse",
+              },
+            ],
+          },
+          {
+            text: "VCS HOST",
+            collapsed: true,
+            items: [
+              {
+                text: "Github",
+                link: "/posts/frontalk/VCS HOST/useGithub",
+              },
             ],
           },
         ],
