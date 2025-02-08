@@ -81,6 +81,11 @@ export default {
               { text: "HTML超链接", link: "/posts/frontalk/HTML/Hyperlinks" },
               { text: "HTML链接标签", link: "/posts/frontalk/HTML/link" },
               { text: "script 与 noscript", link: "/posts/frontalk/HTML/script" },
+              { text: "HTML多媒体标签", link: "/posts/frontalk/HTML/multimedia" },
+              { text: "iframe 与 frame", link: "/posts/frontalk/HTML/iframe" },
+              { text: "表格 table", link: "/posts/frontalk/HTML/table" },
+              { text: "表单 form", link: "/posts/frontalk/HTML/form" },
+              { text: "HTML5 新引入标签", link: "/posts/frontalk/HTML/other" },
             ],
           },
           {

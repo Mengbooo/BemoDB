@@ -6,7 +6,7 @@
 
 让我们通过一个完整的 URL 示例来分析其组成部分：
 
-```url
+``` txt
 https://www.example.com:80/path/to/myfile.html?key1=value1&key2=value2#anchor
 ```
 
@@ -71,7 +71,7 @@ decodeURIComponent('%E4%B8%AD%E5%9B%BD'); // "中国"
 - 以 `data:` 开头
 - 直接在 URL 中嵌入数据
 - 常用于小图片或简单文本
-```url
+``` txt
 data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==
 ```
 

@@ -8,7 +8,7 @@
 > 天下快意之事莫若友,快友之事莫若谈
 ::: details 友链申请
 如果想和我交换友链，可以<a href="mailto:bolaxious@163.com">发送邮件</a>给我，我将会在审核后添加你的博客到友链，留言格式如下：
-``` 申请格式
+``` txt
 name: 博客名字
 link: 博客地址
 desc: 站点的描述
@@ -19,7 +19,7 @@ desc: 站点的描述
 - Love & Peace
 ```
 如果你想添加本站至友链可以参考：
-``` 本站信息
+``` txt
 > name : BemoDB
 > link : https://mengbooo.github.io/BemoDB
 > desc : Bolaxious的文档库🥰
@@ -40,6 +40,7 @@ desc: 站点的描述
 - [🌋](https://github.com/jingyuhhh)
 - [🥟](https://www.mcjiaozi.com)
 - [Magren](https://magren.cc)
+- [LiuShen](https://blog.liushen.fun)
 
 ## 足迹 🥰
 
