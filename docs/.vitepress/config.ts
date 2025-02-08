@@ -30,8 +30,8 @@ export default {
       { text: "文档", link: "/doc" },
     ],
     sidebar: [
-      { text: "文档首页", link: "/doc" },
-      { text: "导航", link: "/posts/nav" },
+      { text: "你好", link: "/doc" },
+      { text: "导航", link: "/nav" },
       {
         text: "年记",
         collapsed: false,
