@@ -1,7 +1,7 @@
 # 导航
 
 ::: details 关于导航
-因为很懒不是很想写自定义的导航页，干脆就用默认文档+超链接吧，用于记录一些有趣的网站，或者一些有用的资源。
+因为不是很想写自定义的导航页，干脆就用默认文档+超链接吧，用于记录一些有趣的网站，或者一些有用的资源。
 :::
 
 ## 朋友们 🤗
@@ -46,3 +46,4 @@ desc: 站点的描述
 
 - [Frontalk](https://front-talk.com/)：一个包含前端学习路线、视频、资讯的个人网站.
 - [WindRunnerMax](https://blog.touchczy.top/#/)：优秀的博客
+- [talencat](https://talencat.com/resume)：简历生成器
