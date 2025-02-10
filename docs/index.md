@@ -14,6 +14,9 @@ hero:
     - theme: alt
       text: Github
       link: https://github.com/mengbooo
+    - theme: brand
+      text: Bemosite
+      link: https://bemosite.fun/
 features:
   - icon: 🛠️
     title: 关于网站
