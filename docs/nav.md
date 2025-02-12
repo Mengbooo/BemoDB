@@ -46,4 +46,4 @@ desc: 站点的描述
 
 - [Frontalk](https://front-talk.com/)：一个包含前端学习路线、视频、资讯的个人网站.
 - [WindRunnerMax](https://blog.touchczy.top/#/)：优秀的博客
-- [talencat](https://talencat.com/resume)：简历生成器
+- [talencat](https://talencat.com/)：简历生成器

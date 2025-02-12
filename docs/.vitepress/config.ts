@@ -34,12 +34,12 @@ export default {
       { text: "导航", link: "/nav" },
       {
         text: "年记",
-        collapsed: false,
+        collapsed: true,
         items: [{ text: "2024:Teenager Forever", link: "/posts/annals/2024" }],
       },
       {
         text: "随记",
-        collapsed: false,
+        collapsed: true,
         items: [
           { text: "构建之法", link: "/posts/notes/goujianzhifa" },
           { text: "AI与中年人", link: "/posts/notes/AI&MiddleAged" },
@@ -52,7 +52,7 @@ export default {
       },
       {
         text: "小研究",
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: "Hello Halo —— 使用Halo搭建个人博客",
@@ -63,7 +63,7 @@ export default {
       },
       {
         text: "前端 | frontalk",
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: "HTML",
@@ -108,6 +108,9 @@ export default {
             text: "CSS",
             collapsed: true,
             items: [
+              { text: "CSS文档首页", link: "/posts/frontalk/CSS/index" },
+              { text: "Why CSS", link: "/posts/frontalk/CSS/css_whyUseCSS" },
+              { text: "CSS选择器", link: "/posts/frontalk/CSS/css_selector" },
             ],
           },
           {
@@ -134,7 +137,7 @@ export default {
       },
       {
         text: "算法",
-        collapsed: false,
+        collapsed: true,
         items: [
           { text: "相关资料", link: "/posts/algorithm/index" },
           { text: "滑动窗口算法", link: "/posts/algorithm/sliding_window" },
@@ -142,7 +145,7 @@ export default {
       },
       {
         text: "计算机网络",
-        collapsed: false,
+        collapsed: true,
         items: [
           { text: "相关资料", link: "/posts/csnet/index" },
           { text: "HTTP 笔记", link: "/posts/csnet/http" },
