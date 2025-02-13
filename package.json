@@ -16,6 +16,7 @@
     "vitepress": "^1.5.0"
   },
   "dependencies": {
+    "busuanzi.pure.js": "^1.0.3",
     "esbuild": "^0.24.2",
     "vite": "^6.0.7",
     "vitepress-plugin-rss": "^0.3.0"

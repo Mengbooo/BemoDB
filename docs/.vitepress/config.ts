@@ -28,6 +28,7 @@ export default {
     nav: [
       { text: "主页", link: "/" },
       { text: "文档", link: "/doc" },
+      { text: "导航", link: "/nav" },
     ],
     sidebar: [
       { text: "你好", link: "/doc" },
@@ -111,6 +112,7 @@ export default {
               { text: "CSS文档首页", link: "/posts/frontalk/CSS/index" },
               { text: "Why CSS", link: "/posts/frontalk/CSS/css_whyUseCSS" },
               { text: "CSS选择器", link: "/posts/frontalk/CSS/css_selector" },
+              { text: "CSS盒模型", link: "/posts/frontalk/CSS/css_boxModel" },
             ],
           },
           {
@@ -124,7 +126,7 @@ export default {
             ],
           },
           {
-            text: "VCS HOST",
+            text: "VCS Hosting",
             collapsed: true,
             items: [
               {
