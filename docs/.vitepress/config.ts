@@ -141,6 +141,8 @@ export default {
                 text: "层叠、继承与优先级",
                 link: "/posts/FE/CSS/css_cascade",
               },
+              { text: "值与单位", link: "/posts/FE/CSS/css_value" },
+              { text: "调整大小", link: "/posts/FE/CSS/css_change" },
             ],
           },
           {
