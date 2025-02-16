@@ -143,6 +143,8 @@ export default {
               },
               { text: "值与单位", link: "/posts/FE/CSS/css_value" },
               { text: "调整大小", link: "/posts/FE/CSS/css_change" },
+              { text: "背景和边框", link: "/posts/FE/CSS/css_bg" },
+              { text: "处理溢出", link: "/posts/FE/CSS/css_overflow" },
             ],
           },
           {
