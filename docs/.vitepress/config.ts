@@ -165,6 +165,7 @@ export default {
               { text: "列表样式", link: "/posts/FE/CSS/css_list" },
               { text: "链接样式", link: "/posts/FE/CSS/css_a" },
               { text: "web字体", link: "/posts/FE/CSS/css_webFonts" },
+              { text: "intro to css layout", link: "/posts/FE/CSS/css_introToLayout" },
             ],
           },
           {
