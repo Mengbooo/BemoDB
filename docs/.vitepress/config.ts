@@ -87,6 +87,20 @@ export default {
         ],
       },
       {
+        text: "操作系统",
+        collapsed: true,
+        items: [
+          
+        ],
+      },
+      {
+        text: "软件工程",
+        collapsed: true,
+        items: [
+        
+        ],
+      },
+      {
         text: "前端",
         collapsed: true,
         items: [
@@ -145,6 +159,8 @@ export default {
               { text: "调整大小", link: "/posts/FE/CSS/css_change" },
               { text: "背景和边框", link: "/posts/FE/CSS/css_bg" },
               { text: "处理溢出", link: "/posts/FE/CSS/css_overflow" },
+              { text: "图像、表单元素的处理", link: "/posts/FE/CSS/css_multimedia" }, 
+              { text: "表格的处理", link: "/posts/FE/CSS/css_table" },
             ],
           },
           {
