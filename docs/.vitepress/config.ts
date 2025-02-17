@@ -161,6 +161,10 @@ export default {
               { text: "处理溢出", link: "/posts/FE/CSS/css_overflow" },
               { text: "图像、表单元素的处理", link: "/posts/FE/CSS/css_multimedia" }, 
               { text: "表格的处理", link: "/posts/FE/CSS/css_table" },
+              { text: "文本与字体", link: "/posts/FE/CSS/css_fonts" },
+              { text: "列表样式", link: "/posts/FE/CSS/css_list" },
+              { text: "链接样式", link: "/posts/FE/CSS/css_a" },
+              { text: "web字体", link: "/posts/FE/CSS/css_webFonts" },
             ],
           },
           {
