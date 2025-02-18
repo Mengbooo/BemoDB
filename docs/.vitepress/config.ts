@@ -68,6 +68,7 @@ export default {
             link: "/posts/research/halo",
           },
           { text: "subtick简谈", link: "/posts/research/subtick" },
+          { text: "something about Cursor", link: "/posts/research/cursor" },
         ],
       },
       {
@@ -166,6 +167,12 @@ export default {
               { text: "链接样式", link: "/posts/FE/CSS/css_a" },
               { text: "web字体", link: "/posts/FE/CSS/css_webFonts" },
               { text: "intro to css layout", link: "/posts/FE/CSS/css_introToLayout" },
+              { text: "浮动", link: "/posts/FE/CSS/css_float" },
+              { text: "定位", link: "/posts/FE/CSS/css_position" },
+              { text: "Flex", link: "/posts/FE/CSS/css_flex" },
+              { text: "Grid", link: "/posts/FE/CSS/css_grid" },
+              { text: "响应式设计", link: "/posts/FE/CSS/css_responsive" },
+              { text: "媒体查询入门", link: "/posts/FE/CSS/css_mediaQueries" },
             ],
           },
           {
