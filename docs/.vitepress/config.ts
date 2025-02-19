@@ -102,7 +102,7 @@ export default {
         ],
       },
       {
-        text: "前端",
+        text: "FrontEnd World",
         collapsed: true,
         items: [
           {
