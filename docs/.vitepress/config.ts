@@ -102,7 +102,7 @@ export default {
         ],
       },
       {
-        text: "FrontEnd World",
+        text: "Primary FrontEnd",
         collapsed: true,
         items: [
           {
@@ -183,12 +183,15 @@ export default {
                 text: "JavaScript 文档首页",
                 link: "/posts/FE/JavaScript/index",
               },
+              { text: "JavaScript 基础", link: "/posts/FE/JavaScript/js-grammar" },
             ],
           },
           {
             text: "Web API",
             collapsed: true,
-            items: [],
+            items: [
+              { text: "交互：alert、prompt 和 confirm", link: "/posts/FE/webAPI/interaction" },
+            ],
           },
           {
             text: "包管理器",
