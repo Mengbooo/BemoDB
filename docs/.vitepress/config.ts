@@ -89,7 +89,8 @@ export default {
         text: "计算机网络",
         collapsed: true,
         items: [
-          { text: "相关资料", link: "/posts/csnet/index" },
+          { text: "网络篇", link: "/posts/csnet/index" },
+          { text: "OSI七层模型简介", link: "/posts/csnet/OSI" },
           { text: "HTTP 笔记", link: "/posts/csnet/http" },
         ],
       },
