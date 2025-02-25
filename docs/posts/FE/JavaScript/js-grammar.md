@@ -470,6 +470,59 @@ alert( undefined == 0 ); // false (3)
 (3) 返回 false 是因为这是一个相等性检查，而 undefined 只与 null 相等，不会与其他值相等。
 :::
 
+## if 和 “？”
+if 和 “？”其实在C语言中已经学过了，这里就不写那么详细了。
+
+需要注意的是的是 “？” 的非常规使用：
+
+有时有人会使用问号 ? 来代替 if 语句：
+``` javascript
+let company = prompt('Which company created JavaScript?', '');
+
+(company == 'Netscape') ?
+   alert('Right!') : alert('Wrong.');
+```
+::: warning
+在这里我们不是把结果赋值给变量。而是根据条件执行不同的代码。
+
+**不建议这样使用问号运算符。**
+:::
+## 逻辑运算符
+JavaScript 中有四个逻辑运算符：||（或），&&（与），!（非），??（空值合并运算符）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
