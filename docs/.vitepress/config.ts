@@ -233,7 +233,10 @@ export default {
           {
             text: "Node",
             collapsed: true,
-            items: [],
+            items: [
+              { text: "Node.js 篇", link: "/posts/FE/node/index" },
+              { text: "Node.js 基础相关", link: "/posts/FE/node/base" },
+            ],
           },
           {
             text: "SSG",
