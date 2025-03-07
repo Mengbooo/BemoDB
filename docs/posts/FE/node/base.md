@@ -1,10 +1,11 @@
 # Node.js 基础相关
 
-## 是什么？
+## Nodejs 是什么？
 
 nodejs 并不是 JavaScript 应用，也不是编程语言，因为编程语言使用的 JavaScript,Nodejs 是 JavaScript 的运行时，也就是运行环境。采用事件驱动和非阻塞 I/O 的 设计理念，使用 npm 作为包管理工具，适合干一些 IO 密集型应用，不适合 CPU 密集型应用，nodejsIO 依靠 libuv 有很强的处理能力，而 CPU 因为 nodejs 单线程原因，容易造成 CPU 占用率高，如果非要做 CPU 密集型应用，可以使用 C++插件编写 或者 nodejs 提供的 cluster。
 
 ## 怎么安装
+网上随便搜都有教程，nodejs很多地方都要用。
 
 ## Npm Package json
 
@@ -108,3 +109,43 @@ npmrc 文件，全称为 npm running configuration，是 npm 的运行时**配�
 
 ## npx
 npx是一个命令行工具，它是npm 5.2.0版本中新增的功能。它允许用户在不安装全局包的情况下，运行已安装在本地项目中的包或者远程仓库中的包。这可以使开发人员更轻松地管理包的依赖关系，并且可以避免全局污染的问题。它还可以帮助开发人员在项目中使用不同版本的包，而不会出现版本冲突的问题。
+
+npx的使用场景 .e.g: [create-react-app 文档](https://create-react-app.bootcss.com/docs/getting-started)  因为这能始终保持使用最新版本（虽然说CRA已经被弃用了）
+
+此外，npx 的运行规则和npm 是一样的 本地目录查找 .bin 看有没有，如果没有就去全局的 node_moduels 查找，如果还没有就去下载这个包然后运行命令，然后删除这个包。
+
+## 发布 npm 包
+首先先检查一下是否是npm源（cnpm淘宝源发布不了，用npm get registry查一下源）然后创建一个npm账号，创建完成之后使用 npm login 登录账号,然后 npm publish 发布 npm 包（出现403说明包名被用过了）
+
+## npm私服
+搭建一个私有的npm仓库，一般来说每个公司都有自己的一个npm私服，从而内部共享。
+- 能离线使用
+- 提高安全性
+- 提高下载速度
+
+[Verdaccio](verdaccio.org/zh-CN/) 是可以帮我们快速构建npm私服的一个工具，可以通过执行：
+``` sh
+npm install verdaccio -g
+```
+相关的基本命令：
+``` sh
+#创建账号
+npm adduser --registry http://localhost:4873/
+# 账号 密码 邮箱
+
+# 发布npm
+npm publish --registry http://localhost:4873/
+
+#指定开启端口 默认 4873
+verdaccio --listen 9999
+
+# 指定安装源
+npm install --registry http://localhost:4873
+
+# 从本地仓库删除包
+npm unpublish <package-name> --registry http://localhost:4873
+```
+## 模块化（CJS、ESM）
+模块化的概念挺重要也比较晦涩，参考链接：
+- https://www.cnblogs.com/echoyya/p/14577243.html
+- https://zhuanlan.zhihu.com/p/143412753
