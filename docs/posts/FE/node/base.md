@@ -123,7 +123,7 @@ npx的使用场景 .e.g: [create-react-app 文档](https://create-react-app.boot
 - 提高安全性
 - 提高下载速度
 
-[Verdaccio](verdaccio.org/zh-CN/) 是可以帮我们快速构建npm私服的一个工具，可以通过执行：
+Verdaccio 是可以帮我们快速构建npm私服的一个工具，可以通过执行：
 ``` sh
 npm install verdaccio -g
 ```
