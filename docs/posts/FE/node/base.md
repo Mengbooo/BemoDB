@@ -5,7 +5,7 @@
 nodejs 并不是 JavaScript 应用，也不是编程语言，因为编程语言使用的 JavaScript,Nodejs 是 JavaScript 的运行时，也就是运行环境。采用事件驱动和非阻塞 I/O 的 设计理念，使用 npm 作为包管理工具，适合干一些 IO 密集型应用，不适合 CPU 密集型应用，nodejsIO 依靠 libuv 有很强的处理能力，而 CPU 因为 nodejs 单线程原因，容易造成 CPU 占用率高，如果非要做 CPU 密集型应用，可以使用 C++插件编写 或者 nodejs 提供的 cluster。
 
 ## 怎么安装
-网上随便搜都有教程，nodejs很多地方都要用。
+网上随便搜都有教程，因为node的使用场景非常广泛。
 
 ## Npm Package json
 
@@ -145,7 +145,22 @@ npm install --registry http://localhost:4873
 # 从本地仓库删除包
 npm unpublish <package-name> --registry http://localhost:4873
 ```
-## 模块化（CJS、ESM）
-模块化的概念挺重要也比较晦涩，参考链接：
-- https://www.cnblogs.com/echoyya/p/14577243.html
-- https://zhuanlan.zhihu.com/p/143412753
+## 模块化
+::: tip
+这部分比较重要，并且初次接触会不理解“模块化”这一概念，参考别人的文章:
+- [前端模块化详解(完整版)](https://segmentfault.com/a/1190000017466120)
+:::
+Node.js 的出现让我们可以用 JavaScript 来写服务端代码，而 Node 应用由模块组成，采用的是 CommonJS 模块规范，当然并非完全按照 CommonJS 来，它进行了取舍，增加了一些自身的特性（当然也可以使用ESM规范）
+
+Node内部提供一个Module构建函数。所有模块都是Module的实例，每个模块内部，都有一个module对象，代表当前模块。包含以下属性：
+- module.id 模块的识别符，通常是带有绝对路径的模块文件名。
+- module.filename 模块的文件名，带有绝对路径。
+- module.loaded 返回一个布尔值，表示模块是否已经完成加载。
+- module.parent 返回一个对象，表示调用该模块的模块。
+- module.children 返回一个数组，表示该模块要用到的其他模块。
+- module.exports 表示模块对外输出的值。
+
+Node 使用 CommonJS 模块规范，内置的require命令用于加载模块文件。
+第一次加载某个模块时，Node会缓存该模块。以后再加载该模块，就直接从缓存取出该模块的module.exports 属性。所有缓存的模块保存在 require.cache 之中。
+
+CommonJS 规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。由于 Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以 CommonJS 规范比较适用。如果是浏览器环境，要从服务器端加载模块，用 CommonJS 需要等模块下载完并运行后才能使用，将阻塞后面代码的执行，这时就必须采用非同步模式，因此浏览器端一般采用 AMD 规范，解决异步加载的问题。

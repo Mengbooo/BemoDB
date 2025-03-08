@@ -1,10 +1,24 @@
+<script setup>
+import { VPTeamMembers } from 'vitepress/theme'
+const members = [
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/96043667?v=4',
+    name: 'dekrt',
+    links: [
+      { icon: 'github', link: 'https://github.com/dekrt' },
+      { icon: 'rss', link: 'https://dekrt.cn' },
+    ]
+  },
+]
+</script>
+
 # 导航
 
 ::: details 关于导航
 因为不是很想写自定义的导航页，干脆就用默认文档+超链接吧，用于记录一些有趣的网站，或者一些有用的资源。
 :::
 
-## 朋友们 🤗
+### 朋友们 🤗
 > 天下快意之事莫若友,快友之事莫若谈
 ::: details 友链申请
 如果想和我交换友链，可以<a href="mailto:bolaxious@163.com">发送邮件</a>给我，我将会在审核后添加你的博客到友链，留言格式如下：
@@ -25,8 +39,10 @@ desc: 站点的描述
 > desc : Bolaxious的文档库🥰
 > avatar : https://avatars.githubusercontent.com/u/143786942?v=4
 ```
-
 ::: 
+<VPTeamMembers size="small" :members="members" />
+
+
 
 - [dekrt](https://dekrt.cn/)
 - [拆家大主教](https://buuug.top/)
@@ -42,7 +58,7 @@ desc: 站点的描述
 - [Magren](https://magren.cc)
 - [LiuShen](https://blog.liushen.fun)
 
-## 足迹 🥰
+### 足迹 🥰
 
 - [Frontalk](https://front-talk.com/)：一个包含前端学习路线、视频、资讯的个人网站.
 - [WindRunnerMax](https://blog.touchczy.top/#/)：优秀的博客
