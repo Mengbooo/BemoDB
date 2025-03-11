@@ -2,17 +2,19 @@
 
 ```yaml
 - 作业题目：操作系统课后实践作业_1
-- 姓名：邱梦博
-- 班级：软件2303
 - 日期：2025/3/6
 ```
 
-> 配置：VMware workstation pro 17.6.3 、ubuntukylin-22.04-pro-amd64 、Linux 6.13.5 内核
+> 配置：
+> - VMware workstation pro 17.6.3 
+> - ubuntukylin-22.04-pro-amd64
+> - Linux 6.13.5 内核
 
 下载地址：
- [CDS Repository - /var/www/public/stage/session-120/cds/vmw-desktop](https://softwareupdate.vmware.com/cds/vmw-desktop/)
- [mirrors.huaweicloud.com/ubuntukylin-cdimage/22.04/](https://mirrors.huaweicloud.com/ubuntukylin-cdimage/22.04/)
- [https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.13.5.tar.xz](https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.8.tar.xz)
+
+ - [CDS Repository - /var/www/public/stage/session-120/cds/vmw-desktop](https://softwareupdate.vmware.com/cds/vmw-desktop/)
+ - [mirrors.huaweicloud.com/ubuntukylin-cdimage/22.04/](https://mirrors.huaweicloud.com/ubuntukylin-cdimage/22.04/)
+ - [https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.13.5.tar.xz](https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.8.tar.xz)
 
 > 
 
