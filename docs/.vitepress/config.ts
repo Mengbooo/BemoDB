@@ -105,7 +105,9 @@ export default {
         text: "软件工程",
         collapsed: true,
         items: [
-        
+          { text: "导论", link: "/posts/software/base" },
+          { text: "软件过程", link: "/posts/software/process" },
+          { text: "敏捷开发", link: "/posts/software/agile-development" },
         ],
       },
       {
