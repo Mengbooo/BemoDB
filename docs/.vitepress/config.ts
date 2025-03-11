@@ -99,6 +99,7 @@ export default {
         collapsed: true,
         items: [
           { text: "操作系统课后作业 1", link: "/posts/os/hw_1/hw_1" },
+          { text: "[转载] 操作系统课后作业 1", link: "/posts/os/Q_hw_1/Q_hw_1" },
         ],
       },
       {
