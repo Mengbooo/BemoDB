@@ -685,12 +685,14 @@ let nickName = "Supercoder";
 // 显示第一个已定义的值：
 alert(firstName ?? lastName ?? nickName ?? "匿名"); // Supercoder
 ```
+
 ::: tip
+
 - || 返回第一个 **真** 值。
 - ?? 返回第一个 **已定义的** 值。
-:::
-::: warning 
-出于安全原因，JavaScript 禁止将 ?? 运算符与 && 和 || 运算符一起使用，除非使用括号明确指定了优先级。这个限制无疑是值得商榷的，它被添加到语言规范中是为了避免人们从 || 切换到 ?? 时的编程错误。
+  :::
+  ::: warning
+  出于安全原因，JavaScript 禁止将 ?? 运算符与 && 和 || 运算符一起使用，除非使用括号明确指定了优先级。这个限制无疑是值得商榷的，它被添加到语言规范中是为了避免人们从 || 切换到 ?? 时的编程错误。
 
 可以明确地使用括号来解决这个问题：
 
@@ -698,27 +700,320 @@ alert(firstName ?? lastName ?? nickName ?? "匿名"); // Supercoder
 let x = (1 && 2) ?? 3; // 正常工作了
 alert(x); // 2
 ```
+
 :::
 
 ## 基础的循环
+
 涵盖基础的循环：while，do..while 和 for(..; ..; ..)。
+
 - 用于遍历对象属性的 for..in 循环请见后文的 `for…in`。
 - 用于遍历数组和可迭代对象的循环分别请见后文的`for…of` 和 `iterables`
 
 额但是基础的循环不太想写，各个语言之间这个都大差不差，哎呀不写了反正是自己看。
 
+## "switch" 语句
 
+switch 语句可以替代多个 if 判断。它为多分支选择的情况提供了一个更具描述性的方式。
 
+switch 语句有至少一个 case 代码块和一个可选的 default 代码块。e.g:
 
+```javascript
+switch(x) {
+  case 'value1':  // if (x === 'value1')
+    ...
+    [break]
 
+  case 'value2':  // if (x === 'value2')
+    ...
+    [break]
 
+  default:
+    ...
+    [break]
+}
 
+// 比较 x 值与第一个 case（也就是 value1）是否严格相等，然后比较第二个 case（value2）以此类推。
+// 如果相等，switch 语句就执行相应 case 下的代码块，直到遇到最靠近的 break 语句（或者直到 switch 语句末尾）。
+// 如果没有符合的 case，则执行 default 代码块（如果 default 存在）。
+// 如果没有 break，程序将**不经过任何检查**就会继续执行下一个 case。
+```
 
+**注意：**
 
+- switch 和 case 都允许任意表达式
+- 共享同一段代码的几个 case 分支可以被分为一组
+- case 的相等是严格相等。被比较的值必须是相同的类型才能进行匹配。
 
+## 函数
 
+函数是程序的主要“构建模块”。函数使该段代码可以被调用很多次，而不需要写重复的代码。
 
+使用 `函数声明` 创建函数。`function` 关键字首先出现，然后是 `函数名`，然后是括号之间的 `参数` 列表，最后是花括号之间的代码（即“函数体”）。e.g:
 
+```javascript
+function name(parameter1, parameter2, ... parameterN) {
+  ...body...
+}
+```
+
+::: tip 变量作用域
+这一部分会在后面再详细介绍。
+
+- 使用 let 在函数中声明的变量只在该函数内部可见。
+- 函数可以访问外部变量，函数对外部变量拥有全部的访问权限。函数也可以修改外部变量。例如
+
+```javascript
+let userName = "John";
+function showMessage() {
+  let message = "Hello, " + userName;
+  alert(message);
+}
+showMessage(); // Hello, John
+```
+
+- 如果在函数内部声明了同名变量，那么函数会 `遮蔽` 外部变量。
+
+::: warning 注意
+任何函数之外声明的变量，例如上述代码中的外部变量 userName，都被称为 全局 变量。
+
+全局变量在任意函数中都是可见的（除非被局部变量遮蔽）。
+
+减少全局变量的使用是一种很好的做法。现代的代码有很少甚至没有全局变量。大多数变量存在于它们的函数中。但是有时候，全局变量能够用于存储项目级别的数据。
+:::
+
+### 参数
+
+可以通过参数将任意数据传递给函数。在如下示例中，函数有两个参数：from 和 text。
+
+```javascript
+function showMessage(from, text) {
+  // 参数：from 和 text
+  alert(from + ": " + text);
+}
+
+showMessage("Ann", "Hello!"); // Ann: Hello! (*)
+showMessage("Ann", "What's up?"); // Ann: What's up? (**)
+```
+
+当函数在 `(*)` 和 `(**)` 行中被调用时，给定值**被复制**到了局部变量 from 和 text。然后函数使用它们进行计算。**函数修改的是复制的变量值副本**：
+
+```javascript
+function showMessage(from, text) {
+  from = "*" + from + "*"; // 让 "from" 看起来更优雅
+  alert(from + ": " + text);
+}
+let from = "Ann";
+showMessage(from, "Hello"); // *Ann*: Hello
+// "from" 值相同，函数修改了一个局部的副本。
+alert(from); // Ann
+```
+
+::: tip parameter 和 argument
+当一个值被作为函数参数（parameter）传递时，它也被称为 参数（argument）。
+
+- 参数（parameter）是函数声明中括号内列出的变量（它是函数声明时的术语）。
+- 参数（argument）是调用函数时传递给函数的值（它是函数调用时的术语）。
+
+我们声明函数时列出它们的参数（parameters），然后调用它们传递参数（arguments）
+:::
+
+### 默认值
+
+如果一个函数被调用，但有参数（argument）未被提供，那么相应的值就会变成 undefined。我们可以使用 = 为函数声明中的参数指定所谓的“默认”（如果对应参数的值未被传递则使用）值：
+
+```javascript
+function showMessage(from, text = "no text given") {
+  alert(from + ": " + text);
+}
+showMessage("Ann"); // Ann: no text given
+
+// 这里 "no text given" 是一个字符串，但它可以是更复杂的表达式，并且只会在缺少参数时才会被计算和分配。所以，这也是可能的：
+
+function showMessage(from, text = anotherFunction()) {
+  // anotherFunction() 仅在没有给定 text 时执行
+  // 其运行结果将成为 text 的值
+}
+```
+
+有些时候，将参数默认值的设置放在函数执行（相较更后期）而不是函数声明时，也行得通。可以使用：
+
+- `if` 语句
+- `||` 运算符
+- `??` 运算符,它在大多数假值（例如 0）应该被视为“正常值”时更具优势
+
+### 返回值
+
+函数可以将一个值返回到调用代码中作为结果。指令 return 可以在函数的任意位置。当执行到达时，函数停止，并将值返回给调用代码；只使用 return 但没有返回值也是可行的。但这会导致函数立即退出。**注意：空值的 return 或没有 return 的函数返回值为 undefined**，**不要在 return 与返回值之间添加新行**
+
+### 关于函数命名
+
+函数就是行为（action）。所以它们的名字通常是动词。它应该简短且尽可能准确地描述函数的作用。这样读代码的人就能清楚地知道这个函数的功能。
+
+一种普遍的做法是用动词前缀来开始一个函数，这个前缀模糊地描述了这个行为。团队内部必须就前缀的含义达成一致。例如
+
+- "get…" —— 返回一个值，
+- "calc…" —— 计算某些内容，
+- "create…" —— 创建某些内容，
+- "check…" —— 检查某些内容并返回 boolean 值，等。
+
+::: tip 函数的各司其职
+一个函数应该只包含函数名所指定的功能，而不是做更多与函数名无关的功能。我们如果能通过函数名（isPrime）就可以看出函数的行为，而不需要通过代码，那么通常把这样的代码称为 `自描述`。
+:::
+
+## 函数表达式
+
+在 JavaScript 中，函数不是“神奇的语言结构”，而是一种**特殊的值**。我们在上一个小节使用的语法称为 `函数声明`，另一种创建函数的语法称为 `函数表达式`。它允许我们在任何表达式的中间创建一个新函数。代码如下：
+
+```javascript
+// 函数声明
+function sayHi() {
+  alert("Hello");
+}
+
+// 函数表达式 ，记住函数是一种特殊的值
+let sayHi = function () {
+  alert("Hello");
+};
+```
+
+注意，function 关键字后面没有函数名。函数表达式允许省略函数名。
+，这里我们立即将它赋值给变量，所以上面的两个代码示例的含义是一样的：**“创建一个函数并将其放入变量 sayHi 中”。**
+
+在某些编程语言中，只要提到函数的名称都会导致函数的调用执行，但 JavaScript 可不是这样。在 JavaScript 中，函数是一个值，所以我们可以把它当成值对待。我们可以复制函数到其他变量：
+
+```javascript
+function sayHi() {
+  // (1) 创建
+  alert("Hello");
+}
+let func = sayHi; // (2) 复制
+func(); // Hello     // (3) 运行复制的值（正常运行）！
+sayHi(); // Hello    //     这里也能运行（为什么不行呢）
+```
+
+解释一下上段代码发生的细节：
+
+- (1) 行声明创建了函数，并把它放入到变量 sayHi。
+- (2) 行将 sayHi 复制到了变量 func。请注意：sayHi 后面没有括号。如果有括号，func = sayHi() 会把 sayHi() 的调用结果写进 func，而不是 sayHi 函数 本身。
+- 现在函数可以通过 sayHi() 和 func() 两种方式进行调用。
+
+嘻嘻，JavaScript 很神奇吧。
+
+### 回调函数
+
+我们来看看相关应用：
+让我们多举几个例子，看看如何将函数作为值来传递以及如何使用函数表达式。
+
+我们写一个包含三个参数的函数 ask(question, yes, no)：
+
+- question 关于问题的文本
+- yes 当回答为 “Yes” 时，要运行的脚本
+- no 当回答为 “No” 时，要运行的脚本
+
+函数需要提出 question（问题），并根据用户的回答，调用 yes() 或 no()：
+
+```javascript
+function ask(question, yes, no) {
+  if (confirm(question)) yes();
+  else no();
+}
+function showOk() {
+  alert("You agreed.");
+}
+function showCancel() {
+  alert("You canceled the execution.");
+}
+// 用法：函数 showOk 和 showCancel 被作为参数传入到 ask
+ask("Do you agree?", showOk, showCancel);
+```
+
+ask 的两个参数值 showOk 和 showCancel 被称为 `回调函数` 或简称 `回调`。主要思想是我们传递一个函数，并期望在稍后必要时将其“回调”。在我们的例子中，showOk 是回答 “yes” 的回调，showCancel 是回答 “no” 的回调。
+
+我们可以使用函数表达式来编写一个等价的、更简洁的函数：
+
+```javascript
+function ask(question, yes, no) {
+  if (confirm(question)) yes();
+  else no();
+}
+
+ask(
+  "Do you agree?",
+  function () {
+    alert("You agreed.");
+  },
+  function () {
+    alert("You canceled the execution.");
+  }
+);
+```
+
+这里直接在 ask(...) 调用内进行函数声明。这两个函数没有名字，所以叫 `匿名函数`。这样的函数在 ask 外无法访问（因为没有对它们分配变量），不过这正是我们想要的。
+
+这样的代码在我们的脚本中非常常见，这正符合 JavaScript 语言的思想。
+::: tip JavaScript 引擎会在什么时候创建函数？
+**函数表达式是在代码执行到达时被创建，并且仅从那一刻起可用**
+
+一旦代码执行到赋值表达式 let sum = function… 的右侧，此时就会开始创建该函数，并且可以从现在开始使用（分配，调用等）。
+
+**在函数声明被定义之前，它就可以被调用**
+
+例如，一个全局函数声明对整个脚本来说都是可见的，无论它被写在这个脚本的哪个位置。这是内部算法的缘故。当 JavaScript 准备 运行脚本时，首先会在脚本中寻找全局函数声明，并创建这些函数。我们可以将其视为“初始化阶段”。
+:::
+::: tip 函数声明的作用域
+函数声明的另外一个特殊的功能是它的块级作用域。严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。
+
+如果使用函数表达式且正确赋值那么就能够在块级作用域外运行。
+:::
+::: tip 什么时候选择函数声明与函数表达式？
+根据经验，当我们需要声明一个函数时，首先考虑函数声明语法。它能够为组织代码提供更多的灵活性。因为我们可以在声明这些函数之前调用这些函数。
+
+这对代码可读性也更好，因为在代码中查找 function f(…) {…} 比 let f = function(…) {…} 更容易。函数声明更“醒目”。
+
+……但是，如果由于某种原因而导致函数声明不适合我们（我们刚刚看过上面的例子），那么应该使用函数表达式。
+:::
+
+## 使用箭头函数创建函数
+
+创建函数还有另外一种非常简单的语法，并且这种方法通常比函数表达式更好。它被称为“箭头函数”，因为它看起来像这样：
+
+```javascript
+let func = (arg1, arg2, ..., argN) => expression;
+```
+
+这里创建了一个函数 func，它接受参数 arg1..argN，然后使用参数对右侧的 expression 求值并返回其结果。它是下面这段代码的更短的版本：
+
+```javascript
+let func = function(arg1, arg2, ..., argN) {
+  return expression;
+};
+// 具体的例子如：
+let sum = (a, b) => a + b;
+alert( sum(1, 2) ); // 3
+```
+
+对于箭头函数的参数说明：
+
+- 如果我们只有一个参数，还可以省略掉参数外的圆括号，使代码更短。
+- 如果没有参数，括号则是空的（但括号必须保留）
+
+箭头函数对于简单的单行行为（action）来说非常方便。那么对于多行的箭头函数：我们可以使用花括号将它们括起来。主要区别在于，用花括号括起来之后，需要包含 return 才能返回值（就像常规函数一样）。belike：
+
+```javascript
+let sum = (a, b) => {
+  // 花括号表示开始一个多行函数
+  let result = a + b;
+  return result; // 如果我们使用了花括号，那么我们需要一个显式的 “return”
+};
+alert(sum(1, 2)); // 3
+```
+
+在基础部分，我们简单认识了一下箭头函数，但是它还有很多有趣的特性，我们在后面的深入理解箭头函数再继续研究它。
+
+## 总结
+
+见[JavaScript Info JavaScript 特性](https://zh.javascript.info/javascript-specials)
 
 ## Task
 
