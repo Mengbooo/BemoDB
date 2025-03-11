@@ -2,7 +2,8 @@
 ::: tip 文章信息
 Written by [Q-thrive](https://github.com/Qthrive) in 2025.3.11 
 
-Reprinted by Bolaxious
+Reprinted by Bolaxious , Reproduction is permitted by permission
+
 :::
 ::: warning 注意
 - 虚拟机安装自行搜索教程
