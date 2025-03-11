@@ -98,7 +98,7 @@ export default {
         text: "操作系统",
         collapsed: true,
         items: [
-          
+          { text: "操作系统课后作业 1", link: "/posts/os/hw_1/hw_1" },
         ],
       },
       {
