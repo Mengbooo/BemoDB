@@ -194,6 +194,7 @@ export default {
                 link: "/posts/FE/JavaScript/index",
               },
               { text: "JavaScript 基础", link: "/posts/FE/JavaScript/js-grammar" },
+              { text: "JavaScript 代码质量", link: "/posts/FE/JavaScript/code-quality" },
             ],
           },
           {
