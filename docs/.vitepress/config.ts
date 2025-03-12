@@ -18,7 +18,7 @@ export default {
   lastUpdated: true,
   title: "BemoDB", // 网站标题
   description: "这是 Bolaxious 的文档库，用于各种文章的存放",
-  head: [["link", { rel: "icon", href: "/base/logo.jpg" }]],
+  head: [["link", { rel: "icon", href: `${base}/webhook.ico` }]],
   themeConfig: {
     search: {
       provider: "local",
@@ -55,7 +55,10 @@ export default {
             text: "70% 问题：关于 AI 辅助编码的残酷真相",
             link: "/posts/recording/70_ai",
           },
-          { text: "CSS设计中的缺陷列表", link: "/posts/recording/mistakesOfCSS" },
+          {
+            text: "CSS设计中的缺陷列表",
+            link: "/posts/recording/mistakesOfCSS",
+          },
           { text: "圆周估算猜想", link: "/posts/recording/Multiply" },
         ],
       },
@@ -80,7 +83,10 @@ export default {
             text: "其它题目",
             collapsed: true,
             items: [
-              { text: "Marscode-T41 滑动窗口算法", link: "/posts/algorithm/other/sliding_window" },
+              {
+                text: "Marscode-T41 滑动窗口算法",
+                link: "/posts/algorithm/other/sliding_window",
+              },
             ],
           },
         ],
@@ -99,7 +105,10 @@ export default {
         collapsed: true,
         items: [
           { text: "操作系统课后作业 1", link: "/posts/os/hw_1/hw_1" },
-          { text: "[转载] 操作系统课后作业 1", link: "/posts/os/Q_hw_1/Q_hw_1" },
+          {
+            text: "[转载] 操作系统课后作业 1",
+            link: "/posts/os/Q_hw_1/Q_hw_1",
+          },
         ],
       },
       {
@@ -170,13 +179,19 @@ export default {
               { text: "调整大小", link: "/posts/FE/CSS/css_change" },
               { text: "背景和边框", link: "/posts/FE/CSS/css_bg" },
               { text: "处理溢出", link: "/posts/FE/CSS/css_overflow" },
-              { text: "图像、表单元素的处理", link: "/posts/FE/CSS/css_multimedia" }, 
+              {
+                text: "图像、表单元素的处理",
+                link: "/posts/FE/CSS/css_multimedia",
+              },
               { text: "表格的处理", link: "/posts/FE/CSS/css_table" },
               { text: "文本与字体", link: "/posts/FE/CSS/css_fonts" },
               { text: "列表样式", link: "/posts/FE/CSS/css_list" },
               { text: "链接样式", link: "/posts/FE/CSS/css_a" },
               { text: "web字体", link: "/posts/FE/CSS/css_webFonts" },
-              { text: "intro to css layout", link: "/posts/FE/CSS/css_introToLayout" },
+              {
+                text: "intro to css layout",
+                link: "/posts/FE/CSS/css_introToLayout",
+              },
               { text: "浮动", link: "/posts/FE/CSS/css_float" },
               { text: "定位", link: "/posts/FE/CSS/css_position" },
               { text: "Flex", link: "/posts/FE/CSS/css_flex" },
@@ -193,15 +208,24 @@ export default {
                 text: "JavaScript 文档首页",
                 link: "/posts/FE/JavaScript/index",
               },
-              { text: "JavaScript 基础", link: "/posts/FE/JavaScript/js-grammar" },
-              { text: "JavaScript 代码质量", link: "/posts/FE/JavaScript/code-quality" },
+              {
+                text: "JavaScript 基础",
+                link: "/posts/FE/JavaScript/js-grammar",
+              },
+              {
+                text: "JavaScript 代码质量",
+                link: "/posts/FE/JavaScript/code-quality",
+              },
             ],
           },
           {
             text: "Web API",
             collapsed: true,
             items: [
-              { text: "交互：alert、prompt 和 confirm", link: "/posts/FE/webAPI/interaction" },
+              {
+                text: "交互：alert、prompt 和 confirm",
+                link: "/posts/FE/webAPI/interaction",
+              },
             ],
           },
           {
