@@ -271,7 +271,8 @@ if (!Math.trunc) { // 如果没有这个函数
 现在的话，我们很少会需要我们去写 Polyfills ，不过这种的方法论还是需要知道的。
 
 ## 关于代码测试
-::: tip TODO
+这个问题很大很广，这里简单提供两篇文章进行参考。
+::: tip 参考
 - https://juejin.cn/post/6844904194600599560
 - https://zh.javascript.info/testing-mocha
 :::

@@ -44,7 +44,8 @@ export default {
         items: [
           { text: "构建之法", link: "/posts/notes/goujianzhifa" },
           { text: "AI与中年人", link: "/posts/notes/AI&MiddleAged" },
-          { text: "元宵夜游", link: "/posts/notes/fireFlower" },
+          { text: "元宵夜游", link: "/posts/notes/fireFlower/fireFlower" },
+          { text: "玉兰开了", link: "/posts/notes/yuLan/yuLan" },
         ],
       },
       {
@@ -215,6 +216,10 @@ export default {
               {
                 text: "JavaScript 代码质量",
                 link: "/posts/FE/JavaScript/code-quality",
+              },
+              {
+                text: "Object（对象）",
+                link: "/posts/FE/JavaScript/object",
               },
             ],
           },
