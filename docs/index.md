@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Bolaxious 的文档库
   text: Bolaxious's documentation library
-  tagline: 技术 & 生活
+  tagline: 代码 · 艺术 · 游戏 · 生活
   image:
     src: cat.png
     alt: 小猫跑了
