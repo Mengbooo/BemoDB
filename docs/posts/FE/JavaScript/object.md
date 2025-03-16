@@ -1255,7 +1255,7 @@ JavaScript 是如何决定应用哪种转换的？
 ::: tip
 为了进行转换，JavaScript 尝试查找并调用三个对象方法：
 
-- 调用 obj[Symbol.toPrimitive](hint) —— 带有 symbol 键 Symbol.toPrimitive（系统 symbol）的方法，如果这个方法存在的话，
+- 调用 obj[Symbol.toPrimitive]() —— 带有 symbol 键 Symbol.toPrimitive（系统 symbol）的方法，如果这个方法存在的话，
 - 否则，如果 hint 是 "string" —— 尝试调用 obj.toString() 或 obj.valueOf()，无论哪个存在。
 - 否则，如果 hint 是 "number" 或 "default" —— 尝试调用 obj.valueOf() 或 obj.toString()，无论哪个存在。
 :::
@@ -1358,7 +1358,6 @@ let obj = {
 };
 
 alert(obj * 2); // 4，对象被转换为原始值字符串 "2"，之后它被乘法转换为数字 2。
-
 ```
 - 乘法 obj * 2 首先将对象转换为原始值（字符串 “2”）。
 - 之后 "2" * 2 变为 2 * 2（字符串被转换为数字）
@@ -1387,7 +1386,7 @@ alert(obj + 2); // 22（"2" + 2）被转换为原始值字符串 => 级联
 
 转换算法是：
 
-1. 调用 obj[Symbol.toPrimitive](hint) 如果这个方法存在，
+1. 调用 `obj[Symbol.toPrimitive](hint)` 如果这个方法存在，
 2. 否则，如果 hint 是 "string"
   - 尝试调用 obj.toString() 或 obj.valueOf()，无论哪个存在。
 3. 否则，如果 hint 是 "number" 或者 "default"
@@ -1395,14 +1394,3 @@ alert(obj + 2); // 22（"2" + 2）被转换为原始值字符串 => 级联
 所有这些方法都必须返回一个原始值才能工作（如果已定义）。
 
 在实际使用中，通常只实现 obj.toString() 作为字符串转换的“全能”方法就足够了，该方法应该返回对象的“人类可读”表示，用于日志记录或调试。
-
-
-
-
-
-
-
-
-
-
-
