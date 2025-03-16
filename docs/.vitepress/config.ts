@@ -290,7 +290,18 @@ export default {
       },
       {
         text: "Problems & Solutions",
-        items: [],
+        items: [
+          {
+            text: "SSG",
+            collapsed: true,
+            items: [
+              {
+                text: "Vitepress 内含 deadlink 导致部署失败",
+                link: "/posts/problems/SSG/vitepressDeadLink",
+              },
+            ],
+          },
+        ],
       },
     ],
     socialLinks: [
