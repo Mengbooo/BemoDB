@@ -212,6 +212,10 @@ export default {
                 text: "Object（对象）",
                 link: "/posts/FE/JavaScript/object",
               },
+              {
+                text: "数据类型",
+                link: "/posts/FE/JavaScript/dataType",
+              },
             ],
           },
           {

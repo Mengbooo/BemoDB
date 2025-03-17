@@ -10,3 +10,9 @@
 > Copyright © 2025 Bolaxious. All rights reserved.
 > 
 > ALL POSTS\CODES **MIT** Licensed.
+
+
+::: tip 建站TODO
+- 导入 [Lumen](https://lumen.theojs.cn/) 插件
+- 集成一下 vitepress-plugin-image-viewer 实现图片放大（啊Vitepress你怎么居然没有这个功能）
+:::
