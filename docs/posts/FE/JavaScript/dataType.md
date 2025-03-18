@@ -504,30 +504,257 @@ if (~str.indexOf("Widget")) {
 
 #### includes，startsWith，endsWith
 
+更现代的方法 `str.includes(substr, pos)` 根据 str 中是否包含 substr 来返回 true/false。第二个可选参数是开始搜索的起始位置：
+
+``` javascript
+alert( "Widget with id".includes("Widget") ); // true
+alert( "Hello".includes("Bye") ); // false
+
+alert( "Widget".includes("id") ); // true
+alert( "Widget".includes("id", 3) ); // false, 从位置 3 开始没有 "id"
+```
+方法 `str.startsWith` 和 `str.endsWith` 的功能与其名称所表示的意思相同：
+
+``` javascript
+alert( "Widget".startsWith("Wid") ); // true，"Widget" 以 "Wid" 开始
+alert( "Widget".endsWith("get") ); // true，"Widget" 以 "get" 结束
+```
+
+### 获取子字符串
+
+JavaScript 中有三种获取字符串的方法：substring、substr 和 slice。我们分别来讲一下：
+
+`str.slice(start [, end])`
+
+返回字符串从 start 到（但不包括）end 的部分。例如：
+
+``` javascript
+let str = "stringify";
+alert( str.slice(0, 5) ); // 'strin'，从 0 到 5 的子字符串（不包括 5）
+alert( str.slice(0, 1) ); 
+// 's'，从 0 到 1，但不包括 1，所以只有在 0 处的字符
+```
+如果没有第二个参数，slice 会一直运行到字符串末尾：
+``` javascript
+let str = "stringify";
+alert( str.slice(2) ); // 从第二个位置直到结束
+```
+start/end 也有可能是负值。它们的意思是起始位置从字符串结尾计算：
+``` javascript
+let str = "stringify";
+
+// 从右边的第四个位置开始，在右边的第一个位置结束
+alert( str.slice(-4, -1) ); // 'gif'
+```
+
+`str.substring(start [, end])`
+
+返回字符串从 start 到（但不包括）end 的部分，这与 slice 几乎相同，但是：
+- 它允许 start 大于 end
+- 不支持负参数（不像 slice），它们被视为 0
+
+例如：
+``` javascript
+let str = "stringify";
+
+// 这些对于 substring 是相同的
+alert( str.substring(2, 6) ); // "ring"
+alert( str.substring(6, 2) ); // "ring"
+
+// ……但对 slice 是不同的：
+alert( str.slice(2, 6) ); // "ring"（一样）
+alert( str.slice(6, 2) ); // ""（空字符串）
+```
+
+`str.substr(start [, length])`
+
+返回字符串从 start 开始的给定 length 的部分。与以前的方法相比，这个允许我们指定 length 而不是结束位置：
+
+``` javascript
+let str = "stringify";
+alert( str.substr(2, 4) ); // 'ring'，从位置 2 开始，获取 4 个字符
+```
+第一个参数可能是负数，从结尾算起：
+``` javascript
+let str = "stringify";
+alert( str.substr(-4, 2) ); // 'gi'，从第 4 位获取 2 个字符
+```
+::: tip 它们都这么像，我该用哪个？
+正式一点来讲，substr 有一个小缺点：它不是在 JavaScript 核心规范中描述的，而是在附录 B 中。附录 B 的内容主要是描述因历史原因而遗留下来的仅浏览器特性。因此，理论上非浏览器环境可能无法支持 substr，但实际上它在别的地方也都能用。
+
+相较于其他两个变体，slice 稍微灵活一些，它允许以负值作为参数并且写法更简短。因此仅仅记住这三种方法中的 slice 就足够了。
+:::
+
+### 比较字符串
+
+正如我们从 `值的比较` 一章中了解到的，字符串按字母顺序逐字比较。
+
+但是我们需要注意到：
+1. 小写字母总是大于大写字母
+2. 带变音符号的字母存在“乱序”的情况
+
+所有的字符串都使用 UTF-16 编码。即：每个字符都有对应的数字代码。有特殊的方法可以获取代码表示的字符，以及字符对应的代码。
+
+`str.codePointAt(pos)`
+
+返回在 pos 位置的字符代码 :
+``` javascript
+// 不同的字母有不同的代码
+alert( "z".codePointAt(0) ); // 122
+alert( "Z".codePointAt(0) ); // 90
+```
+
+`String.fromCodePoint(code)`
+
+通过数字 code 创建字符:
+
+``` javascript
+alert( String.fromCodePoint(90) ); // Z
+```
+
+还可以用 \u 后跟十六进制代码，通过这些代码添加 Unicode 字符：
+
+``` javascript
+// 在十六进制系统中 90 为 5a
+alert( '\u005a' ); // Z
+```
+
+现在我们看一下代码为 65..220 的字符（拉丁字母和一些额外的字符），方法是创建一个字符串：
+
+``` javascript
+let str = '';
+
+for (let i = 65; i <= 220; i++) {
+  str += String.fromCodePoint(i);
+}
+alert( str );
+// ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+// ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜ
+```
+
+字符通过数字代码进行比较。越大的代码意味着字符越大。a（97）的代码大于 Z（90）的代码：
+- 所有小写字母追随在大写字母之后，因为它们的代码更大。
+- 一些像 `Ö` 的字母与主要字母表不同。这里，它的代码比任何从 a 到 z 的代码都要大。
+
+调用 `str.localeCompare(str2)` 会根据语言规则返回一个整数，这个整数能指示字符串 `str` 在排序顺序中排在字符串 `str2` 前面、后面、还是相同：
+
+- 如果 str 排在 str2 前面，则返回负数。
+- 如果 str 排在 str2 后面，则返回正数。
+- 如果它们在相同位置，则返回 0
+
+### 内部，Unicode
+::: tip
+这部分会深入字符串内部。如果你计划处理 emoji、罕见的数学或象形文字或其他罕见的符号，这些知识会对你有用。
+:::
+ 
+可以参考：
+- https://zh.javascript.info/string#nei-bu-unicode
+- https://www.unicode.org/reports/tr15/
+
+### 总而言之：
+字符串有非常多的方法，可以参考：
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String
 
 
+## 数组
+当我们需要 `有序集合` 的时候，比如用户、商品以及 HTML 元素的列表，这个时候对象不是很方便，它虽然允许存储键值集合，但是它不能提供能够管理元素顺序的方法。
 
+这时一个特殊的数据结构数组（Array）就派上用场了，它能存储有序的集合。
 
+::: tip 细分一下，Object 包含以下常见类型：
+- 普通对象（Object Literal）
+- 数组（Array）
+- 日期对象（Date）
+- 正则表达式对象（RegExp）
+- 函数对象（Function）
+- 集合对象（Set、Map）
+- 错误对象（Error、SyntaxError 等）
+:::
 
+### 声明
+创建一个空数组有两种语法：
+``` javascript
+let arr = new Array();
+let arr = [];
+```
+绝大多数情况下使用的都是第二种语法。我们可以在方括号中添加初始元素：
+``` javascript
+let fruits = ["Apple", "Orange", "Plum"];
+```
+数组元素从 0 开始编号。
 
+我们可以通过方括号中的数字获取元素：
+``` javascript
+let fruits = ["Apple", "Orange", "Plum"];
 
+alert( fruits[0] ); // Apple
+alert( fruits[1] ); // Orange
+alert( fruits[2] ); // Plum
+```
+可以替换元素：
+``` javascript
+fruits[2] = 'Pear'; // 现在变成了 ["Apple", "Orange", "Pear"]
+```
+或者向数组新加一个元素：
+``` javascript
+fruits[3] = 'Lemon'; // 现在变成 ["Apple", "Orange", "Pear", "Lemon"]
+```
+length 属性的值是数组中元素的总个数：
+``` javascript
+let fruits = ["Apple", "Orange", "Plum"];
+alert( fruits.length ); // 3
+```
+也可以用 alert 来显示整个数组
+``` javascript
+let fruits = ["Apple", "Orange", "Plum"];
+alert( fruits ); // Apple,Orange,Plum
+```
+数组可以存储任何类型的元素，例如:
+``` javascript
+// 混合值
+let arr = [ 'Apple', { name: 'John' }, true, function() { alert('hello'); } ];
 
+// 获取索引为 1 的对象然后显示它的 name
+alert( arr[1].name ); // John
 
+// 获取索引为 3 的函数并执行
+arr[3](); // hello
+```
+数组就像对象一样，可以以逗号结尾
 
+### 使用 “at” 获取最后一个元素
+::: tip 
+旧式浏览器可能需要 polyfills
+::: 
+假设我们想要数组的最后一个元素。
 
+一些编程语言允许我们使用负数索引来实现这一点，例如 fruits[-1]。
 
+但在 JavaScript 中这行不通。结果将是 undefined，因为方括号中的索引是被按照其字面意思处理的。
 
+我们可以显式地计算最后一个元素的索引，然后访问它：fruits[fruits.length - 1]。
 
+``` javascript
+let fruits = ["Apple", "Orange", "Plum"];
 
+alert( fruits[fruits.length-1] ); // Plum
+```
+我们可以用 at 来使其简短一些：
 
+``` javascript
+let fruits = ["Apple", "Orange", "Plum"];
 
+// 与 fruits[fruits.length-1] 相同
+alert( fruits.at(-1) ); // Plum
+```
+也就是，对于`arr.at(i)`：
+- 如果 i >= 0，则与 arr[i] 完全相同。
+- 对于 i 为负数的情况，它则从数组的尾部向前数。
 
+### pop/push, shift/unshift 方法
 
-
-
-
-
-
+我们在使用数组时离不开 队列和栈，因此我们有对应的方法：
 
 
 
