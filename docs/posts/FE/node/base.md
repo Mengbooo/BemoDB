@@ -166,3 +166,79 @@ Node 使用 CommonJS 模块规范，内置的require命令用于加载模块文�
 CommonJS 规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。由于 Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以 CommonJS 规范比较适用。如果是浏览器环境，要从服务器端加载模块，用 CommonJS 需要等模块下载完并运行后才能使用，将阻塞后面代码的执行，这时就必须采用非同步模式，因此浏览器端一般采用 AMD 规范，解决异步加载的问题。
 
 ## 全局变量
+在 `nodejs` 中使用`global`定义全局变量，定义的变量，可以在引入的文件中也可以访问到该变量，例如 `a.js global.xxx = 'xxx' require('xxx.js')  xxx.js` 也可以访问到该变量，在浏览器中我们定义的全局变量都在window,`nodejs`在`global`
+
+不同的环境还需要判断，于是在ECMAScript 2020 出现了一个`globalThis`全局变量，在`nodejs`环境会自动切换成`global` ，浏览器环境自动切换`window`非常方便
+
+### 关于其他全局API
+
+由于nodejs中没有DOM和BOM，除了这些API，其他的ECMAscriptAPI基本都能用
+
+``` javascript
+setTimeout setInterval Promise Math  console  Date fetch(node v18) 等...
+```
+这些 `API` 都是可以正常用的
+
+### nodejs内置全局API
+
+``` javascript
+__dirname // 它表示当前模块的**所在目录**的绝对路径
+__filename // 它表示当前模块文件的绝对路径，包括文件名和文件扩展名
+require module // 引入模块和模块导出
+process // process 对象，可用于监控进程、设置信号处理、发送IPC消息等。
+Buffer // Buffer类在处理文件、网络通信、加密和解密等操作中非常有用，尤其是在需要处理二进制数据时
+```
+## 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

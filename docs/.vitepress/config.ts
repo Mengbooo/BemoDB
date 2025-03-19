@@ -20,6 +20,7 @@ export default {
   description: "这是 Bolaxious 的文档库，用于各种文章的存放",
   head: [["link", { rel: "icon", href: `${base}/webhook.ico` }]],
   themeConfig: {
+    outline: [2, 4], // 显示 h2, h3, h4 标题
     search: {
       provider: "local",
     },
