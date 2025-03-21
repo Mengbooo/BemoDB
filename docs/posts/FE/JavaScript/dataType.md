@@ -1460,11 +1460,9 @@ alert(str); // Bilbo;Gandalf;Nazgul
 `arr.reduce` 方法和 `arr.reduceRight` 方法和上面的种类差不多，但稍微复杂一点。它们用于根据数组计算单个值，语法为：
 
 ```javascript
-let arr = ["Bilbo", "Gandalf", "Nazgul"];
-
-let str = arr.join(";"); // 使用分号 ; 将数组粘合成字符串
-
-alert(str); // Bilbo;Gandalf;Nazgul
+let value = arr.reduce(function(accumulator, item, index, array) {
+  // ...
+}, [initial]);
 ```
 
 该函数一个接一个地应用于所有数组元素，并将其结果“搬运（carry on）”到下一个调用。
@@ -1724,9 +1722,11 @@ next 函数：
             }
         }
 ```
+
 很少需要我们这样做，但是比 for..of 给了我们更多的控制权。例如，我们可以拆分迭代过程：迭代一部分，然后停止，做一些其他处理，然后再恢复迭代。
 
 ### 可迭代（iterable）和类数组（array-like）
+
 这两个官方术语看起来差不多，但其实大不相同。请确保你能够充分理解它们的含义，以免造成混淆。
 
 - `Iterable` 如上所述，是实现了 `Symbol.iterator` 方法的对象。
@@ -1739,19 +1739,23 @@ next 函数：
 ```javascript
 let range = {
   from: 1,
-  to: 5
+  to: 5,
 };
 ```
+
 下面这个对象则是类数组的，但是不可迭代：
+
 ```javascript
-let arrayLike = { // 有索引和 length 属性 => 类数组对象
+let arrayLike = {
+  // 有索引和 length 属性 => 类数组对象
   0: "Hello",
   1: "World",
-  length: 2
+  length: 2,
 };
 
 // Error (no Symbol.iterator)
-for (let item of arrayLike) {}
+for (let item of arrayLike) {
+}
 ```
 
 可迭代对象和类数组对象通常都 不是数组，它们没有 push 和 pop 等方法。如果我们有一个这样的对象，并想像数组那样操作它，那就非常不方便。**例如，我们想使用数组方法操作 range，应该如何实现呢？**
@@ -1766,12 +1770,13 @@ for (let item of arrayLike) {}
 let arrayLike = {
   0: "Hello",
   1: "World",
-  length: 2
+  length: 2,
 };
 
 let arr = Array.from(arrayLike); // (*)
 alert(arr.pop()); // World（pop 方法有效）
 ```
+
 在 `(*)` 行的` Array.from` 方法接受对象，检查它是一个可迭代对象或类数组对象，然后创建一个新数组，并将该对象的所有元素复制到这个新数组。
 
 如果是可迭代对象，也是同样：
@@ -1781,16 +1786,20 @@ alert(arr.pop()); // World（pop 方法有效）
 let arr = Array.from(range);
 alert(arr); // 1,2,3,4,5 （数组的 toString 转化方法生效）
 ```
+
 `Array.from` 的完整语法允许我们提供一个可选的`“映射（mapping）”`函数：
+
 ```javascript
 Array.from(obj[, mapFn, thisArg])
 ```
+
 可选的第二个参数 mapFn 可以是一个函数，该函数会在对象中的元素被添加到数组前，被应用于每个元素，此外 thisArg 允许我们为该函数设置 this。
+
 ```javascript
 // 假设 range 来自上文例子中
 
 // 求每个数的平方
-let arr = Array.from(range, num => num * num);
+let arr = Array.from(range, (num) => num * num);
 
 alert(arr); // 1,4,9,16,25
 ```
@@ -1798,7 +1807,7 @@ alert(arr); // 1,4,9,16,25
 现在我们用 Array.from 将一个字符串转换为单个字符的数组：
 
 ```javascript
-let str = '𝒳😂';
+let str = "𝒳😂";
 
 // 将 str 拆分为字符数组
 let chars = Array.from(str);
@@ -1808,7 +1817,7 @@ alert(chars[1]); // 😂
 alert(chars.length); // 2
 
 // 技术上来讲，它和下面这段代码做的是相同的事：
-let str = '𝒳😂';
+let str = "𝒳😂";
 
 let chars = []; // Array.from 内部执行相同的循环
 for (let char of str) {
@@ -1819,12 +1828,691 @@ alert(chars);
 ```
 
 ## Map and Set（映射和集合）
+
 学到现在，我们已经了解了以下复杂的数据结构：
 
 - 常规对象，存储带有键的数据的集合。
 - 数组，存储有序集合
 
 但这还不足以应对现实情况。这就是为什么存在 `Map 和 Set`。
+
+### Map
+
+Map 是一个带键的数据项的集合，就像一个 常规 Object 一样。 但是它们最大的差别是 Map 允许任何类型的键（key）。
+
+它的方法和属性如下：
+
+- `new Map()` —— 创建 map。
+- `map.set(key, value)` —— 根据键存储值。
+- `map.get(key)` —— 根据键来返回值，如果 map 中不存在对应的 key，则返回 undefined。
+- `map.has(key)` —— 如果 key 存在则返回 true，否则返回 false。
+- `map.delete(key)` —— 删除指定键的值。
+- `map.clear()` —— 清空 map。
+- `map.size` —— 返回当前元素个数。
+
+示例：
+
+```javascript
+let map = new Map();
+
+map.set("1", "str1"); // 字符串键
+map.set(1, "num1"); // 数字键
+map.set(true, "bool1"); // 布尔值键
+
+// 还记得普通的 Object 吗? 它会将键转化为字符串
+// Map 则会保留键的类型，所以下面这两个结果不同：
+alert(map.get(1)); // 'num1'
+alert(map.get("1")); // 'str1'
+
+alert(map.size); // 3
+```
+
+如我们所见，与对象不同，键不会被转换成字符串。键可以是任何类型。
+
+::: warning `map[key]` 不是使用 Map 的正确方式
+虽然 `map[key]` 也有效，例如我们可以设置 `map[key] = 2`，这样会将 map 视为 JavaScript 的 **常规 object**，因此它暗含了所有相应的限制（仅支持 string/symbol 键等）。
+
+所以我们应该使用 map 方法：set 和 get 等。
+:::
+
+**Map 还可以使用对象作为键**。例如：
+
+```javascript
+let john = { name: "John" };
+
+// 存储每个用户的来访次数
+let visitsCountMap = new Map();
+
+// john 是 Map 中的键
+visitsCountMap.set(john, 123);
+
+alert(visitsCountMap.get(john)); // 123
+```
+
+**使用对象作为键是 Map 最值得注意和重要的功能之一**。在 Object 中，我们则无法使用对象作为键。在 Object 中使用字符串作为键是可以的，但我们无法使用另一个 Object 作为 Object 中的键。
+
+如果我在常规对象中使用对象作为键：
+
+```javascript
+let john = { name: "John" };
+let ben = { name: "Ben" };
+
+let visitsCountObj = {}; // 尝试使用对象
+
+visitsCountObj[ben] = 234; // 尝试将对象 ben 用作键
+visitsCountObj[john] = 123;
+// 尝试将对象 john 用作键，但我们会发现使用对象 ben 作为键存下的值会被替换掉
+
+// 变成这样了！
+alert(visitsCountObj["[object Object]"]); // 123
+```
+
+因为 visitsCountObj 是一个对象，它会将所有 Object 键例如上面的 john 和 ben 转换为字符串 "[object Object]"。这显然不是我们想要的结果。
+
+::: tip Map 是怎么比较键的？
+Map 使用 SameValueZero 算法来比较键是否相等。它和严格等于 === 差不多，但区别是 NaN 被看成是等于 NaN。所以 NaN 也可以被用作键。
+
+这个算法不能被改变或者自定义。
+:::
+::: tip 链式调用
+每一次 map.set 调用都会返回 map 本身，所以我们可以进行“链式”调用：
+
+```javascript
+map.set("1", "str1").set(1, "num1").set(true, "bool1");
+```
+
+:::
+
+### Map 的迭代
+
+如果要在 map 里使用循环，可以使用以下三个方法：
+
+- `map.keys()` —— 遍历并返回一个包含所有键的可迭代对象，
+- `map.values()` —— 遍历并返回一个包含所有值的可迭代对象，
+- `map.entries()`（和 map 相同） —— 遍历并返回一个包含所有实体 `[key, value]` 的可迭代对象，`for..of` 在默认情况下使用的就是这个。
+
+例如：
+
+```javascript
+let recipeMap = new Map([
+  ["cucumber", 500],
+  ["tomatoes", 350],
+  ["onion", 50],
+]);
+
+// 遍历所有的键（vegetables）
+for (let vegetable of recipeMap.keys()) {
+  alert(vegetable); // cucumber, tomatoes, onion
+}
+
+// 遍历所有的值（amounts）
+for (let amount of recipeMap.values()) {
+  alert(amount); // 500, 350, 50
+}
+
+// 遍历所有的实体 [key, value]
+for (let entry of recipeMap) {
+  // 与 recipeMap.entries() 相同
+  alert(entry); // cucumber,500 (and so on)
+}
+```
+
+::: tip 关于顺序
+迭代的顺序与插入值的顺序相同。与普通的 Object 不同，Map 保留了此顺序。
+:::
+
+除此之外，Map 有内建的 forEach 方法，与 Array 类似：
+
+```javascript
+// 对每个键值对 (key, value) 运行 forEach 函数
+recipeMap.forEach((value, key, map) => {
+  alert(`${key}: ${value}`); // cucumber: 500 etc
+});
+```
+
+### 从对象创建 Map 与 从 Map 创建对象
+
+`Object.entries`
+
+当创建一个 Map 后，我们可以传入一个带有键值对的数组（或其它可迭代对象）来进行初始化，如下所示：
+
+```javascript
+// 键值对 [key, value] 数组
+let map = new Map([
+  ["1", "str1"],
+  [1, "num1"],
+  [true, "bool1"],
+]);
+
+alert(map.get("1")); // str1
+```
+
+如果我们想从一个已有的普通对象（plain object）来创建一个 Map，那么我们可以使用内建方法 `Object.entries(obj)`，该方法返回对象的键/值对数组，该数组格式完全按照 Map 所需的格式。
+
+例如：
+
+```javascript
+let obj = {
+  name: "John",
+  age: 30,
+};
+
+let map = new Map(Object.entries(obj));
+
+alert(map.get("name")); // John
+```
+
+这里，Object.entries 返回键/值对数组：`[ ["name","John"], ["age", 30] ]`。这就是 Map 所需要的格式。
+
+`Object.fromEntries`
+
+Object.fromEntries 方法的作用是相反的：给定一个具有 [key, value] 键值对的数组，它会根据给定数组创建一个对象：
+
+```javascript
+let prices = Object.fromEntries([
+  ["banana", 1],
+  ["orange", 2],
+  ["meat", 4],
+]);
+
+// 现在 prices = { banana: 1, orange: 2, meat: 4 }
+
+alert(prices.orange); // 2
+
+// 又比如：
+
+let map = new Map();
+map.set("banana", 1);
+map.set("orange", 2);
+map.set("meat", 4);
+
+// 创建一个普通对象（plain object）(*)
+let obj = Object.fromEntries(map.entries()); // 这里也可以省掉 .entries()
+```
+
+### Set
+
+Set 是一个特殊的类型集合 —— “值的集合”（没有键），它的每一个值只能出现一次。
+
+它的主要方法如下：
+
+- `new Set(iterable)` —— 创建一个 set，如果提供了一个 iterable 对象（通常是数组），将会从数组里面复制值到 set 中。
+- `set.add(value)` —— 添加一个值，返回 set 本身
+- `set.delete(value)` —— 删除值，如果 value 在这个方法调用的时候存在则返回 true ，否则返回 false。
+- `set.has(value)` —— 如果 value 在 set 中，返回 true，否则返回 false。
+- `set.clear()` —— 清空 set。
+- `set.size` —— 返回元素个数。
+
+它的主要特点是，**重复使用同一个值调用 set.add(value) 并不会发生什么改变。这就是 Set 里面的每一个值只出现一次的原因。**
+
+例如，我们有客人来访，我们想记住他们每一个人。但是已经来访过的客人再次来访，不应造成重复记录。每个访客必须只被“计数”一次。
+
+Set 可以帮助我们解决这个问题：
+
+```javascript
+let set = new Set();
+
+let john = { name: "John" };
+let pete = { name: "Pete" };
+let mary = { name: "Mary" };
+
+// visits，一些访客来访好几次
+set.add(john);
+set.add(pete);
+set.add(mary);
+set.add(john);
+set.add(mary);
+
+// set 只保留不重复的值
+alert(set.size); // 3
+
+for (let user of set) {
+  alert(user.name); // John（然后 Pete 和 Mary）
+}
+```
+
+Set 的替代方法可以是一个用户数组，用 arr.find 在每次插入值时检查是否重复。但是这样性能会很差，因为这个方法会遍历整个数组来检查每个元素。Set 内部对唯一性检查进行了更好的优化。
+
+### Set 的迭代
+
+我们可以使用 for..of 或 forEach 来遍历 Set：
+
+```javascript
+let set = new Set(["oranges", "apples", "bananas"]);
+
+for (let value of set) alert(value);
+
+// 与 forEach 相同：
+set.forEach((value, valueAgain, set) => {
+  alert(value);
+});
+```
+::: tip
+注意一件有趣的事儿。forEach 的回调函数有三个参数：一个 value，然后是 同一个值 valueAgain，最后是目标对象。没错，同一个值在参数里出现了两次。
+
+forEach 的回调函数有三个参数，是为了与 Map 兼容。当然，这看起来确实有些奇怪。但是这对在特定情况下轻松地用 Set 代替 Map 很有帮助，反之亦然。
+:::
+
+Map 中用于迭代的方法在 Set 中也同样支持：
+
+- `set.keys()` —— 遍历并返回一个包含所有值的可迭代对象，
+- `set.values()` —— 与 set.keys() 作用相同，这是为了兼容 Map，
+- `set.entries()` —— 遍历并返回一个包含所有的实体 [value, value] 的可迭代对象，它的存在也是为了兼容 Map。
+
+## WeakMap and WeakSet（弱映射和弱集合）
+
+我们从前面的 垃圾回收 章节中知道，JavaScript 引擎在值“可达”和可能被使用时会将其保持在内存中。
+
+例如：
+
+```javascript
+let john = { name: "John" };
+
+// 该对象能被访问，john 是它的引用
+
+// 覆盖引用
+john = null;
+
+// 该对象将会被从内存中清除
+```
+通常，当对象、数组之类的数据结构在内存中时，它们的子元素，如对象的属性、数组的元素都被认为是可达的。
+
+例如，如果把一个对象放入到数组中，那么只要这个数组存在，那么这个对象也就存在，即使没有其他对该对象的引用。
+
+就像这样:
+
+```javascript
+let john = { name: "John" };
+
+let array = [ john ];
+
+john = null; // 覆盖引用
+
+// 前面由 john 所引用的那个对象被存储在了 array 中
+// 所以它不会被垃圾回收机制回收
+// 我们可以通过 array[0] 获取到它
+```
+类似的，如果我们使用对象作为常规 Map 的键，那么当 Map 存在时，该对象也将存在。它会占用内存，并且不会被（垃圾回收机制）回收。
+
+例如：
+```javascript
+let john = { name: "John" };
+
+let map = new Map();
+map.set(john, "...");
+
+john = null; // 覆盖引用
+
+// john 被存储在了 map 中，
+// 我们可以使用 map.keys() 来获取它
+```
+WeakMap 在这方面有着根本上的不同。**它不会阻止垃圾回收机制对作为键的对象（key object）的回收**。
+
+让我们通过例子来看看这指的到底是什么。
+
+### WeakMap
+WeakMap 和 Map 的第一个不同点就是，**WeakMap 的键必须是对象，不能是原始值**：
+
+```javascript
+let weakMap = new WeakMap();
+
+let obj = {};
+
+weakMap.set(obj, "ok"); // 正常工作（以对象作为键）
+
+// 不能使用字符串作为键
+weakMap.set("test", "Whoops"); // Error，因为 "test" 不是一个对象
+```
+现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和map）中自动清除。
+```javascript
+let john = { name: "John" };
+
+let weakMap = new WeakMap();
+weakMap.set(john, "...");
+
+john = null; // 覆盖引用
+
+// john 被从内存中删除了！
+```
+与上面常规的 Map 的例子相比，现在如果 john 仅仅是作为 WeakMap 的键而存在 —— 它将会被从 map（和内存）中自动删除。
+
+WeakMap 不支持迭代以及 `keys()，values() 和 entries()` 方法。所以没有办法获取 WeakMap 的所有键或值。
+
+WeakMap 只有以下的方法：
+
+- `weakMap.get(key)`
+- `weakMap.set(key, value)`
+- `weakMap.delete(key)`
+- `weakMap.has(key)`
+
+为什么会有这种限制呢？这是技术的原因。如果一个对象丢失了其它所有引用（就像上面示例中的 john），那么它就会被垃圾回收机制自动回收。但是在从技术的角度并不能准确知道 何时会被回收。
+
+这些都是由 JavaScript 引擎决定的。JavaScript 引擎可能会选择立即执行内存清理，如果现在正在发生很多删除操作，那么 JavaScript 引擎可能就会选择等一等，稍后再进行内存清理。因此，从技术上讲，WeakMap 的当前元素的数量是未知的。JavaScript 引擎可能清理了其中的垃圾，可能没清理，也可能清理了一部分。因此，暂不支持访问 WeakMap 的所有键/值的方法。
+
+### WeakMap 的使用场景
+#### 额外数据的存储
+假如我们正在处理一个“属于”另一个代码的一个对象，也可能是第三方库，并想存储一些与之相关的数据，那么这些数据就应该与这个对象共存亡 —— 这时候 WeakMap 正是我们所需要的利器。
+
+我们将这些数据放到 WeakMap 中，并使用该对象作为这些数据的键，那么当该对象被垃圾回收机制回收后，这些数据也会被自动清除。
+
+```javascript
+weakMap.set(john, "secret documents");
+// 如果 john 消失，secret documents 将会被自动清除
+```
+让我们来看一个例子。
+
+例如，我们有用于处理用户访问计数的代码。收集到的信息被存储在 map 中：一个用户对象作为键，其访问次数为值。当一个用户离开时（该用户对象将被垃圾回收机制回收），这时我们就不再需要他的访问次数了。
+
+下面是一个使用 Map 的计数函数的例子
+
+```javascript
+// 📁 visitsCount.js
+let visitsCountMap = new Map(); // map: user => visits count
+
+// 递增用户来访次数
+function countUser(user) {
+  let count = visitsCountMap.get(user) || 0;
+  visitsCountMap.set(user, count + 1);
+}
+```
+下面是其他部分的代码，可能是使用它的其它代码：
+```javascript
+// 📁 main.js
+let john = { name: "John" };
+
+countUser(john); // count his visits
+
+// 不久之后，john 离开了
+john = null;
+```
+现在，john 这个对象应该被垃圾回收，但它仍在内存中，因为它是 visitsCountMap 中的一个键。
+
+当我们移除用户时，我们需要清理 visitsCountMap，否则它将在内存中无限增大。在复杂的架构中，这种清理会成为一项繁重的任务。
+
+我们可以通过使用 WeakMap 来避免这样的问题：
+```javascript
+// 📁 visitsCount.js
+let visitsCountMap = new WeakMap(); // weakmap: user => visits count
+
+// 递增用户来访次数
+function countUser(user) {
+  let count = visitsCountMap.get(user) || 0;
+  visitsCountMap.set(user, count + 1);
+}
+```
+现在我们不需要去清理 visitsCountMap 了。当 john 对象变成不可达时，即便它是 WeakMap 里的一个键，它也会连同它作为 WeakMap 里的键所对应的信息一同被从内存中删除。
+#### 缓存
+另外一个常见的例子是缓存。我们可以存储（“缓存”）函数的结果，以便将来对同一个对象的调用可以重用这个结果。
+
+为了实现这一点，我们可以使用 Map（非最佳方案）：
+
+```javascript
+// 📁 cache.js
+let cache = new Map();
+
+// 计算并记住结果
+function process(obj) {
+  if (!cache.has(obj)) {
+    let result = /* calculations of the result for */ obj;
+
+    cache.set(obj, result);
+  }
+
+  return cache.get(obj);
+}
+
+// 现在我们在其它文件中使用 process()
+
+// 📁 main.js
+let obj = {/* 假设我们有个对象 */};
+
+let result1 = process(obj); // 计算完成
+
+// ……稍后，来自代码的另外一个地方……
+let result2 = process(obj); // 取自缓存的被记忆的结果
+
+// ……稍后，我们不再需要这个对象时：
+obj = null;
+
+alert(cache.size); // 1（啊！该对象依然在 cache 中，并占据着内存！）
+```
+对于多次调用同一个对象，它只需在第一次调用时计算出结果，之后的调用可以直接从 cache 中获取。这样做的缺点是，当我们不再需要这个对象的时候需要清理 cache。
+
+如果我们用 WeakMap 替代 Map，便不会存在这个问题。当对象被垃圾回收时，对应缓存的结果也会被自动从内存中清除。
+
+```javascript
+// 📁 cache.js
+let cache = new WeakMap();
+
+// 计算并记结果
+function process(obj) {
+  if (!cache.has(obj)) {
+    let result = /* calculate the result for */ obj;
+
+    cache.set(obj, result);
+  }
+
+  return cache.get(obj);
+}
+
+// 📁 main.js
+let obj = {/* some object */};
+
+let result1 = process(obj);
+let result2 = process(obj);
+
+// ……稍后，我们不再需要这个对象时：
+obj = null;
+
+// 无法获取 cache.size，因为它是一个 WeakMap，
+// 要么是 0，或即将变为 0
+// 当 obj 被垃圾回收，缓存的数据也会被清除
+```
+### WeakSet
+WeakSet 的表现类似：
+
+- 与 Set 类似，但是我们只能向 WeakSet 添加对象（而不能是原始值）。
+- 对象只有在其它某个（些）地方能被访问的时候，才能留在 WeakSet 中。
+- 跟 Set 一样，WeakSet 支持 add，has 和 delete 方法，但不支持 size 和 keys()，并且不可迭代。
+
+变“弱（weak）”的同时，它也可以作为额外的存储空间。但并非针对任意数据，而是针对“是/否”的事实。WeakSet 的元素可能代表着有关该对象的某些信息。
+
+例如，我们可以将用户添加到 WeakSet 中，以追踪访问过我们网站的用户：
+```javascript
+let visitedSet = new WeakSet();
+
+let john = { name: "John" };
+let pete = { name: "Pete" };
+let mary = { name: "Mary" };
+
+visitedSet.add(john); // John 访问了我们
+visitedSet.add(pete); // 然后是 Pete
+visitedSet.add(john); // John 再次访问
+
+// visitedSet 现在有两个用户了
+
+// 检查 John 是否来访过？
+alert(visitedSet.has(john)); // true
+
+// 检查 Mary 是否来访过？
+alert(visitedSet.has(mary)); // false
+
+john = null;
+
+// visitedSet 将被自动清理(即自动清除其中已失效的值 john)
+```
+WeakMap 和 WeakSet 最明显的局限性就是不能迭代，并且无法获取所有当前内容。那样可能会造成不便，但是并不会阻止 WeakMap/WeakSet 完成其主要工作 —— **为在其它地方存储/管理的对象数据提供“额外”存储**。
+
+## Object.keys，values，entries
+对各个数据结构的学习至此告一段落，下面让我们讨论一下如何迭代它们。
+
+在前面的章节中，我们认识了 map.keys()，map.values() 和 map.entries() 方法。
+
+这些方法是通用的，有一个共同的约定来将它们用于各种数据结构。如果我们创建一个我们自己的数据结构，我们也应该实现这些方法。
+
+它们支持：
+
+- Map
+- Set
+- Array
+
+普通对象也支持类似的方法，但是语法上有一些不同。
+
+### 普通对象的 Object.keys，values，entries
+对于普通对象，下列这些方法是可用的：
+
+- `Object.keys(obj)` —— 返回一个包含该对象所有的键的数组。
+- `Object.values(obj)` —— 返回一个包含该对象所有的值的数组。
+- `Object.entries(obj)` —— 返回一个包含该对象所有 [key, value] 键值对的**数组**。
+
+::: tip
+- 注意 `我们上面说的这三种方法` 在普通对象这里返回的是**真正的数组**
+
+为什么会这样？主要原因是灵活性。请记住，在 JavaScript 中，对象是所有复杂结构的基础。因此，我们可能有一个自己创建的对象，比如 data，并实现了它自己的 data.values() 方法。同时，我们依然可以对它调用 Object.values(data) 方法。
+
+- 同时方法的前缀是 Object 而非我们具体定义的对象 obj （这主要是历史原因）
+
+语法如：
+
+``` Javascript
+let user = {
+  name: "John",
+  age: 30
+};
+
+// 结果如下：
+
+Object.keys(user) = ["name", "age"]
+Object.values(user) = ["John", 30]
+Object.entries(user) = [ ["name","John"], ["age",30] ]
+```
+:::
+::: warning Object.keys/values/entries 会忽略 symbol 属性
+就像 for..in 循环一样，这些方法会忽略使用 Symbol(...) 作为键的属性。
+
+通常这很方便。但是，如果我们也想要 Symbol 类型的键，那么这儿有一个单独的方法 Object.getOwnPropertySymbols，它会返回一个只包含 Symbol 类型的键的数组。另外，还有一种方法 Reflect.ownKeys(obj)，它会返回 所有 键。
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect/ownKeys
+:::
+
+### 转换对象
+对象缺少数组存在的许多方法，例如 map 和 filter 等。
+
+如果我们想应用它们，那么我们可以使用 `Object.entries`，然后使用 `Object.fromEntries`：
+
+1. 使用 Object.entries(obj) 从 obj 获取由键/值对组成的数组。
+2. 对该数组使用数组方法，例如 map，对这些键/值对进行转换。
+3. 对结果数组使用 Object.fromEntries(array) 方法，将结果转回成对象。
+
+例如，我们有一个带有价格的对象，并想将它们加倍：
+
+``` Javascript
+let prices = {
+  banana: 1,
+  orange: 2,
+  meat: 4,
+};
+
+let doublePrices = Object.fromEntries(
+  // 将价格转换为数组，将每个键/值对映射为另一对
+  // 然后通过 fromEntries 再将结果转换为对象
+  Object.entries(prices).map(entry => [entry[0], entry[1] * 2])
+);
+
+alert(doublePrices.meat); // 8
+```
+
+## 解构赋值
+JavaScript 中最常用的两种数据结构是 Object 和 Array。
+
+- 对象是一种根据键存储数据的实体。
+- 数组是一种直接存储数据的有序列表。
+
+但是，当我们把它们传递给函数时，函数可能不需要整个对象/数组，而只需要其中一部分。
+
+`解构赋值` 是一种特殊的语法，它使我们可以**将数组或对象“拆包”至一系列变量中**。有时这样做更方便。
+
+**解构操作对那些具有很多参数和默认值等的函数也很奏效**。下面有一些例子。
+
+### 数组的解构
+这是一个将数组解构到变量中的例子：
+
+``` Javascript
+// 我们有一个存放了名字和姓氏的数组
+let arr = ["John", "Smith"]
+
+// 解构赋值
+// 设置 firstName = arr[0]
+// 以及 surname = arr[1]
+let [firstName, surname] = arr;
+
+alert(firstName); // John
+alert(surname);  // Smith
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
