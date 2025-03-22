@@ -215,7 +215,11 @@ export default {
               },
               {
                 text: "数据类型",
-                link: "/posts/FE/JavaScript/dataType",
+                link: "/posts/FE/JavaScript/data-type",
+              },
+              {
+                text: "函数进阶",
+                link: "/posts/FE/JavaScript/advance-function",
               },
             ],
           },

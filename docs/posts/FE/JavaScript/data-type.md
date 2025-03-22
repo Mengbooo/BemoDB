@@ -1460,9 +1460,12 @@ alert(str); // Bilbo;Gandalf;Nazgul
 `arr.reduce` 方法和 `arr.reduceRight` 方法和上面的种类差不多，但稍微复杂一点。它们用于根据数组计算单个值，语法为：
 
 ```javascript
-let value = arr.reduce(function(accumulator, item, index, array) {
-  // ...
-}, [initial]);
+let value = arr.reduce(
+  function (accumulator, item, index, array) {
+    // ...
+  },
+  [initial]
+);
 ```
 
 该函数一个接一个地应用于所有数组元素，并将其结果“搬运（carry on）”到下一个调用。
@@ -2087,6 +2090,7 @@ set.forEach((value, valueAgain, set) => {
   alert(value);
 });
 ```
+
 ::: tip
 注意一件有趣的事儿。forEach 的回调函数有三个参数：一个 value，然后是 同一个值 valueAgain，最后是目标对象。没错，同一个值在参数里出现了两次。
 
@@ -2115,6 +2119,7 @@ john = null;
 
 // 该对象将会被从内存中清除
 ```
+
 通常，当对象、数组之类的数据结构在内存中时，它们的子元素，如对象的属性、数组的元素都被认为是可达的。
 
 例如，如果把一个对象放入到数组中，那么只要这个数组存在，那么这个对象也就存在，即使没有其他对该对象的引用。
@@ -2124,7 +2129,7 @@ john = null;
 ```javascript
 let john = { name: "John" };
 
-let array = [ john ];
+let array = [john];
 
 john = null; // 覆盖引用
 
@@ -2132,9 +2137,11 @@ john = null; // 覆盖引用
 // 所以它不会被垃圾回收机制回收
 // 我们可以通过 array[0] 获取到它
 ```
+
 类似的，如果我们使用对象作为常规 Map 的键，那么当 Map 存在时，该对象也将存在。它会占用内存，并且不会被（垃圾回收机制）回收。
 
 例如：
+
 ```javascript
 let john = { name: "John" };
 
@@ -2146,11 +2153,13 @@ john = null; // 覆盖引用
 // john 被存储在了 map 中，
 // 我们可以使用 map.keys() 来获取它
 ```
+
 WeakMap 在这方面有着根本上的不同。**它不会阻止垃圾回收机制对作为键的对象（key object）的回收**。
 
 让我们通过例子来看看这指的到底是什么。
 
 ### WeakMap
+
 WeakMap 和 Map 的第一个不同点就是，**WeakMap 的键必须是对象，不能是原始值**：
 
 ```javascript
@@ -2163,7 +2172,9 @@ weakMap.set(obj, "ok"); // 正常工作（以对象作为键）
 // 不能使用字符串作为键
 weakMap.set("test", "Whoops"); // Error，因为 "test" 不是一个对象
 ```
-现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和map）中自动清除。
+
+现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和 map）中自动清除。
+
 ```javascript
 let john = { name: "John" };
 
@@ -2174,6 +2185,7 @@ john = null; // 覆盖引用
 
 // john 被从内存中删除了！
 ```
+
 与上面常规的 Map 的例子相比，现在如果 john 仅仅是作为 WeakMap 的键而存在 —— 它将会被从 map（和内存）中自动删除。
 
 WeakMap 不支持迭代以及 `keys()，values() 和 entries()` 方法。所以没有办法获取 WeakMap 的所有键或值。
@@ -2190,7 +2202,9 @@ WeakMap 只有以下的方法：
 这些都是由 JavaScript 引擎决定的。JavaScript 引擎可能会选择立即执行内存清理，如果现在正在发生很多删除操作，那么 JavaScript 引擎可能就会选择等一等，稍后再进行内存清理。因此，从技术上讲，WeakMap 的当前元素的数量是未知的。JavaScript 引擎可能清理了其中的垃圾，可能没清理，也可能清理了一部分。因此，暂不支持访问 WeakMap 的所有键/值的方法。
 
 ### WeakMap 的使用场景
+
 #### 额外数据的存储
+
 假如我们正在处理一个“属于”另一个代码的一个对象，也可能是第三方库，并想存储一些与之相关的数据，那么这些数据就应该与这个对象共存亡 —— 这时候 WeakMap 正是我们所需要的利器。
 
 我们将这些数据放到 WeakMap 中，并使用该对象作为这些数据的键，那么当该对象被垃圾回收机制回收后，这些数据也会被自动清除。
@@ -2199,6 +2213,7 @@ WeakMap 只有以下的方法：
 weakMap.set(john, "secret documents");
 // 如果 john 消失，secret documents 将会被自动清除
 ```
+
 让我们来看一个例子。
 
 例如，我们有用于处理用户访问计数的代码。收集到的信息被存储在 map 中：一个用户对象作为键，其访问次数为值。当一个用户离开时（该用户对象将被垃圾回收机制回收），这时我们就不再需要他的访问次数了。
@@ -2215,7 +2230,9 @@ function countUser(user) {
   visitsCountMap.set(user, count + 1);
 }
 ```
+
 下面是其他部分的代码，可能是使用它的其它代码：
+
 ```javascript
 // 📁 main.js
 let john = { name: "John" };
@@ -2225,11 +2242,13 @@ countUser(john); // count his visits
 // 不久之后，john 离开了
 john = null;
 ```
+
 现在，john 这个对象应该被垃圾回收，但它仍在内存中，因为它是 visitsCountMap 中的一个键。
 
 当我们移除用户时，我们需要清理 visitsCountMap，否则它将在内存中无限增大。在复杂的架构中，这种清理会成为一项繁重的任务。
 
 我们可以通过使用 WeakMap 来避免这样的问题：
+
 ```javascript
 // 📁 visitsCount.js
 let visitsCountMap = new WeakMap(); // weakmap: user => visits count
@@ -2240,8 +2259,11 @@ function countUser(user) {
   visitsCountMap.set(user, count + 1);
 }
 ```
+
 现在我们不需要去清理 visitsCountMap 了。当 john 对象变成不可达时，即便它是 WeakMap 里的一个键，它也会连同它作为 WeakMap 里的键所对应的信息一同被从内存中删除。
+
 #### 缓存
+
 另外一个常见的例子是缓存。我们可以存储（“缓存”）函数的结果，以便将来对同一个对象的调用可以重用这个结果。
 
 为了实现这一点，我们可以使用 Map（非最佳方案）：
@@ -2264,7 +2286,9 @@ function process(obj) {
 // 现在我们在其它文件中使用 process()
 
 // 📁 main.js
-let obj = {/* 假设我们有个对象 */};
+let obj = {
+  /* 假设我们有个对象 */
+};
 
 let result1 = process(obj); // 计算完成
 
@@ -2276,6 +2300,7 @@ obj = null;
 
 alert(cache.size); // 1（啊！该对象依然在 cache 中，并占据着内存！）
 ```
+
 对于多次调用同一个对象，它只需在第一次调用时计算出结果，之后的调用可以直接从 cache 中获取。这样做的缺点是，当我们不再需要这个对象的时候需要清理 cache。
 
 如果我们用 WeakMap 替代 Map，便不会存在这个问题。当对象被垃圾回收时，对应缓存的结果也会被自动从内存中清除。
@@ -2296,7 +2321,9 @@ function process(obj) {
 }
 
 // 📁 main.js
-let obj = {/* some object */};
+let obj = {
+  /* some object */
+};
 
 let result1 = process(obj);
 let result2 = process(obj);
@@ -2308,7 +2335,9 @@ obj = null;
 // 要么是 0，或即将变为 0
 // 当 obj 被垃圾回收，缓存的数据也会被清除
 ```
+
 ### WeakSet
+
 WeakSet 的表现类似：
 
 - 与 Set 类似，但是我们只能向 WeakSet 添加对象（而不能是原始值）。
@@ -2318,6 +2347,7 @@ WeakSet 的表现类似：
 变“弱（weak）”的同时，它也可以作为额外的存储空间。但并非针对任意数据，而是针对“是/否”的事实。WeakSet 的元素可能代表着有关该对象的某些信息。
 
 例如，我们可以将用户添加到 WeakSet 中，以追踪访问过我们网站的用户：
+
 ```javascript
 let visitedSet = new WeakSet();
 
@@ -2341,9 +2371,11 @@ john = null;
 
 // visitedSet 将被自动清理(即自动清除其中已失效的值 john)
 ```
+
 WeakMap 和 WeakSet 最明显的局限性就是不能迭代，并且无法获取所有当前内容。那样可能会造成不便，但是并不会阻止 WeakMap/WeakSet 完成其主要工作 —— **为在其它地方存储/管理的对象数据提供“额外”存储**。
 
 ## Object.keys，values，entries
+
 对各个数据结构的学习至此告一段落，下面让我们讨论一下如何迭代它们。
 
 在前面的章节中，我们认识了 map.keys()，map.values() 和 map.entries() 方法。
@@ -2359,6 +2391,7 @@ WeakMap 和 WeakSet 最明显的局限性就是不能迭代，并且无法获取
 普通对象也支持类似的方法，但是语法上有一些不同。
 
 ### 普通对象的 Object.keys，values，entries
+
 对于普通对象，下列这些方法是可用的：
 
 - `Object.keys(obj)` —— 返回一个包含该对象所有的键的数组。
@@ -2366,6 +2399,7 @@ WeakMap 和 WeakSet 最明显的局限性就是不能迭代，并且无法获取
 - `Object.entries(obj)` —— 返回一个包含该对象所有 [key, value] 键值对的**数组**。
 
 ::: tip
+
 - 注意 `我们上面说的这三种方法` 在普通对象这里返回的是**真正的数组**
 
 为什么会这样？主要原因是灵活性。请记住，在 JavaScript 中，对象是所有复杂结构的基础。因此，我们可能有一个自己创建的对象，比如 data，并实现了它自己的 data.values() 方法。同时，我们依然可以对它调用 Object.values(data) 方法。
@@ -2374,7 +2408,7 @@ WeakMap 和 WeakSet 最明显的局限性就是不能迭代，并且无法获取
 
 语法如：
 
-``` Javascript
+```Javascript
 let user = {
   name: "John",
   age: 30
@@ -2386,6 +2420,7 @@ Object.keys(user) = ["name", "age"]
 Object.values(user) = ["John", 30]
 Object.entries(user) = [ ["name","John"], ["age",30] ]
 ```
+
 :::
 ::: warning Object.keys/values/entries 会忽略 symbol 属性
 就像 for..in 循环一样，这些方法会忽略使用 Symbol(...) 作为键的属性。
@@ -2398,6 +2433,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 :::
 
 ### 转换对象
+
 对象缺少数组存在的许多方法，例如 map 和 filter 等。
 
 如果我们想应用它们，那么我们可以使用 `Object.entries`，然后使用 `Object.fromEntries`：
@@ -2408,7 +2444,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 例如，我们有一个带有价格的对象，并想将它们加倍：
 
-``` Javascript
+```Javascript
 let prices = {
   banana: 1,
   orange: 2,
@@ -2425,6 +2461,7 @@ alert(doublePrices.meat); // 8
 ```
 
 ## 解构赋值
+
 JavaScript 中最常用的两种数据结构是 Object 和 Array。
 
 - 对象是一种根据键存储数据的实体。
@@ -2437,9 +2474,10 @@ JavaScript 中最常用的两种数据结构是 Object 和 Array。
 **解构操作对那些具有很多参数和默认值等的函数也很奏效**。下面有一些例子。
 
 ### 数组的解构
+
 这是一个将数组解构到变量中的例子：
 
-``` Javascript
+```Javascript
 // 我们有一个存放了名字和姓氏的数组
 let arr = ["John", "Smith"]
 
@@ -2452,100 +2490,1307 @@ alert(firstName); // John
 alert(surname);  // Smith
 ```
 
+我们可以使用这些变量而非原来的数组项了。
+
+当与 split 函数（或其他返回值为数组的函数）结合使用时，看起来更优雅：
+
+```Javascript
+let [firstName, surname] = "John Smith".split(' ');
+alert(firstName); // John
+alert(surname);  // Smith
+```
+
+正如我们所看到的，语法很简单。但是有几个需要注意的细节。让我们通过更多的例子来加深理解:
+::: tip “解构”并不意味着“破坏”
+这种语法被叫做“解构赋值”，是因为它“拆开”了数组或对象，将其中的各元素复制给一些变量。原来的数组或对象自身没有被修改。
+
+换句话说，解构赋值只是写起来简洁一点。以下两种写法是等价的：
 
+```Javascript
+// let [firstName, surname] = arr;
+let firstName = arr[0];
+let surname = arr[1];
+```
 
+:::
+::: tip 忽略使用逗号的元素
+可以通过添加额外的逗号来丢弃数组中不想要的元素：
 
+```Javascript
+// 不需要第二个元素
+let [firstName, , title] = [
+  "Julius",
+  "Caesar",
+  "Consul",
+  "of the Roman Republic",
+  ];
 
+alert( firstName,title ); // Julius，Consul
+```
 
+在上面的代码中，数组的第二个元素被跳过了，第三个元素被赋值给了 title 变量。数组中剩下的元素也都被跳过了（因为在这没有对应给它们的变量）。
+:::
+::: tip 等号右侧可以是任何可迭代对象
+……实际上，我们可以将其与任何可迭代对象一起使用，而不仅限于数组：
 
+```Javascript
+let [a, b, c] = "abc"; // ["a", "b", "c"]
+let [one, two, three] = new Set([1, 2, 3]);
+```
 
+这种情况下解构赋值是通过迭代右侧的值来完成工作的。这是一种用于对在 = 右侧的值上调用 for..of 并进行赋值的操作的语法糖。
+:::
+::: tip 赋值给等号左侧的任何内容
+我们可以在等号左侧使用任何“可以被赋值的”东西。
 
+例如，一个对象的属性：
 
+```Javascript
+let user = {};
+[user.name, user.surname] = "John Smith".split(' ');
 
+alert(user.name); // John
+alert(user.surname); // Smith
+```
 
+:::
+::: tip 与 `.entries()` 方法进行循环操作
+在前面的章节中我们已经见过了 `Object.entries(obj)` 方法。
 
+我们可以将 `.entries()` 方法与解构语法一同使用，来遍历一个对象的“键—值”对：
 
+```Javascript
+let user = {
+  name: "John",
+  age: 30
+};
 
+// 使用循环遍历键—值对
+for (let [key, value] of Object.entries(user)) {
+  alert(`${key}:${value}`); // name:John, then age:30
+}
+```
 
+用于 Map 的类似代码更简单，因为 Map 是可迭代的：
 
+```Javascript
+let user = new Map();
+user.set("name", "John");
+user.set("age", "30");
 
+// Map 是以 [key, value] 对的形式进行迭代的，非常便于解构
+for (let [key, value] of user) {
+  alert(`${key}:${value}`); // name:John, then age:30
+}
+```
 
+:::
+::: tip 交换变量值的技巧
+使用解构赋值来交换两个变量的值是一个著名的技巧：
 
+```Javascript
+let guest = "Jane";
+let admin = "Pete";
 
+// 让我们来交换变量的值：使得 guest = Pete，admin = Jane
+[guest, admin] = [admin, guest];
 
+alert(`${guest} ${admin}`); // Pete Jane（成功交换！）
+```
 
+这里我们创建了一个由两个变量组成的临时数组，并且立即以颠倒的顺序对其进行了解构赋值。
 
+我们也可以用这种方式交换两个以上的变量。
+:::
 
+#### 其余的数组项
 
+通常，如果数组比左边的列表长，那么“其余”的数组项会被省略。
 
+例如，这里只取了两项，其余的就被忽略了：
 
+```Javascript
+let [name1, name2] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
 
+alert(name1); // Julius
+alert(name2); // Caesar
+// 其余数组项未被分配到任何地方
+```
 
+如果我们还想收集其余的数组项 —— 我们可以使用三个点 "..." 来再加一个参数以获取其余数组项：
 
+```Javascript
+let [name1, name2, ...rest] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
 
+// rest 是包含从第三项开始的其余数组项的数组
+alert(rest[0]); // Consul
+alert(rest[1]); // of the Roman Republic
+alert(rest.length); // 2
+```
 
+rest 的值就是数组中剩下的元素组成的数组。
 
+不一定要使用变量名 rest，我们也可以使用任何其他的变量名。只要确保它前面有三个点，并且在解构赋值的最后一个参数位置上就行了
 
+#### 默认值
 
+如果数组比左边的变量列表短，这里不会出现报错。缺少对应值的变量都会被赋 undefined：
 
+```Javascript
+let [firstName, surname] = [];
 
+alert(firstName); // undefined
+alert(surname); // undefined
+```
 
+如果我们想要一个“默认”值给未赋值的变量，我们可以使用 = 来提供：
 
+```Javascript
+// 默认值
+let [name = "Guest", surname = "Anonymous"] = ["Julius"];
 
+alert(name);    // Julius（来自数组的值）
+alert(surname); // Anonymous（默认值被使用了）
+```
 
+默认值可以是更加复杂的表达式，甚至可以是函数调用。不过，这些表达式或函数只会在这个变量未被赋值的时候才会被计算。
 
+举个例子，我们使用了 prompt 函数来提供两个默认值：
 
+```Javascript
+// 只会提示输入姓氏
+let [name = prompt('name?'), surname = prompt('surname?')] = ["Julius"];
 
+alert(name);    // Julius（来自数组）
+alert(surname); // 你输入的值
+```
 
+### 对象的解构
 
+解构赋值同样适用于对象。
 
+基本语法是：
 
+```Javascript
+let {var1, var2} = {var1:…, var2:…}
+```
 
+在等号右侧是一个已经存在的对象，我们想把它拆分到变量中。等号左侧包含了对象相应属性的一个类对象“模式（pattern）”。在最简单的情况下，等号左侧的就是 {...} 中的变量名列表。
 
+如下所示：
 
+```Javascript
+let options = {
+  title: "Menu",
+  width: 100,
+  height: 200
+};
 
+let {title, width, height} = options;
 
+alert(title);  // Menu
+alert(width);  // 100
+alert(height); // 200
+```
 
+::: warning 变量的顺序并不重要，下面这个代码也是等价的
 
+```Javascript
+// 改变 let {...} 中元素的顺序
+let {height, width, title} = { title: "Menu", height: 200, width: 100 }
+```
 
+但是尽量不要这么写
+:::
+等号左侧的模式（pattern）可以更加复杂，指定属性和变量之间的映射关系。
 
+如果我们想把一个属性赋值给另一个名字的变量，比如把 options.width 属性赋值给名为 w 的变量，那么我们可以使用冒号来设置变量名称：
 
+```Javascript
+let options = {
+  title: "Menu",
+  width: 100,
+  height: 200
+};
 
+// { sourceProperty: targetVariable }
+let {width: w, height: h, title} = options;
 
+// width -> w
+// height -> h
+// title -> title
 
+alert(title);  // Menu
+alert(w);      // 100
+alert(h);      // 200
+```
 
+冒号的语法是“从对象中什么属性的值：赋值给哪个变量”。上面的例子中，属性 width 被赋值给了 w，属性 height 被赋值给了 h，属性 title 被赋值给了同名变量。
 
+对于可能缺失的属性，我们可以使用 "=" 设置默认值，如下所示：
 
+就像数组或函数参数一样，默认值可以是任意表达式甚至可以是函数调用。它们只会在未提供对应的值时才会被计算/调用。
 
+在下面的代码中，prompt 提示输入 width 值，但不会提示输入 title 值：
 
+```Javascript
+let options = {
+  title: "Menu"
+};
 
+let {width = prompt("width?"), title = prompt("title?")} = options;
 
+alert(title);  // Menu
+alert(width);  // (prompt 的返回值)
+```
 
+我们还可以将冒号和等号结合起来：
 
+```Javascript
+let options = {
+  title: "Menu"
+};
 
+let {width: w = 100, height: h = 200, title} = options;
 
+alert(title);  // Menu
+alert(w);      // 100
+alert(h);      // 200
+```
 
+如果我们有一个具有很多属性的复杂对象，那么我们可以只提取所需的内容：
 
+```Javascript
+let options = {
+  title: "Menu",
+  width: 100,
+  height: 200
+};
 
+// 仅提取 title 作为变量
+let { title } = options;
 
+alert(title); // Menu
+```
 
+#### 剩余模式（pattern）“…”
 
+如果对象拥有的属性数量比我们提供的变量数量还多，该怎么办？我们可以只取其中的某一些属性，然后把“剩余的”赋值到其他地方吗？
 
+我们可以使用剩余模式（pattern），与数组类似。一些较旧的浏览器不支持此功能（例如 IE，可以使用 Babel 对其进行 polyfill），但可以在现代浏览器中使用。
 
+看起来就像这样：
 
+```Javascript
+let options = {
+  title: "Menu",
+  height: 200,
+  width: 100
+};
 
+// title = 名为 title 的属性
+// rest = 存有剩余属性的对象
+let {title, ...rest} = options;
 
+// 现在 title="Menu", rest={height: 200, width: 100}
+alert(rest.height);  // 200
+alert(rest.width);   // 100
+```
 
+::: warning 不使用 let 时的陷阱
+在上面的示例中，变量都是在赋值中通过正确方式声明的：let {…} = {…}。当然，我们也可以使用已有的变量，而不用 let，但这里有一个陷阱。
 
+以下代码无法正常运行：
 
+```Javascript
+let title, width, height;
 
+// 这一行发生了错误
+{title, width, height} = {title: "Menu", width: 200, height: 100};
+```
 
+问题在于 JavaScript 把主代码流（即不在其他表达式中）的 {...} 当做一个代码块。这样的代码块可以用于对语句分组，如下所示：
 
+```Javascript
+{
+  // 一个代码块
+  let message = "Hello";
+  // ...
+  alert( message );
+}
+```
 
+因此，这里 JavaScript 假定我们有一个代码块，这就是报错的原因。我们需要解构它。
 
+为了告诉 JavaScript 这不是一个代码块，我们可以把整个赋值表达式用括号 (...) 包起来：
 
+```Javascript
+let title, width, height;
 
+// 现在就可以了
+({title, width, height} = {title: "Menu", width: 200, height: 100});
 
+alert( title ); // Menu
+```
+
+:::
+
+### 嵌套解构
+
+如果一个对象或数组嵌套了其他的对象和数组，我们可以在等号左侧使用更复杂的模式（pattern）来提取更深层的数据。
+
+在下面的代码中，options 的属性 size 是另一个对象，属性 items 是另一个数组。赋值语句中等号左侧的模式（pattern）具有相同的结构以从中提取值：
+
+```Javascript
+let options = {
+  size: {
+    width: 100,
+    height: 200
+  },
+  items: ["Cake", "Donut"],
+  extra: true
+};
+
+// 为了清晰起见，解构赋值语句被写成多行的形式
+let {
+  size: { // 把 size 赋值到这里
+    width,
+    height
+  },
+  items: [item1, item2], // 把 items 赋值到这里
+  title = "Menu" // 在对象中不存在（使用默认值）
+} = options;
+
+alert(title);  // Menu
+alert(width);  // 100
+alert(height); // 200
+alert(item1);  // Cake
+alert(item2);  // Donut
+```
+
+对象 options 的所有属性，除了 extra 属性在等号左侧不存在，都被赋值给了对应的变量
+
+最终，我们得到了 width、height、item1、item2 和具有默认值的 title 变量。
+
+注意，size 和 items 没有对应的变量，因为我们取的是它们的内容。
+
+### 智能函数参数
+
+有时，一个函数有很多参数，其中大部分的参数都是可选的。对用户界面来说更是如此。想象一个创建菜单的函数。它可能具有宽度参数，高度参数，标题参数和项目列表等。
+
+下面是实现这种函数的一个很不好的写法：
+
+```Javascript
+function showMenu(
+  title = "Untitled",
+  width = 200,
+  height = 100,
+  items = []
+  ) {
+  // ...
+}
+```
+
+在实际开发中，记忆如此多的参数的位置是一个很大的负担。通常集成开发环境（IDE）会尽力帮助我们，特别是当代码有良好的文档注释的时候，但是…… 另一个问题就是，在大部分的参数只需采用默认值的情况下，调用这个函数时会需要写大量的 undefined。
+
+像这样：
+
+```Javascript
+// 在采用默认值就可以的位置设置 undefined
+showMenu("My Menu", undefined, undefined, ["Item1", "Item2"])
+```
+
+这太难看了。而且，当我们处理更多参数的时候可读性会变得很差。
+
+解构赋值可以解决这些问题。
+
+我们可以用一个对象来传递所有参数，而函数负责把这个对象解构成各个参数：
+
+```Javascript
+// 我们传递一个对象给函数
+let options = {
+  title: "My menu",
+  items: ["Item1", "Item2"]
+};
+
+// ……然后函数马上把对象解构成变量
+function showMenu({title = "Untitled", width = 200, height = 100, items = []}) {
+  // title, items – 提取于 options，
+  // width, height – 使用默认值
+  alert( `${title} ${width} ${height}` ); // My Menu 200 100
+  alert( items ); // Item1, Item2
+}
+
+showMenu(options);
+```
+
+我们也可以使用带有嵌套对象和冒号映射的更加复杂的解构：
+
+```Javascript
+let options = {
+  title: "My menu",
+  items: ["Item1", "Item2"]
+};
+
+function showMenu({
+  title = "Untitled",
+  width: w = 100,  // width goes to w
+  height: h = 200, // height goes to h
+  items: [item1, item2] // items first element goes to item1, second to item2
+}) {
+  alert( `${title} ${w} ${h}` ); // My Menu 100 200
+  alert( item1 ); // Item1
+  alert( item2 ); // Item2
+}
+
+showMenu(options);
+```
+
+完整语法和解构赋值是一样的：
+
+```Javascript
+function({
+  incomingProperty: varName = defaultValue
+  ...
+})
+```
+
+对于参数对象，属性 incomingProperty 对应的变量是 varName，默认值是 defaultValue。
+
+请注意，这种解构假定了 showMenu() 函数确实存在参数。如果我们想让所有的参数都使用默认值，那我们应该传递一个空对象：
+
+```Javascript
+showMenu({}); // 不错，所有值都取默认值
+
+showMenu(); // 这样会导致错误
+```
+
+我们可以通过指定空对象 {} 为整个参数对象的默认值来解决这个问题：
+
+```Javascript
+function showMenu({ title = "Menu", width = 100, height = 200 } = {}) {
+  alert( `${title} ${width} ${height}` );
+}
+
+showMenu(); // Menu 100 200
+```
+
+## 日期和时间
+
+让我们来学习一个新的内建对象：日期（Date）。该对象存储日期和时间，并提供了日期/时间的管理方法。
+
+我们可以使用它来存储创建/修改时间，测量时间，或者仅用来打印当前时间。
+
+### 创建 Date 对象
+
+调用 new Date() 来创建一个新的 Date 对象。在调用时可以带有一些参数，如下所示：
+
+`new Date()`
+
+不带参数 —— 创建一个表示当前日期和时间的 Date 对象：
+
+```Javascript
+let now = new Date();
+alert( now ); // 显示当前的日期/时间
+```
+
+`new Date(milliseconds)`
+
+```Javascript
+// 0 表示 01.01.1970 UTC+0
+let Jan01_1970 = new Date(0);
+alert( Jan01_1970 );
+
+// 现在增加 24 小时，得到 02.01.1970 UTC+0
+let Jan02_1970 = new Date(24 * 3600 * 1000);
+alert( Jan02_1970 );
+```
+
+传入的整数参数代表的是自 1970-01-01 00:00:00 以来经过的毫秒数，该整数被称为 时间戳。
+
+这是一种日期的轻量级数字表示形式。我们通常使用 new Date(timestamp) 通过时间戳来创建日期，并可以使用 date.getTime() 将现有的 Date 对象转化为时间戳（下文会讲到）。
+
+在 01.01.1970 之前的日期带有负的时间戳，例如：
+
+```Javascript
+// 31 Dec 1969
+let Dec31_1969 = new Date(-24 * 3600 * 1000);
+alert( Dec31_1969 );
+```
+
+`new Date(datestring)`
+
+如果只有一个参数，并且是字符串，那么它会被自动解析。该算法与 Date.parse 所使用的算法相同，将在下文中进行介绍。
+
+```Javascript
+let date = new Date("2017-01-26");
+alert(date);
+// 未指定具体时间，所以假定时间为格林尼治标准时间（GMT）的午夜零点
+// 并根据运行代码时的用户的时区进行调整
+// 因此，结果可能是
+// Thu Jan 26 2017 11:00:00 GMT+1100 (Australian Eastern Daylight Time)
+// 或
+// Wed Jan 25 2017 16:00:00 GMT-0800 (Pacific Standard Time)
+```
+
+`new Date(year, month, date, hours, minutes, seconds, ms)`
+
+使用当前时区中的给定组件创建日期。只有前两个参数是必须的。
+
+- year 应该是四位数。为了兼容性，也接受 2 位数，并将其视为 19xx，例如 98 与 1998 相同，但强烈建议始终使用 4 位数。
+- month 计数从 **0（一月）开始，到 11（十二月）结束**。
+- date 是当月的具体某一天，如果缺失，则为默认值 1。
+- 如果 hours/minutes/seconds/ms 缺失，则均为默认值 0。
+
+例如：
+
+```Javascript
+new Date(2011, 0, 1, 0, 0, 0, 0); // 1 Jan 2011, 00:00:00
+new Date(2011, 0, 1); // 同样，时分秒等均为默认值 0
+```
+
+时间度量最大精确到 1 毫秒（1/1000 秒）：
+
+```Javascript
+let date = new Date(2011, 0, 1, 2, 3, 4, 567);
+alert( date ); // 1.01.2011, 02:03:04.567
+```
+
+### 访问日期组件
+
+从 Date 对象中访问年、月等信息有多种方式：
+
+- `getFullYear()` 获取年份（4 位数）
+  ::: tip 不是 getYear()，而是 getFullYear()
+  很多 JavaScript 引擎都实现了一个非标准化的方法 getYear()。不推荐使用这个方法。它有时候可能会返回 2 位的年份信息。永远不要使用它。要获取年份就使用 getFullYear()
+  :::
+- `getMonth()` 获取月份，从 0 到 11。
+- `getDate()` 获取当月的具体日期，从 1 到 31，这个方法名称可能看起来有些令人疑惑。
+- `getHours()，getMinutes()，getSeconds()，getMilliseconds()`
+  获取相应的时间组件。
+- `getDay()` 获取一周中的第几天，从 0（星期日）到 6（星期六）。第一天始终是星期日，在某些国家可能不是这样的习惯，但是这不能被改变。
+- `getTime()` 返回日期的时间戳 —— 从 1970-1-1 00:00:00 UTC+0 开始到现在所经过的毫秒数。
+- `getTimezoneOffset()` 返回 UTC 与本地时区之间的时差，以分钟为单位：
+
+### 设置日期组件
+
+下列方法可以设置日期/时间组件：
+
+- `setFullYear(year, [month], [date])`
+- `setMonth(month, [date])`
+- `setDate(date)`
+- `setHours(hour, [min], [sec], [ms])`
+- `setMinutes(min, [sec], [ms])`
+- `setSeconds(sec, [ms])`
+- `setMilliseconds(ms)`
+- `setTime(milliseconds)`（使用自 1970-01-01 00:00:00 UTC+0 以来的毫秒数来设置整个日期）
+
+以上方法除了 setTime() 都有 UTC 变体，例如：setUTCHours()。
+
+我们可以看到，有些方法可以一次性设置多个组件，比如 setHours。未提及的组件不会被修改。
+
+举个例子：
+```Javascript
+let today = new Date();
+
+today.setHours(0);
+alert(today); // 日期依然是今天，但是小时数被改为了 0
+
+today.setHours(0, 0, 0, 0);
+alert(today); // 日期依然是今天，时间为 00:00:00。
+```
+::: tip 这么多方法？！
+所有的方法使用细节都能在MDN中找到答案：
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date
+
+::: 
+
+### 自动校准（Autocorrection）
+自动校准 是 Date 对象的一个非常方便的特性。我们可以设置超范围的数值，它会自动校准。
+
+举个例子：
+
+```Javascript
+let date = new Date(2013, 0, 32); // 32 Jan 2013 ?!?
+alert(date); // ……是 1st Feb 2013!
+```
+
+假设我们要在日期 “28 Feb 2016” 上加 2 天。结果可能是 “2 Mar” 或 “1 Mar”，因为存在闰年。但是我们不需要考虑这些，只需要直接加 2 天，剩下的 Date 对象会帮我们处理：
+
+```Javascript
+let date = new Date(2016, 1, 28);
+date.setDate(date.getDate() + 2);
+
+alert( date ); // 1 Mar 2016
+```
+这个特性经常被用来获取给定时间段后的日期。例如，我们想获取“现在 70 秒后”的日期：
+
+```Javascript
+let date = new Date();
+date.setSeconds(date.getSeconds() + 70);
+
+alert( date ); // 显示正确的日期信息
+```
+我们还可以设置 0 甚至可以设置负值。例如：
+
+```Javascript
+let date = new Date(2016, 0, 2); // 2016 年 1 月 2 日
+
+date.setDate(1); // 设置为当月的第一天
+alert( date );
+
+date.setDate(0); // 天数最小可以设置为 1，所以这里设置的是上一月的最后一天
+alert( date ); // 31 Dec 2015
+```
+### 日期转化为数字，日期差值
+当 Date 对象被转化为数字时，得到的是对应的时间戳，与使用 date.getTime() 的结果相同：
+
+```Javascript
+let date = new Date();
+alert(+date); // 以毫秒为单位的数值，与使用 date.getTime() 的结果相同
+```
+有一个重要的副作用：日期可以相减，相减的结果是以毫秒为单位时间差。
+
+这个作用可以用于时间测量（程序，实际时间等等）：
+```Javascript
+let start = new Date(); // 开始测量时间
+
+// do the job
+for (let i = 0; i < 100000; i++) {
+  let doSomething = i * i * i;
+}
+
+let end = new Date(); // 结束测量时间
+
+alert( `The loop took ${end - start} ms` );
+```
+
+### Date.now()
+如果我们仅仅想要测量时间间隔，我们不需要 Date 对象。
+
+有一个特殊的方法 Date.now()，它会返回当前的时间戳。
+
+它相当于 new Date().getTime()，但它不会创建中间的 Date 对象。因此它更快，而且不会对垃圾回收造成额外的压力。
+
+这种方法很多时候因为方便，又或是因性能方面的考虑而被采用，例如使用 JavaScript 编写游戏或其他的特殊应用场景。
+
+因此这样做可能会更好：
+
+```Javascript
+let start = Date.now(); // 从 1 Jan 1970 至今的时间戳
+
+// do the job
+for (let i = 0; i < 100000; i++) {
+  let doSomething = i * i * i;
+}
+
+let end = Date.now(); // 完成
+
+alert( `The loop took ${end - start} ms` ); // 相减的是时间戳，而不是日期
+```
+### 基准测试（Benchmarking）
+
+在对一个很耗 CPU 性能的函数进行可靠的基准测试（Benchmarking）时，我们需要谨慎一点。
+
+例如，我们想判断以下两个计算日期差值的函数：哪个更快？
+
+这种性能测量通常称为“基准测试（benchmark）”。
+
+```Javascript
+// 我们有 date1 和 date2，哪个函数会更快地返回两者的时间差？
+function diffSubtract(date1, date2) {
+  return date2 - date1;
+}
+
+// or
+function diffGetTime(date1, date2) {
+  return date2.getTime() - date1.getTime();
+}
+```
+
+这两个函数做的事情完全相同，但是其中一个函数使用显式的 date.getTime() 来获取毫秒形式的日期，另一个则依赖于“日期 — 数字”的转换。它们的结果是一样的。
+
+那么，哪个更快呢？
+
+首先想到的方法可能是连续运行两者很多次，并计算所消耗的时间之差。就这个例子而言，函数过于简单，所以我们必须执行至少 100000 次。
+
+让我们开始测量：
+
+```Javascript
+function diffSubtract(date1, date2) {
+  return date2 - date1;
+}
+
+function diffGetTime(date1, date2) {
+  return date2.getTime() - date1.getTime();
+}
+
+function bench(f) {
+  let date1 = new Date(0);
+  let date2 = new Date();
+
+  let start = Date.now();
+  for (let i = 0; i < 100000; i++) f(date1, date2);
+  return Date.now() - start;
+}
+
+alert( 'Time of diffSubtract: ' + bench(diffSubtract) + 'ms' );
+alert( 'Time of diffGetTime: ' + bench(diffGetTime) + 'ms' );
+```
+看起来使用 getTime() 这种方式快得多，这是因为它没有进行类型转换，对引擎优化来说更加简单。
+
+我们得到了结论，但是这并不是一个很好的度量的例子。
+
+想象一下当运行 bench(diffSubtract) 的同时，CPU 还在并行处理其他事务，并且这也会占用资源。然而，运行 bench(diffGetTime) 的时候，并行处理的事务完成了。
+
+对于现代多进程操作系统来说，这是一个非常常见的场景。
+
+比起第二个函数，第一个函数所能使用的 CPU 资源更少。这可能导致错误的结论。
+
+为了得到更加可靠的度量，整个度量测试包应该重新运行多次。
+
+例如，像下面的代码这样：
+
+```Javascript
+function diffSubtract(date1, date2) {
+  return date2 - date1;
+}
+
+function diffGetTime(date1, date2) {
+  return date2.getTime() - date1.getTime();
+}
+
+function bench(f) {
+  let date1 = new Date(0);
+  let date2 = new Date();
+
+  let start = Date.now();
+  for (let i = 0; i < 100000; i++) f(date1, date2);
+  return Date.now() - start;
+}
+
+let time1 = 0;
+let time2 = 0;
+
+// 交替运行 bench(diffSubtract) 和 bench(diffGetTime) 各 10 次
+for (let i = 0; i < 10; i++) {
+  time1 += bench(diffSubtract);
+  time2 += bench(diffGetTime);
+}
+
+alert( 'Total time for diffSubtract: ' + time1 );
+alert( 'Total time for diffGetTime: ' + time2 );
+```
+
+现代的 JavaScript 引擎的先进优化策略只对执行很多次的 “hot code” 有效（对于执行很少次数的代码没有必要优化）。因此，在上面的例子中，第一次执行的优化程度不高。我们可能需要增加一个预热步骤：
+
+```Javascript
+// 在主循环中增加预热环节
+bench(diffSubtract);
+bench(diffGetTime);
+
+// 开始度量
+for (let i = 0; i < 10; i++) {
+  time1 += bench(diffSubtract);
+  time2 += bench(diffGetTime);
+}
+```
+::: tip 进行微型基准测试时要小心
+现代的 JavaScript 引擎执行了很多优化。与正常编写的代码相比，它们可能会改变“人为编写的专用于测试的代码”的执行流程，特别是在我们对很小的代码片段进行基准测试时，例如某个运算符或内建函数的工作方式。因此，为了深入理解性能问题，请学习 JavaScript 引擎的工作原理。在那之后，你或许再也不需要进行微型基准测试了。
+
+http://mrale.ph 提供了很多 V8 引擎相关的文章。
+:::
+
+### 对字符串调用 Date.parse
+Date.parse(str) 方法可以从一个字符串中读取日期。
+
+字符串的格式应该为：`YYYY-MM-DDTHH:mm:ss.sssZ`，其中：
+
+- YYYY-MM-DD —— 日期：年-月-日。
+- 字符 "T" 是一个分隔符。
+- HH:mm:ss.sss —— 时间：小时，分钟，秒，毫秒。
+- 可选字符 'Z' 为 +-hh:mm 格式的时区。单个字符 Z 代表 UTC+0 时区。
+
+简短形式也是可以的，比如 YYYY-MM-DD 或 YYYY-MM，甚至可以是 YYYY。
+
+`Date.parse(str)` 调用会解析给定格式的字符串，并返回时间戳（自 1970-01-01 00:00:00 起所经过的毫秒数）。如果给定字符串的格式不正确，则返回 NaN。
+
+举个例子：
+
+```Javascript
+let ms = Date.parse('2012-01-26T13:51:50.417-07:00');
+
+alert(ms); // 1327611110417  (时间戳)
+```
+我们可以通过时间戳来立即创建一个 new Date 对象：
+
+```Javascript
+let date = new Date( Date.parse('2012-01-26T13:51:50.417-07:00') );
+
+alert(date);
+```
+
+## JSON 方法，toJSON
+假设我们有一个复杂的对象，我们希望将其转换为字符串，以通过网络发送，或者只是为了在日志中输出它。
+
+当然，这样的字符串应该包含所有重要的属性。
+
+我们可以像这样实现转换：
+
+```Javascript
+let user = {
+  name: "John",
+  age: 30,
+
+  toString() {
+    return `{name: "${this.name}", age: ${this.age}}`;
+  }
+};
+
+alert(user); // {name: "John", age: 30}
+```
+
+……但在开发过程中，会新增一些属性，旧的属性会被重命名和删除。每次更新这种 toString 都会非常痛苦。我们可以尝试遍历其中的属性，但是如果对象很复杂，并且在属性中嵌套了对象呢？我们也需要对它们进行转换。
+
+幸运的是，不需要编写代码来处理所有这些问题。这项任务已经解决了。
+
+### JSON.stringify
+
+JSON（JavaScript Object Notation）是表示值和对象的通用格式。在 RFC 4627 标准中有对其的描述。最初它是为 JavaScript 而创建的，但许多其他编程语言也有用于处理它的库。因此，当客户端使用 JavaScript 而服务器端是使用 Ruby/PHP/Java 等语言编写的时，使用 JSON 可以很容易地进行数据交换。
+
+JavaScript 提供了如下方法：
+
+- `JSON.stringify` 将对象转换为 JSON。
+- `JSON.parse` 将 JSON 转换回对象。
+
+例如，在这里我们 JSON.stringify 一个 student 对象：
+
+```Javascript
+let student = {
+  name: 'John',
+  age: 30,
+  isAdmin: false,
+  courses: ['html', 'css', 'js'],
+  spouse: null
+};
+
+let json = JSON.stringify(student);
+
+alert(typeof json); // we've got a string!
+
+alert(json);
+/* JSON 编码的对象：
+{
+  "name": "John",
+  "age": 30,
+  "isAdmin": false,
+  "courses": ["html", "css", "js"],
+  "spouse": null
+}
+*/
+```
+
+方法 JSON.stringify(student) 接收对象并将其转换为字符串。
+
+得到的 json 字符串是一个被称为 `JSON 编码（JSON-encoded）` 或 `序列化（serialized）` 或 `字符串化（stringified）` 或 `编组化（marshalled）` 的对象。我们现在已经准备好通过有线发送它或将其放入普通数据存储。
+
+请注意，JSON 编码的对象与对象字面量有几个重要的区别：
+
+- 字符串使用双引号。JSON 中没有单引号或反引号。所以 'John' 被转换为 "John"。
+- 对象属性名称也是双引号的。这是强制性的。所以 age:30 被转换成 "age":30。
+
+JSON.stringify 也可以应用于原始（primitive）数据类型。
+
+JSON 支持以下数据类型：
+
+- Objects { ... }
+- Arrays [ ... ]
+- Primitives：
+  - strings，
+  - numbers，
+  - boolean values true/false，
+  - null。
+
+例如：
+
+```Javascript
+// 数字在 JSON 还是数字
+alert( JSON.stringify(1) ) // 1
+
+// 字符串在 JSON 中还是字符串，只是被双引号扩起来
+alert( JSON.stringify('test') ) // "test"
+
+alert( JSON.stringify(true) ); // true
+
+alert( JSON.stringify([1, 2, 3]) ); // [1,2,3]
+```
+JSON 是语言无关的纯数据规范，因此一些**特定于 JavaScript 的对象属性**会被 JSON.stringify 跳过。
+
+即：
+
+- 函数属性（方法）。
+- Symbol 类型的键和值。
+- 存储 undefined 的属性。
+
+例如：
+
+```Javascript
+let user = {
+  sayHi() { // 被忽略
+    alert("Hello");
+  },
+  [Symbol("id")]: 123, // 被忽略
+  something: undefined // 被忽略
+};
+
+alert( JSON.stringify(user) ); // {}（空对象）
+```
+通常这很好。如果这不是我们想要的方式，那么我们很快就会看到如何自定义转换方式。
+
+最棒的是支持嵌套对象转换，并且可以自动对其进行转换。
+
+例如：
+
+```Javascript
+let meetup = {
+  title: "Conference",
+  room: {
+    number: 23,
+    participants: ["john", "ann"]
+  }
+};
+
+alert( JSON.stringify(meetup) );
+/* 整个结构都被字符串化了
+{
+  "title":"Conference",
+  "room":{"number":23,"participants":["john","ann"]},
+}
+*/
+```
+**重要的限制：不得有循环引用。**
+
+例如：
+
+```Javascript
+let room = {
+  number: 23
+};
+
+let meetup = {
+  title: "Conference",
+  participants: ["john", "ann"]
+};
+
+meetup.place = room;       // meetup 引用了 room
+room.occupiedBy = meetup; // room 引用了 meetup
+
+JSON.stringify(meetup); // Error: Converting circular structure to JSON
+```
+
+### 排除和转换：replacer
+JSON.stringify 的完整语法是：
+```Javascript
+let json = JSON.stringify(value[, replacer, space])
+```
+
+- `value` 要编码的值。
+- `replacer` 要编码的属性数组或映射函数 function(key, value)。
+- `space` 用于格式化的空格数量。
+
+大部分情况，JSON.stringify 仅与第一个参数一起使用。但是，如果我们需要微调替换过程，比如过滤掉循环引用，我们可以使用 JSON.stringify 的第二个参数。
+
+如果我们传递一个属性数组给它，那么只有这些属性会被编码。
+
+例如：
+
+```Javascript
+let room = {
+  number: 23
+};
+
+let meetup = {
+  title: "Conference",
+  participants: [{name: "John"}, {name: "Alice"}],
+  place: room // meetup 引用了 room
+};
+
+room.occupiedBy = meetup; // room 引用了 meetup
+
+alert( JSON.stringify(meetup, ['title', 'participants']) );
+// {"title":"Conference","participants":[{},{}]}
+```
+这里我们可能过于严格了。属性列表应用于了整个对象结构。所以 participants 是空的，因为 name 不在列表中。
+
+让我们包含除了会导致循环引用的 room.occupiedBy 之外的所有属性：
+
+```Javascript
+let room = {
+  number: 23
+};
+
+let meetup = {
+  title: "Conference",
+  participants: [{name: "John"}, {name: "Alice"}],
+  place: room // meetup 引用了 room
+};
+
+room.occupiedBy = meetup; // room 引用了 meetup
+
+alert( JSON.stringify(meetup, ['title', 'participants', 'place', 'name', 'number']) );
+/*
+{
+  "title":"Conference",
+  "participants":[{"name":"John"},{"name":"Alice"}],
+  "place":{"number":23}
+}
+*/
+```
+现在，除 occupiedBy 以外的所有内容都被序列化了。但是属性的列表太长了。
+
+幸运的是，我们可以使用一个函数代替数组作为 replacer。
+
+该函数会为每个 (key,value) 对调用并返回“已替换”的值，该值将替换原有的值。如果值被跳过了，则为 undefined。
+
+在我们的例子中，我们可以为 occupiedBy 以外的所有内容按原样返回 value。对于 occupiedBy，下面的代码返回 undefined：
+
+``` javascript
+let room = {
+  number: 23
+};
+
+let meetup = {
+  title: "Conference",
+  participants: [{name: "John"}, {name: "Alice"}],
+  place: room // meetup 引用了 room
+};
+
+room.occupiedBy = meetup; // room 引用了 meetup
+
+alert( JSON.stringify(meetup, function replacer(key, value) {
+  alert(`${key}: ${value}`);
+  return (key == 'occupiedBy') ? undefined : value;
+}));
+
+
+/* key:value pairs that come to replacer:
+:             [object Object]
+title:        Conference
+participants: [object Object],[object Object]
+0:            [object Object]
+name:         John
+1:            [object Object]
+name:         Alice
+place:        [object Object]
+number:       23
+occupiedBy: [object Object]
+*/
+```
+请注意 replacer 函数会获取每个键/值对，包括嵌套对象和数组项。它被递归地应用。replacer 中的 this 的值是包含当前属性的对象。
+
+第一个调用很特别。它是使用特殊的“包装对象”制作的：{"": meetup}。换句话说，第一个 (key, value) 对的键是空的，并且该值是整个目标对象。这就是上面的示例中第一行是 ":[object Object]" 的原因。
+
+这个理念是为了给 replacer 提供尽可能多的功能：如果有必要，它有机会分析并替换/跳过整个对象。
+
+### 格式化：space
+
+`JSON.stringify(value, replacer, spaces)` 的第三个参数是用于优化格式的空格数量。
+
+以前，所有字符串化的对象都没有缩进和额外的空格。如果我们想通过网络发送一个对象，那就没什么问题。space 参数专门用于调整出更美观的输出。
+
+例如这里的 space = 2 告诉 JavaScript 在多行中显示嵌套的对象，对象内部缩进 2 个空格：
+
+``` javascript
+let user = {
+  name: "John",
+  age: 25,
+  roles: {
+    isAdmin: false,
+    isEditor: true
+  }
+};
+
+alert(JSON.stringify(user, null, 2));
+/* 两个空格的缩进：
+{
+  "name": "John",
+  "age": 25,
+  "roles": {
+    "isAdmin": false,
+    "isEditor": true
+  }
+}
+*/
+
+/* 对于 JSON.stringify(user, null, 4) 的结果会有更多缩进：
+{
+    "name": "John",
+    "age": 25,
+    "roles": {
+        "isAdmin": false,
+        "isEditor": true
+    }
+}
+*/
+```
+
+第三个参数也可以是字符串。在这种情况下，字符串用于缩进，而不是空格的数量。
+
+spaces 参数仅用于日志记录和美化输出。
+
+### 自定义 “toJSON”
+像 toString 进行字符串转换，对象也可以提供 toJSON 方法来进行 JSON 转换。如果可用，JSON.stringify 会自动调用它。
+
+例如：
+
+``` javascript
+let room = {
+  number: 23
+};
+
+let meetup = {
+  title: "Conference",
+  date: new Date(Date.UTC(2017, 0, 1)),
+  room
+};
+
+alert( JSON.stringify(meetup) );
+/*
+  {
+    "title":"Conference",
+    "date":"2017-01-01T00:00:00.000Z",  // (1)
+    "room": {"number":23}               // (2)
+  }
+*/
+```
+
+在这儿我们可以看到 date (1) 变成了一个字符串。这是因为所有日期都有一个内建的 toJSON 方法来返回这种类型的字符串。
+
+现在让我们为对象 room 添加一个自定义的 toJSON：
+
+``` javascript
+let room = {
+  number: 23,
+  toJSON() {
+    return this.number;
+  }
+};
+
+let meetup = {
+  title: "Conference",
+  room
+};
+
+alert( JSON.stringify(room) ); // 23
+
+alert( JSON.stringify(meetup) );
+/*
+  {
+    "title":"Conference",
+    "room": 23
+  }
+*/
+```
+正如我们所看到的，toJSON 既可以用于直接调用 JSON.stringify(room) 也可以用于当 room 嵌套在另一个编码对象中时。
+
+### JSON.parse
+
+要解码 JSON 字符串，我们需要另一个方法 JSON.parse。
+
+语法：
+
+``` javascript
+let value = JSON.parse(str, [reviver]);
+```
+- str 要解析的 JSON 字符串。
+- reviver 可选的函数 function(key,value)，该函数将为每个 (key, value) 对调用，并可以对值进行转换。
+
+例如：
+``` javascript
+// 字符串化数组
+let numbers = "[0, 1, 2, 3]";
+
+numbers = JSON.parse(numbers);
+
+alert( numbers[1] ); // 1
+```
+对于嵌套对象：
+
+``` javascript
+let userData = '{ "name": "John", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
+
+let user = JSON.parse(userData);
+
+alert( user.friends[1] ); // 1
+```
+JSON 可能会非常复杂，对象和数组可以包含其他对象和数组。但是它们必须遵循相同的 JSON 格式。
+
+以下是手写 JSON 时的典型错误（有时我们必须出于调试目的编写它）：
+
+``` javascript
+let json = `{
+  name: "John",                     // 错误：属性名没有双引号
+  "surname": 'Smith',               // 错误：值使用的是单引号（必须使用双引号）
+  'isAdmin': false                  // 错误：键使用的是单引号（必须使用双引号）
+  "birthday": new Date(2000, 2, 3), // 错误：不允许使用 "new"，只能是裸值
+  "friends": [0,1,2,3]              // 这个没问题
+}`;
+```
+此外，JSON 不支持注释。向 JSON 添加注释无效。
+
+还有另一种名为 JSON5 的格式，它允许未加引号的键，也允许注释等。但这是一个独立的库，不在语言的规范中。
+
+标准 JSON 格式之所以如此严格，并不是因为它的制定者们偷懒，而是为了能够简单，可靠且快速地实现解析算法。
+### 使用 reviver
+想象一下，我们从服务器上获得了一个字符串化的 meetup 对象。
+
+它看起来像这样：
+
+``` javascript
+// title: (meetup title), date: (meetup date)
+let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
+```
+……现在我们需要对它进行 反序列（deserialize），把它转换回 JavaScript 对象。
+
+让我们通过调用 JSON.parse 来完成：
+``` javascript
+let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
+
+let meetup = JSON.parse(str);
+
+alert( meetup.date.getDate() ); // Error!
+```
+meetup.date 的值是一个字符串，而不是 Date 对象。JSON.parse 怎么知道应该将字符串转换为 Date 呢？
+
+让我们将 reviver 函数传递给 JSON.parse 作为第二个参数，该函数按照“原样”返回所有值，但是 date 会变成 Date：
+
+``` javascript
+let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
+
+let meetup = JSON.parse(str, function(key, value) {
+  if (key == 'date') return new Date(value);
+  return value;
+});
+
+alert( meetup.date.getDate() ); // 现在正常运行了！
+```
+这也适用于嵌套对象：
+``` javascript
+let schedule = `{
+  "meetups": [
+    {"title":"Conference","date":"2017-11-30T12:00:00.000Z"},
+    {"title":"Birthday","date":"2017-04-18T12:00:00.000Z"}
+  ]
+}`;
+
+schedule = JSON.parse(schedule, function(key, value) {
+  if (key == 'date') return new Date(value);
+  return value;
+});
+
+alert( schedule.meetups[1].date.getDate() ); // 正常运行了！
+```
 
 
 
