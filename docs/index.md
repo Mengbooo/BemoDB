@@ -2,6 +2,7 @@
 layout: home
 hero:
   name: Bolaxious 的文档库
+  textsuffix: 'Theme'
   text: Bolaxious's documentation library
   tagline: 代码 · 艺术 · 游戏 · 生活
   image:
