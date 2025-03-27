@@ -408,6 +408,847 @@ list.next = list.next.next;
 ……等。
 在本章中，我们将学习如何编写支持传入任意数量参数的函数，以及如何将数组作为参数传递给这类函数。
 
+### Rest 参数 `...`
+在 JavaScript 中，无论函数是如何定义的，你都可以在调用它时传入任意数量的参数。
+
+例如：
+
+``` javascript
+function sum(a, b) {
+  return a + b;
+}
+
+alert( sum(1, 2, 3, 4, 5) );
+```
+虽然这里这个函数不会因为传入过多的参数而报错。但是，当然，只有前两个参数被求和了。
+
+我们可以在函数定义中声明一个数组来收集参数。语法是这样的：`...变量名`，这将会声明一个数组并指定其名称，其中存有剩余的参数。这三个点的语义就是“收集剩余的参数并存进指定数组中”。
+
+例如，我们需要把所有的参数都放到数组 `args` 中：
+
+``` javascript
+function sumAll(...args) { // 数组名为 args
+  let sum = 0;
+
+  for (let arg of args) sum += arg;
+
+  return sum;
+}
+
+alert( sumAll(1) ); // 1
+alert( sumAll(1, 2) ); // 3
+alert( sumAll(1, 2, 3) ); // 6
+```
+我们也可以选择将第一个参数获取为变量，并将剩余的参数收集起来。
+
+下面的例子把前两个参数获取为变量，并把剩余的参数收集到 titles 数组中
+
+``` javascript
+function showName(firstName, lastName, ...titles) {
+  alert( firstName + ' ' + lastName ); // Julius Caesar
+
+  // 剩余的参数被放入 titles 数组中
+  // i.e. titles = ["Consul", "Imperator"]
+  alert( titles[0] ); // Consul
+  alert( titles[1] ); // Imperator
+  alert( titles.length ); // 2
+}
+
+showName("Julius", "Caesar", "Consul", "Imperator");
+```
+::: warning Rest 参数必须放到参数列表的末尾
+Rest 参数会收集剩余的所有参数，因此下面这种用法没有意义，并且会导致错误：
+``` javascript
+function f(arg1, ...rest, arg2) { // arg2 在 ...rest 后面？！
+  // error
+}
+```
+`...rest` 必须写在参数列表最后。
+:::
+### “arguments” 变量
+有一个名为 `arguments` 的`特殊类数组对象`可以在函数中被访问，该对象以参数在参数列表中的索引作为键，存储所有参数。
+
+例如：
+
+``` javascript
+function showName() {
+  alert( arguments.length );
+  alert( arguments[0] );
+  alert( arguments[1] );
+
+  // 它是可遍历的
+  // for(let arg of arguments) alert(arg);
+}
+
+// 依次显示：2，Julius，Caesar
+showName("Julius", "Caesar");
+
+// 依次显示：1，Ilya，undefined（没有第二个参数）
+showName("Ilya");
+```
+
+在过去，JavaScript 中不支持 rest 参数语法，而使用 arguments 是获取函数所有参数的唯一方法。现在它仍然有效，我们可以在一些老代码里找到它。
+
+但缺点是，尽管 arguments 是一个类数组，也是可迭代对象，但它终究不是数组。它不支持数组方法，因此我们不能调用 arguments.map(...) 等方法。
+
+此外，它始终包含所有参数，我们不能像使用 rest 参数那样只截取参数的一部分。
+
+因此，当我们需要这些功能时，**最好使用 rest 参数**。
+
+::: tip 箭头函数没有 `"arguments"`
+如果我们在箭头函数中访问 arguments，访问到的 arguments 并不属于箭头函数，而是属于箭头函数外部的“普通”函数。
+
+举个例子：
+
+``` javascript
+function f() {
+  let showArg = () => alert(arguments[0]);
+  showArg();
+}
+
+f(1); // 1
+```
+我们已经知道，箭头函数没有自身的 this。现在我们知道了它们也没有特殊的 arguments 对象。
+:::
+
+### Spread 语法
+
+我们刚刚看到了如何从参数列表中获取数组。
+
+有时候我们也需要做与之相反的事。
+
+例如，内建函数 Math.max 会返回参数中最大的值：
+
+``` javascript
+alert( Math.max(3, 5, 1) ); // 5
+```
+如果我们有一个数组 [3, 5, 1]，我们该如何用它调用 Math.max 呢？
+
+直接“原样”传入这个数组是不会奏效的，因为 Math.max 期望的是**列表形式的数值型参数**，而不是一个数组：
+
+``` javascript
+let arr = [3, 5, 1];
+
+alert( Math.max(arr) ); // NaN
+```
+
+`Spread 语法` 可以解决这个问题！它看起来和 rest 参数很像，也使用 ...，但是二者的用途完全相反。
+
+当在函数调用中使用 ...arr 时，它会把可迭代对象 arr “展开”到参数列表中。
+
+以 Math.max 为例：
+``` javascript
+let arr = [3, 5, 1];
+
+alert( Math.max(arr) ); // NaN
+```
+我们还可以通过这种方式传入多个可迭代对象：
+``` javascript
+let arr1 = [1, -2, 3, 4];
+let arr2 = [8, 3, -8, 1];
+
+alert( Math.max(...arr1, ...arr2) ); // 8
+```
+我们甚至还可以将 spread 语法与常规值结合使用：
+``` javascript
+let arr1 = [1, -2, 3, 4];
+let arr2 = [8, 3, -8, 1];
+
+alert( Math.max(1, ...arr1, 2, ...arr2, 25) ); // 25
+```
+并且，我们还可以使用 spread 语法来合并数组：
+``` javascript
+let arr = [3, 5, 1];
+let arr2 = [8, 9, 15];
+
+let merged = [0, ...arr, 2, ...arr2];
+
+alert(merged); // 0,3,5,1,2,8,9,15（0，然后是 arr，然后是 2，然后是 arr2）
+```
+在上面的示例中，我们使用数组展示了 spread 语法，其实我们可以用 spread 语法这样操作任何可迭代对象。
+
+例如，在这儿我们使用 spread 语法将字符串转换为字符数组：
+``` javascript
+let str = "Hello";
+
+alert( [...str] ); // H,e,l,l,o
+```
+Spread 语法内部使用了迭代器来收集元素，与 for..of 的方式相同。
+
+因此，对于一个字符串，for..of 会逐个返回该字符串中的字符，...str 也同理会得到 "H","e","l","l","o" 这样的结果。随后，字符列表被传递给数组初始化器` [...str]`。
+
+对于这个特定任务，我们还可以使用 Array.from 来实现，因为该方法会将一个可迭代对象（如字符串）转换为数组：
+``` javascript
+let str = "Hello";
+
+// Array.from 将可迭代对象转换为数组
+alert( Array.from(str) ); // H,e,l,l,o
+```
+运行结果与 `[...str]` 相同。
+
+不过 Array.from(obj) 和 `[...obj]` 存在一个细微的差别：
+
+- Array.from 适用于类数组对象也适用于可迭代对象。
+- Spread 语法只适用于可迭代对象。
+
+因此，对于将一些“东西”转换为数组的任务，Array.from 往往更通用。
+
+### 复制 array/object
+
+对于浅拷贝，我们之前讲到了 `Object.assign()` 可以实现，其实 Spread 也可以实现浅拷贝。
+
+``` javascript
+let arr = [1, 2, 3];
+
+let arrCopy = [...arr]; // 将数组 spread 到参数列表中
+                        // 然后将结果放到一个新数组
+
+// 两个数组中的内容相同吗？
+alert(JSON.stringify(arr) === JSON.stringify(arrCopy)); // true
+
+// 两个数组相等吗？
+alert(arr === arrCopy); // false（它们的引用是不同的）
+
+// 修改我们初始的数组不会修改副本：
+arr.push(4);
+alert(arr); // 1, 2, 3, 4
+alert(arrCopy); // 1, 2, 3
+```
+并且，也可以通过相同的方式来复制一个对象：
+
+``` javascript
+let obj = { a: 1, b: 2, c: 3 };
+
+let objCopy = { ...obj }; // 将对象 spread 到参数列表中
+                          // 然后将结果返回到一个新对象
+
+// 两个对象中的内容相同吗？
+alert(JSON.stringify(obj) === JSON.stringify(objCopy)); // true
+
+// 两个对象相等吗？
+alert(obj === objCopy); // false (not same reference)
+
+// 修改我们初始的对象不会修改副本：
+obj.d = 4;
+alert(JSON.stringify(obj)); // {"a":1,"b":2,"c":3,"d":4}
+alert(JSON.stringify(objCopy)); // {"a":1,"b":2,"c":3}
+```
+
+这种方式比使用 `let arrCopy = Object.assign([], arr)` 复制数组，或使用 `let objCopy = Object.assign({}, obj)` 复制对象来说更为简便。因此，只要情况允许，我们倾向于使用它。
+
+### 总而言之：
+区分：
+- 若 ... 出现在函数参数列表的最后，那么它就是 rest 参数，它会把参数列表中剩余的参数收集到一个数组中。
+- 若 ... 出现在函数调用或类似的表达式中，那它就是 spread 语法，它会把一个数组展开为列表。
+
+使用场景：
+- Rest 参数用于创建可接受任意数量参数的函数。
+- Spread 语法用于将数组传递给通常需要含有许多参数的函数。
+
+我们可以使用这两种语法轻松地互相转换列表与参数数组。
+
+旧式的 arguments（类数组且可迭代的对象）也依然能够帮助我们获取函数调用中的所有参数。
+
+## 变量作用域，闭包
+
+JavaScript 是一种非常面向函数的语言。它给了我们很大的自由度。在 JavaScript 中，我们可以随时创建函数，可以将函数作为参数传递给另一个函数，并在完全不同的代码位置进行调用。
+
+我们已经知道函数可以访问其外部的变量。
+
+但是，如果在函数被创建之后，外部变量发生了变化会怎样？函数会获得新值还是旧值？
+
+如果将函数作为参数（argument）传递并在代码中的另一个位置调用它，该函数将访问的是新位置的外部变量吗？
+
+让我们来学习这些相关知识，以了解在这些场景以及更复杂的场景下到底会发生什么。
+
+::: tip 我们将在这探讨一下 `let/const`
+``` txt
+**在本文的示例中，我们将使用 let 声明变量**。
+```
+在 JavaScript 中，有三种声明变量的方式：let，const（现代方式），var（过去留下来的方式）。
+
+- 用 const 声明的变量的行为也相同（译注：与 let 在作用域等特性上是相同的），因此，本文也涉及用 const 进行变量声明。
+- 旧的 var 与上面两个有着明显的区别，我们将在 下一篇文章 老旧的 "var" 中详细介绍。
+:::
+
+### 代码块
+如果在代码块 `{...}` 内使用 let 声明了一个变量，那么这个变量只在该代码块内可见。
+
+``` javascript
+{
+  // 使用在代码块外不可见的局部变量做一些工作
+
+  let message = "Hello"; // 只在此代码块内可见
+
+  alert(message); // Hello
+}
+
+alert(message); // Error: message is not defined
+```
+我们可以使用它来隔离一段代码，该段代码执行自己的任务，并使用仅属于自己的变量：
+
+``` javascript
+{
+  // 显示 message
+  let message = "Hello";
+  alert(message);
+}
+
+{
+  // 显示另一个 message
+  let message = "Goodbye";
+  alert(message);
+}
+```
+::: warning 如果没有代码块则会报错
+请注意，如果我们使用 let 对已存在的变量进行重复声明，如果对应的变量没有单独的代码块，则会出现错误：
+``` javascript
+// 显示 message
+let message = "Hello";
+alert(message);
+
+// 显示另一个 message
+let message = "Goodbye"; // Error: variable already declared
+alert(message);
+```
+:::
+
+`对于 if，for 和 while 等，在 {...} 中声明的变量也仅在内部可见：`
+
+``` javascript
+if (true) {
+  let phrase = "Hello!";
+
+  alert(phrase); // Hello!
+}
+
+alert(phrase); // Error, no such variable!
+```
+
+在这儿，当 if 执行完毕，则下面的 alert 将看不到 phrase，因此会出现错误。（译注：就算下面的 alert 想在 if 没执行完成时去取 phrase（虽然这种情况不可能发生）也是取不到的，因为 let 声明的变量在代码块外不可见。）
+
+太好了，因为这就允许我们创建特定于 if 分支的块级局部变量。
+
+对于 for 和 while 循环也是如此：
+
+``` javascript
+for (let i = 0; i < 3; i++) {
+  // 变量 i 仅在这个 for 循环的内部可见
+  alert(i); // 0，然后是 1，然后是 2
+}
+
+alert(i); // Error, no such variable
+```
+**从视觉上看，let i 位于 {...} 之外。但是 for 构造在这里很特殊：在其中声明的变量被视为块的一部分。**
+
+### 嵌套函数
+如果一个函数是在另一个函数中创建的，该函数就被称为“嵌套”函数。
+
+在 JavaScript 中很容易实现这一点。
+
+我们可以使用嵌套来组织代码，比如这样：
+
+``` javascript
+function sayHiBye(firstName, lastName) {
+
+  // 辅助嵌套函数使用如下
+  function getFullName() {
+    return firstName + " " + lastName;
+  }
+
+  alert( "Hello, " + getFullName() );
+  alert( "Bye, " + getFullName() );
+
+}
+```
+这里创建的 嵌套 函数 getFullName() 是为了更加方便。它可以访问外部变量，因此可以返回全名。嵌套函数在 JavaScript 中很常见。
+
+更有意思的是，可以返回一个嵌套函数：作为一个新对象的属性或作为结果返回。之后可以在其他地方使用。不论在哪里调用，它仍然可以访问相同的外部变量。
+
+下面的 makeCounter 创建了一个 “counter” 函数，该函数在每次调用时返回下一个数字：
+
+``` javascript
+function makeCounter() {
+  let count = 0;
+
+  return function() {
+    return count++;
+  };
+}
+
+let counter = makeCounter();
+
+alert( counter() ); // 0
+alert( counter() ); // 1
+alert( counter() ); // 2
+```
+尽管很简单，但稍加变型就具有很强的实际用途，比如，用作 **随机数生成器** 以生成用于自动化测试的随机数值。
+
+这是如何运作的呢？如果我们创建多个计数器，它们会是独立的吗？这里的变量是怎么回事？
+
+理解这些内容对于掌握 JavaScript 的整体知识很有帮助，并且对于应对更复杂的场景也很有益处。因此，让我们继续深入探究。
+
+### 词法环境
+一大波深入的技术讲解即将到来。
+
+#### Step 1. 变量
+
+在 JavaScript 中，每个运行的函数，代码块 {...} 以及整个脚本，都有一个被称为 **词法环境（Lexical Environment）** 的内部（隐藏）的关联对象。
+
+词法环境对象由两部分组成：
+
+1. 环境记录（Environment Record） —— 一个存储所有局部变量作为其属性（包括一些其他信息，例如 this 的值）的对象。
+2. 对 外部词法环境 的引用，与外部代码相关联。
+
+一个“变量”只是 **环境记录** 这个特殊的内部对象的一个属性。**“获取或修改变量”意味着“获取或修改词法环境的一个属性”**。
+
+举个例子，这段没有函数的简单的代码中只有一个词法环境：
+
+``` javascript
+let phrase = "Hello";
+alert(phrase);
+
+// Lexical Environment
+// phrase:"Hello" -> outer:null
+```
+
+这就是所谓的与整个脚本相关联的 全局 词法环境。
+
+注释表示环境记录（变量存储），箭头表示外部引用。全局词法环境没有外部引用，所以箭头指向了 null。
+
+随着代码开始并继续运行，词法环境发生了变化。
+
+这是更长的代码：
+
+``` javascript
+let phrase;
+phrase = "Hello";
+phrase = "Bye";
+
+// Lexical Environment
+// 1 execution start : phrase : <uninitialized> -> outer : null
+// 2 phrase: undefined
+// 3 phrase: "Hello"
+// 4 phrase: "Bye"
+```
+上面的注释演示了执行过程中全局词法环境的变化：
+
+1. 当脚本开始运行，词法环境预先填充了所有声明的变量。
+   - 最初，它们处于“未初始化（Uninitialized）”状态。这是一种特殊的内部状态，这意味着引擎知道变量，但是在用 let 声明前，不能引用它。几乎就像变量不存在一样。
+2. 然后 let phrase 定义出现了。它尚未被赋值，因此它的值为 undefined。从这一刻起，我们就可以使用变量了。
+3. phrase 被赋予了一个值。
+4. phrase 的值被修改。
+
+现在看起来都挺简单的：
+
+- 变量是特殊内部对象的属性，与当前正在执行的（代码）块/函数/脚本有关。
+
+- 操作变量实际上是操作该对象的属性。
+
+::: tip 词法环境是一个规范对象
+“词法环境”是一个规范对象（specification object）：它只存在于 语言规范 的“理论”层面，用于描述事物是如何工作的。我们无法在代码中获取该对象并直接对其进行操作。
+
+但 JavaScript 引擎同样可以优化它，比如清除未被使用的变量以节省内存和执行其他内部技巧等，但显性行为应该是和上述的无差。
+:::
+#### Step 2. 函数声明
+
+一个函数其实也是一个值，就像变量一样。
+
+**不同之处在于函数声明的初始化会被立即完成,它在词法环境中是没有`<unintialized>`这一状态的**。
+
+当创建了一个词法环境（Lexical Environment）时，函数声明会立即变为即用型函数（不像 let 那样直到声明处才可用）。
+
+这就是为什么我们甚至可以在声明自身之前调用一个以函数声明（Function Declaration）的方式声明的函数。
+
+例如，这是添加一个函数时全局词法环境的初始状态：
+
+``` javascript
+let phrase = "Hello";
+
+function say(name) {
+  alert( `${phrase},${name}` );
+};
+
+// Lexical Environment
+// 1 execution start : phrase:<uninitialized> -> outer : null
+//                     say:funtion -> outer : null
+// 2 ...
+// 3 ...
+```
+正常来说，这种行为仅适用于函数声明，而不适用于我们将函数分配给变量的函数表达式，例如 `let say = function(name)...`。
+
+#### Step 3. 内部和外部的词法环境
+在一个函数运行时，在调用刚开始时，会自动创建一个新的词法环境以存储这个调用的局部变量和参数。
+
+例如，对于 say("John")，它看起来像这样（当前执行位置在箭头标记的那一行上）：
+``` javascript
+let phrase = "Hello";
+
+function say(name) {
+  alert( `${phrase},${name}` );
+};
+
+// Lexical Environment
+// 1 execution start : phrase:<uninitialized> -> outer : null
+//                     say:funtion -> outer : null
+
+
+// (调用函数，例如 say("John") )
+// 2 Lexical Environment of the call 
+// name:"John" -> outer: say:funtcion -> outer:null
+//                phrase:Hello" -> outer:null
+```
+在这个函数调用期间，我们有两个词法环境：内部一个（用于函数调用）和外部一个（全局）：
+
+- 内部词法环境与 say 的当前执行相对应。它具有一个单独的属性：name，函数的参数。我们调用的是 say("John")，所以 name 的值为 "John"。
+- 外部词法环境是全局词法环境。它具有 phrase 变量和函数本身。
+
+内部词法环境引用了 outer。
+
+**当代码要访问一个变量时 —— 首先会搜索内部词法环境，然后搜索外部环境，然后搜索更外部的环境，以此类推，直到全局词法环境**。
+
+如果在任何地方都找不到这个变量，那么在严格模式下就会报错（在非严格模式下，为了向下兼容，给未定义的变量赋值会创建一个全局变量）。
+
+在这个示例中，搜索过程如下：
+
+- 对于 name 变量，当 say 中的 alert 试图访问 name 时，会立即在内部词法环境中找到它。
+- 当它试图访问 phrase 时，然而内部没有 phrase，所以它顺着对外部词法环境的引用找到了它。
+
+#### Step 4. 返回函数
+让我们回到 makeCounter 这个例子。
+``` javascript
+function makeCounter() {
+  let count = 0;
+
+  return function() {
+    return count++;
+  };
+}
+
+let counter = makeCounter();
+```
+在每次 makeCounter() 调用的开始，都会创建一个新的词法环境对象，以存储该 makeCounter 运行时的变量。
+
+因此，我们有两层嵌套的词法环境，就像上面的示例一样：
+
+``` javascript
+// count : LexicalEnvironment of makeCounter() call
+// makeCounter、counter : global LexicalEnvironment
+
+// count: 0 -> outer: makeCounter:function -> outer:null
+//             counter: undefined       
+```
+不同的是，在执行 makeCounter() 的过程中创建了一个仅占一行的嵌套函数：return count++。我们尚未运行它，仅创建了它。
+
+所有的函数在“诞生”时都会记住创建它们的词法环境。从技术上讲，这里没有什么魔法：所有函数都有名为 `[[Environment]]` 的隐藏属性，该属性保存了对创建该函数的词法环境的引用。
+
+因此，`counter.[[Environment]]` 有对 {count: 0} 词法环境的引用。这就是函数记住它创建于何处的方式，与函数被在哪儿调用无关。`[[Environment]]` 引用在函数创建时被设置并永久保存。
+
+稍后，当调用 counter() 时，会为该调用创建一个新的词法环境，并且其外部词法环境引用获取于 `counter.[[Environment]]`：
+
+``` javascript
+// <empty> -> outer: count: 0   -> outer: makeCounter:function -> outer:null
+//                   counter: undefined       
+```
+现在，当 counter() 中的代码查找 count 变量时，它首先搜索自己的词法环境（为空，因为那里没有局部变量），然后是外部 makeCounter() 的词法环境，并且在哪里找到就在哪里修改。
+
+**在变量所在的词法环境中更新变量**。
+
+如果我们调用 counter() 多次，count 变量将在同一位置增加到 2，3 等。
+
+::: tip 闭包
+开发者通常应该都知道“闭包”这个通用的编程术语。
+
+闭包 是指一个函数可以记住其外部变量并可以访问这些变量。在某些编程语言中，这是不可能的，或者应该以一种特殊的方式编写函数来实现。但如上所述，在 JavaScript 中，所有函数都是天生闭包的（只有一个例外，将在 `"new Function" 语法` 中讲到）。
+
+也就是说：JavaScript 中的函数会自动通过隐藏的 `[[Environment]]` 属性记住创建它们的位置，所以它们都可以访问外部变量。
+
+在面试时，前端开发者通常会被问到“什么是闭包？”，正确的回答应该是闭包的定义，并解释清楚为什么 JavaScript 中的所有函数都是闭包的，以及可能的关于 `[[Environment]]` 属性和词法环境原理的技术细节。
+:::
+
+### 垃圾收集
+通常，函数调用完成后，会将词法环境和其中的所有变量从内存中删除。因为现在没有任何对它们的引用了。与 JavaScript 中的任何其他对象一样，词法环境仅在可达时才会被保留在内存中。
+
+但是，如果有一个嵌套的函数在函数结束后仍可达，则它将具有引用词法环境的 `[[Environment]]` 属性。
+
+在下面这个例子中，即使在（外部）函数执行完成后，它的词法环境仍然可达。因此，此词法环境仍然有效。
+
+例如：
+``` javascript
+function f() {
+  let value = 123;
+
+  return function() {
+    alert(value);
+  }
+}
+
+let g = f(); // g.[[Environment]] 存储了对相应 f() 调用的词法环境的引用
+```
+请注意，如果多次调用 f()，并且返回的函数被保存，那么所有相应的词法环境对象也会保留在内存中。下面代码中有三个这样的函数：
+``` javascript
+function f() {
+  let value = Math.random();
+
+  return function() { alert(value); };
+}
+
+// 数组中的 3 个函数，每个都与来自对应的 f() 的词法环境相关联
+let arr = [f(), f(), f()];
+```
+当词法环境对象变得不可达时，它就会死去（就像其他任何对象一样）。换句话说，它仅在至少有一个嵌套函数引用它时才存在。
+
+在下面的代码中，嵌套函数被删除后，其封闭的词法环境（以及其中的 value）也会被从内存中删除：
+``` javascript
+function f() {
+  let value = 123;
+
+  return function() {
+    alert(value);
+  }
+}
+
+let g = f(); // 当 g 函数存在时，该值会被保留在内存中
+
+g = null; // ……现在内存被清理了
+```
+#### 实际开发中的优化
+正如我们所看到的，理论上当函数可达时，它外部的所有变量也都将存在。
+
+但在实际中，JavaScript 引擎会试图优化它。它们会分析变量的使用情况，如果从代码中可以明显看出有未使用的外部变量，那么就会将其删除。
+
+在 V8（Chrome，Edge，Opera）中的一个重要的副作用是，此类变量在调试中将不可用。
+
+打开 Chrome 浏览器的开发者工具，并尝试运行下面的代码。
+
+当代码执行暂停时，在控制台中输入 alert(value)。
+``` javascript
+function f() {
+  let value = Math.random();
+
+  function g() {
+    debugger; // 在 Console 中：输入 alert(value); No such variable!
+  }
+
+  return g;
+}
+
+let g = f();
+g();
+```
+正如你所见的 —— No such variable! 理论上，它应该是可以访问的，但引擎把它优化掉了。
+
+这可能会导致有趣的（如果不是那么耗时的）调试问题。其中之一 —— 我们可以看到的是一个同名的外部变量，而不是预期的变量。
+
+V8 引擎的这个特性你真的应该知道。如果你要使用 Chrome/Edge/Opera 进行代码调试，迟早会遇到这样的问题。
+
+这不是调试器的 bug，而是 V8 的一个特别的特性。也许以后会被修改。你始终可以通过运行本文中的示例来进行检查。
+
+::: tip 函数会选择最新的内容吗？
+``` javascript
+let name = "John";
+
+function sayHi() {
+  alert("Hi, " + name);
+}
+
+name = "Pete";
+
+sayHi(); // 会显示什么："John" 还是 "Pete"？
+```
+Pete。
+
+函数将从内到外依次在对应的词法环境中寻找目标变量，它使用最新的值。
+
+旧变量值不会保存在任何地方。当一个函数想要一个变量时，它会从自己的词法环境或外部词法环境中获取当前值。
+:::
+
+这一章中有很多有意思的小 Task ，可以看看：https://zh.javascript.info/closure
+
+## 老旧的 "var"
+在本教程最开始那部分的 变量 这章中，我们提到了变量声明的三种方式：
+
+- let
+- const
+- var
+
+var 声明与 let 相似。var 却是一头非常不同的，源自远古时代的怪兽。在现代脚本中一般不再使用它，但它仍然潜伏在旧脚本中。
+
+### “var” 没有块级作用域
+用 var 声明的变量，不是函数作用域就是全局作用域。它们在代码块外也是可见的（也就是说，var 声明的变量只有函数作用域和全局作用域，没有块级作用域）。
+
+举个例子：
+
+``` javascript
+if (true) {
+  var test = true; // 使用 "var" 而不是 "let"
+}
+
+alert(test); // true，变量在 if 结束后仍存在
+```
+由于 var 会忽略代码块，因此我们有了一个全局变量 test。
+
+如果我们在第二行使用 let test 而不是 var test，那么该变量将仅在 if 内部可见：
+
+对于循环也是这样的，var 声明的变量没有块级作用域也没有循环局部作用域：
+
+``` javascript
+for (var i = 0; i < 10; i++) {
+  var one = 1;
+  // ...
+}
+
+alert(i);   // 10，"i" 在循环结束后仍可见，它是一个全局变量
+alert(one); // 1，"one" 在循环结束后仍可见，它是一个全局变量
+```
+
+如果一个代码块位于函数内部，那么 var 声明的变量的作用域将为函数作用域：
+
+``` javascript
+function sayHi() {
+  if (true) {
+    var phrase = "Hello";
+  }
+
+  alert(phrase); // 能正常工作
+}
+
+sayHi();
+alert(phrase); // ReferenceError: phrase is not defined
+```
+
+可以看到，var 穿透了 if，for 和其它代码块。这是因为在早期的 JavaScript 中，块没有词法环境，而 var 就是这个时期的代表之一。
+
+### “var” 允许重新声明
+如果我们用 let 在同一作用域下将同一个变量声明两次，则会出现错误。
+
+使用 var，我们可以重复声明一个变量，不管多少次都行。如果我们对一个已经声明的变量使用 var，这条新的声明语句会被忽略：
+
+``` javascript
+var user = "Pete";
+
+var user = "John"; // 这个 "var" 无效（因为变量已经声明过了）
+// ……不会触发错误
+
+alert(user); // John
+```
+### “var” 声明的变量，可以在其声明语句前被使用
+
+当函数开始的时候，就会处理 var 声明（脚本启动对应全局变量）。
+
+换言之，var 声明的变量会在函数开头被定义，与它在代码中定义的位置无关（这里不考虑定义在嵌套函数中的情况）。
+
+那么看一下这段代码：
+
+``` javascript
+function sayHi() {
+  phrase = "Hello";
+
+  alert(phrase);
+
+  var phrase;
+}
+sayHi();
+```
+……从技术上讲，它与下面这种情况是一样的（var phrase 被上移至函数开头）：
+``` javascript
+function sayHi() {
+  var phrase;
+
+  phrase = "Hello";
+
+  alert(phrase);
+}
+sayHi();
+```
+……甚至与这种情况也一样（记住，代码块是会被忽略的）：
+``` javascript
+function sayHi() {
+  phrase = "Hello"; // (*)
+
+  if (false) {
+    var phrase;
+  }
+
+  alert(phrase);
+}
+sayHi();
+```
+人们将这种行为称为“提升”（英文为 “hoisting” 或 “raising”），因为所有的 var 都被“提升”到了函数的顶部。
+
+所以，在上面的例子中，if (false) 分支永远都不会执行，但没关系，它里面的 var 在函数刚开始时就被处理了，所以在执行 (*) 那行代码时，变量是存在的。
+
+**声明会被提升，但是赋值不会**。
+
+我们最好用例子来说明：
+``` javascript
+function sayHi() {
+  alert(phrase);
+
+  var phrase = "Hello";
+}
+
+sayHi();
+```
+`var phrase = "Hello"` 这行代码包含两个行为：
+
+- 使用 var 声明变量
+- 使用 = 给变量赋值。
+
+声明在函数刚开始执行的时候（“提升”）就被处理了，但是赋值操作始终是在它出现的地方才起作用。所以这段代码实际上是这样工作的：
+
+``` javascript
+function sayHi() {
+  var phrase; // 在函数刚开始时进行变量声明
+
+  alert(phrase); // undefined
+
+  phrase = "Hello"; // ……赋值 — 当程序执行到这一行时。
+}
+
+sayHi();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

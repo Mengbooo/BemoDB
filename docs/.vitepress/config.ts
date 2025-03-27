@@ -104,6 +104,10 @@ export default {
             text: "[转载] 操作系统课后作业 1",
             link: "/posts/os/Q_hw_1/Q_hw_1",
           },
+          {
+            text: "[转载] 操作系统上机实验 1",
+            link: "/posts/os/Q_ex_1/sys-1",
+          },
         ],
       },
       {
