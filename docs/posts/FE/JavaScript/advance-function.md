@@ -1209,57 +1209,176 @@ function sayHi() {
 sayHi();
 ```
 
+因为所有的 var 声明都是在函数开头处理的，我们可以在任何地方引用它们。但是在它们被赋值之前都是 undefined。
+
+上面两个例子中，alert 运行都不会报错，因为变量 phrase 是存在的。但是它还没有被赋值，所以显示 undefiend。
+
+### IIFE 立即调用函数表达式
+在之前，JavaScript 中只有 var 这一种声明变量的方式，并且这种方式声明的变量没有块级作用域，程序员们就发明了一种模仿块级作用域的方法。这种方法被称为“立即调用函数表达式”（immediately-invoked function expressions，IIFE）。
+
+如今，我们不应该再使用 IIFE 了，但是你可以在旧脚本中找到它们。
+
+IIFE 看起来像这样：
+
+``` javascript
+(function() {
+
+  var message = "Hello";
+
+  alert(message); // Hello
+
+})();
+```
+这里，创建了一个函数表达式并立即调用。因此，代码立即执行并拥有了自己的私有变量。
+
+函数表达式被括号 (function {...}) 包裹起来，因为当 JavaScript 引擎在主代码中遇到 "function" 时，它会把它当成一个函数声明的开始。但函数声明必须有一个函数名，所以这样的代码会导致错误：
+``` javascript
+// 尝试声明并立即调用一个函数
+function() { // <-- SyntaxError: Function statements require a function name
+
+  var message = "Hello";
+
+  alert(message); // Hello
+
+}();
+```
+即使我们说：“好吧，那我们加一个名称吧”，但它仍然不工作，因为 JavaScript 不允许立即调用函数声明：
+
+``` javascript
+// 下面的括号会导致语法错误
+function go() {
+
+}(); // <-- 不能立即调用函数声明
+```
+因此，需要使用圆括号把该函数表达式包起来，以告诉 JavaScript，这个函数是在另一个表达式的上下文中创建的，因此它是一个函数表达式：它不需要函数名，可以立即调用。
+
+除了使用括号，还有其他方式可以告诉 JavaScript 在这我们指的是函数表达式：
+``` javascript
+// 创建 IIFE 的方法
+
+(function() {
+  alert("Parentheses around the function");
+})();
+
+(function() {
+  alert("Parentheses around the whole thing");
+}());
+
+!function() {
+  alert("Bitwise NOT operator starts the expression");
+}();
+
++function() {
+  alert("Unary plus starts the expression");
+}();
+```
+在上面的所有情况中，我们都声明了一个函数表达式并立即运行它。请再注意一下：**如今我们没有理由来编写这样的代码**。
 
 
+## 全局对象
+全局对象提供可在任何地方使用的变量和函数。默认情况下，这些全局变量内建于语言或环境中。
 
+在浏览器中，它的名字是 “window”，对 Node.js 而言，它的名字是 “global”，其它环境可能用的是别的名字。
 
+globalThis 被作为全局对象的标准名称加入到了 JavaScript 中，所有环境都应该支持该名称。所有主流浏览器都支持它。
 
+假设我们的环境是浏览器，我们将在这儿使用 “window”。如果你的脚本可能会用来在其他环境中运行，则最好使用 globalThis。
 
+全局对象的所有属性都可以被直接访问：
 
+``` javascript
+alert("Hello");
+// 等同于
+window.alert("Hello");
+```
+**在浏览器中**，使用 var（而不是 let/const！）声明的全局函数和变量会成为全局对象的属性。
 
+``` javascript
+var gVar = 5;
 
+alert(window.gVar); // 5（成为了全局对象的属性）
+```
+函数声明（特指在主代码流中具有 function 关键字的语句，而不是函数表达式）也有这样的效果。
 
+请不要依赖它！这种行为是出于兼容性而存在的。现代脚本使用 JavaScript modules（我们后面会讲） 所以不会发生这种事情。
 
+如果我们使用 let，就不会发生这种情况：
 
+``` javascript
+let gLet = 5;
 
+alert(window.gLet); // undefined（不会成为全局对象的属性）
+```
+如果一个值非常重要，以至于你想使它在全局范围内可用，那么可以直接将其作为属性写入：
 
+``` javascript
+// 将当前用户信息全局化，以允许所有脚本访问它
+window.currentUser = {
+  name: "John"
+};
 
+// 代码中的另一个位置
+alert(currentUser.name);  // John
 
+// 或者，如果我们有一个名为 "currentUser" 的局部变量
+// 从 window 显式地获取它（这是安全的！）
+alert(window.currentUser.name); // John
+```
+也就是说，一般不建议使用全局变量。全局变量应尽可能的少。与使用外部变量或全局变量相比，函数获取“输入”变量并产生特定“输出”的代码设计更加清晰，不易出错且更易于测试。
 
+### 使用 polyfills
+我们使用全局对象来测试对现代语言功能的支持。
 
+例如，测试是否存在内建的 Promise 对象（在版本特别旧的浏览器中不存在）：
 
+``` javascript
+if (!window.Promise) {
+  alert("Your browser is really old!");
+}
+```
+如果没有（例如，我们使用的是旧版浏览器），那么我们可以创建 “polyfills”：添加环境不支持但在现代标准中存在的功能。
 
+``` javascript
+if (!window.Promise) {
+  window.Promise = ... // 定制实现现代语言功能
+}
+```
+## 函数对象，NFE
+我们已经知道，在 JavaScript 中，函数也是一个值。
 
+而 JavaScript 中的每个值都有一种类型，那么函数是什么类型呢？
 
+在 JavaScript 中，**函数的类型是对象**。
 
+一个容易理解的方式是把函数想象成可被调用的“行为对象（action object）”。我们不仅可以调用它们，还能把它们当作对象来处理：增/删属性，按引用传递等。
 
+### 属性 “name”
+函数对象包含一些便于使用的属性。
 
+比如，一个函数的名字可以通过属性 “name” 来访问：
+``` javascript
+function sayHi() {
+  alert("Hi");
+}
 
+alert(sayHi.name); // sayHi
+```
+更有趣的是，名称赋值的逻辑很智能。即使函数被创建时没有名字，名称赋值的逻辑也能给它赋予一个正确的名字，然后进行赋值：
+``` javascript
+let sayHi = function() {
+  alert("Hi");
+};
 
+alert(sayHi.name); // sayHi（有名字！）
+```
+当以默认值的方式完成了赋值时，它也有效：
+``` javascript
+function f(sayHi = function() {}) {
+  alert(sayHi.name); // sayHi（生效了！）
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+f();
+```
 
 
 
