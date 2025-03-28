@@ -99,14 +99,29 @@ export default {
       {
         text: "操作系统",
         items: [
-          { text: "操作系统课后作业 1", link: "/posts/os/hw_1/hw_1" },
           {
-            text: "[转载] 操作系统课后作业 1",
-            link: "/posts/os/Q_hw_1/Q_hw_1",
+            text: "课后作业",
+            collapsed: true,
+            items: [
+              {
+                text: "操作系统课后作业 1",
+                link: "/posts/os/homework/hw_1/hw_1",
+              },
+              {
+                text: "[转载] 操作系统课后作业 1",
+                link: "/posts/os/homework/Q_hw_1/Q_hw_1",
+              },
+            ],
           },
           {
-            text: "[转载] 操作系统上机实验 1",
-            link: "/posts/os/Q_ex_1/sys-1",
+            text: "实验报告",
+            collapsed: true,
+            items: [
+              {
+                text: "[转载] 操作系统上机实验 1",
+                link: "/posts/os/experiment/Q_ex_1/sys-1",
+              },
+            ],
           },
         ],
       },
