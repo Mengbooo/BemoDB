@@ -1379,11 +1379,475 @@ function f(sayHi = function() {}) {
 
 f();
 ```
+规范中把这种特性叫做「上下文命名」。如果函数自己没有提供，那么在赋值中，会根据上下文来推测一个。
 
+对象方法也有名字：
+``` javascript
+let user = {
 
+  sayHi() {
+    // ...
+  },
 
+  sayBye: function() {
+    // ...
+  }
 
+}
 
+alert(user.sayHi.name); // sayHi
+alert(user.sayBye.name); // sayBye
+```
+这没有什么神奇的。有时会出现无法推测名字的情况。此时，属性 name 会是空，像这样：
+
+``` javascript
+// 函数是在数组中创建的
+let arr = [function() {}];
+
+alert( arr[0].name ); // <空字符串>
+// 引擎无法设置正确的名字，所以没有值
+```
+而实际上，大多数函数都是有名字的。
+
+### 属性 “length”
+还有另一个内建属性 “length”，它返回函数入参的个数，比如：
+``` javascript
+function f1(a) {}
+function f2(a, b) {}
+function many(a, b, ...more) {}
+
+alert(f1.length); // 1
+alert(f2.length); // 2
+alert(many.length); // 2
+```
+可以看到，rest 参数不参与计数。
+
+属性 length 有时在操作其它函数的函数中用于做 内省/运行时检查（introspection）。
+
+比如，下面的代码中函数 ask 接受一个询问答案的参数 question 和可能包含任意数量 handler 的参数 ...handlers。
+
+当用户提供了自己的答案后，函数会调用那些 handlers。我们可以传入两种 handlers：
+
+- 一种是无参函数，它仅在用户给出肯定回答时被调用。
+- 一种是有参函数，它在两种情况都会被调用，并且返回一个答案。
+
+为了正确地调用 handler，我们需要检查 handler.length 属性。
+
+我们的想法是，我们用一个简单的无参数的 handler 语法来处理积极的回答（最常见的变体），但也要能够提供通用的 handler：
+
+``` javascript
+function ask(question, ...handlers) {
+  let isYes = confirm(question);
+
+  for(let handler of handlers) {
+    if (handler.length == 0) {
+      if (isYes) handler();
+    } else {
+      handler(isYes);
+    }
+  }
+
+}
+
+// 对于肯定的回答，两个 handler 都会被调用
+// 对于否定的回答，只有第二个 handler 被调用
+ask("Question?", () => alert('You said yes'), result => alert(result));
+```
+这就是所谓的 多态性 的一个例子 —— 根据参数的类型，或者根据在我们的具体情景下的 length 来做不同的处理。这种思想在 JavaScript 的库里有应用。
+
+### 自定义属性
+我们也可以添加我们自己的属性。
+
+这里我们添加了 counter 属性，用来跟踪总的调用次数：
+``` javascript
+function sayHi() {
+  alert("Hi");
+
+  // 计算调用次数
+  sayHi.counter++;
+}
+sayHi.counter = 0; // 初始值
+
+sayHi(); // Hi
+sayHi(); // Hi
+
+alert( `Called ${sayHi.counter} times` ); // Called 2 times
+```
+::: warning 属性不是变量
+被赋值给函数的属性，比如 sayHi.counter = 0，不会 在函数内定义一个局部变量 counter。换句话说，属性 counter 和变量 let counter 是毫不相关的两个东西。
+
+我们可以把函数当作对象，在它里面存储属性，但是这对它的执行没有任何影响。变量不是函数属性，反之亦然。它们之间是平行的。
+:::
+函数属性有时会用来替代闭包。例如，我们可以使用函数属性将 变量作用域，闭包 章节中 counter 函数的例子进行重写：
+``` javascript
+function makeCounter() {
+  // 不需要这个了
+  // let count = 0
+
+  function counter() {
+    return counter.count++;
+  };
+
+  counter.count = 0;
+
+  return counter;
+}
+
+let counter = makeCounter();
+alert( counter() ); // 0
+alert( counter() ); // 1
+```
+
+现在 count 被直接存储在函数里，而不是它外部的词法环境。
+
+那么它和闭包谁好谁赖？
+
+两者最大的不同就是如果 count 的值位于外层（函数）变量中，那么外部的代码无法访问到它，只有嵌套的那些函数可以修改它。而如果它是绑定到函数的，那么就可以这样：
+
+``` javascript
+function makeCounter() {
+
+  function counter() {
+    return counter.count++;
+  };
+
+  counter.count = 0;
+
+  return counter;
+}
+
+let counter = makeCounter();
+
+counter.count = 10;
+alert( counter() ); // 10
+```
+所以，选择哪种实现方式取决于我们的需求是什么。
+
+### 命名函数表达式
+命名函数表达式（NFE，Named Function Expression），指带有名字的函数表达式的术语。
+
+例如，让我们写一个普通的函数表达式：
+``` javascript
+let sayHi = function(who) {
+  alert(`Hello, ${who}`);
+};
+```
+然后给它加一个名字：
+
+``` javascript
+let sayHi = function func(who) {
+  alert(`Hello, ${who}`);
+};
+```
+我们这里得到了什么吗？为它添加一个 "func" 名字的目的是什么？
+
+首先请注意，它仍然是一个函数表达式。在 function 后面加一个名字 "func" 没有使它成为一个函数声明，因为它仍然是作为赋值表达式中的一部分被创建的。
+
+添加这个名字当然也没有打破任何东西。
+
+函数依然可以通过 sayHi() 来调用：
+``` javascript
+let sayHi = function func(who) {
+  alert(`Hello, ${who}`);
+};
+
+sayHi("John"); // Hello, John
+```
+关于名字 func 有两个特殊的地方，这就是添加它的原因：
+
+1. 它允许函数在内部引用自己。
+2. 它在函数外是不可见的。
+
+例如，下面的函数 sayHi 会在没有入参 who 时，以 "Guest" 为入参调用自己：
+``` javascript
+let sayHi = function func(who) {
+  if (who) {
+    alert(`Hello, ${who}`);
+  } else {
+    func("Guest"); // 使用 func 再次调用函数自身
+  }
+};
+
+sayHi(); // Hello, Guest
+
+// 但这不工作：
+func(); // Error, func is not defined（在函数外不可见）
+```
+我们为什么使用 func 呢？为什么不直接使用 sayHi 进行嵌套调用？
+
+当然，在大多数情况下我们可以这样做：
+``` javascript
+let sayHi = function(who) {
+  if (who) {
+    alert(`Hello, ${who}`);
+  } else {
+    sayHi("Guest");
+  }
+};
+```
+上面这段代码的问题在于 sayHi 的值可能会被函数外部的代码改变。如果该函数被赋值给另外一个变量（也就是原变量被修改），那么函数就会开始报错：
+``` javascript
+let sayHi = function(who) {
+  if (who) {
+    alert(`Hello, ${who}`);
+  } else {
+    sayHi("Guest"); // Error: sayHi is not a function
+  }
+};
+
+let welcome = sayHi;
+sayHi = null;
+
+welcome(); // Error，嵌套调用 sayHi 不再有效！
+```
+发生这种情况是因为该函数从它的外部词法环境获取 sayHi。没有局部的 sayHi 了，所以使用外部变量。而当调用时，外部的 sayHi 是 null。
+
+我们给函数表达式添加的可选的名字，正是用来解决这类问题的。
+
+让我们使用它来修复我们的代码：
+
+``` javascript
+let sayHi = function func(who) {
+  if (who) {
+    alert(`Hello, ${who}`);
+  } else {
+    func("Guest"); // 现在一切正常
+  }
+};
+
+let welcome = sayHi;
+sayHi = null;
+
+welcome(); // Hello, Guest（嵌套调用有效）
+```
+现在它可以正常运行了，因为名字 func 是函数局部域的。它不是从外部获取的（而且它对外部也是不可见的）。规范确保它只会引用当前函数。
+
+外部代码仍然有该函数的 sayHi 或 welcome 变量。而且 func 是一个“内部函数名”，是函数可以可靠地调用自身的方式。
+::: tip
+这里所讲的“内部名”特性只针对函数表达式，而不是函数声明。对于函数声明，没有用来添加“内部”名的语法。
+
+有时，当我们需要一个可靠的内部名时，这就成为了你把函数声明重写成函数表达式的理由了。
+:::
+
+## "new Function" 语法
+
+还有一种创建函数的方法。它很少被使用，但**有些时候只能选择它**。
+
+### 语法
+创建函数的语法：
+``` javascript
+let func = new Function ([arg1, arg2, ...argN], functionBody);
+```
+该函数是通过使用参数 arg1...argN 和给定的 functionBody 创建的。
+
+下面这个例子可以帮助你理解创建语法。这是一个带有两个参数的函数：
+
+``` javascript
+let sum = new Function('a', 'b', 'return a + b');
+
+alert( sum(1, 2) ); // 3
+```
+这里有一个没有参数的函数，只有函数体：
+``` javascript
+let sayHi = new Function('alert("Hello")');
+
+sayHi(); // Hello
+```
+与我们已知的其他方法相比，这种方法最大的不同在于，它实际上是通过运行时通过参数传递过来的字符串创建的。
+
+以前的所有声明方法都需要我们 —— 程序员，在脚本中编写函数的代码。
+
+但是 new Function 允许我们将任意字符串变为函数。例如，我们可以从服务器接收一个新的函数并执行它：
+``` javascript
+let str = ... 动态地接收来自服务器的代码 ...
+
+let func = new Function(str);
+func();
+```
+使用 new Function 创建函数的应用场景非常特殊，**比如在复杂的 Web 应用程序中，我们需要从服务器获取代码或者动态地从模板编译函数时才会使用**。
+### 闭包
+通常，闭包是指使用一个特殊的属性 [[Environment]] 来记录函数自身的创建时的环境的函数。它具体指向了函数创建时的词法环境。（我们在 变量作用域，闭包 一章中对此进行了详细的讲解）。
+
+但是如果我们使用 new Function 创建一个函数，那么该函数的 [[Environment]] 并不指向当前的词法环境，而是指向全局环境。
+
+因此，**此类函数无法访问外部（outer）变量，只能访问全局变量**。
+``` javascript
+function getFunc() {
+  let value = "test";
+
+  let func = new Function('alert(value)');
+
+  return func;
+}
+
+getFunc()(); // error: value is not defined
+```
+将其与常规行为进行比较：
+``` javascript
+function getFunc() {
+  let value = "test";
+
+  let func = function() { alert(value); };
+
+  return func;
+}
+
+getFunc()(); // "test"，从 getFunc 的词法环境中获取的
+```
+new Function 的这种特性看起来有点奇怪，不过在实际中却非常实用。
+
+想象一下我们必须通过一个字符串来创建一个函数。在编写脚本时我们不会知道该函数的代码（这也就是为什么我们不用常规方法创建函数），但在执行过程中会知道了。我们可能会从服务器或其他来源获取它。
+
+我们的新函数需要和主脚本进行交互。
+
+如果这个函数能够访问外部（outer）变量会怎么样？
+
+问题在于，在将 JavaScript 发布到生产环境之前，需要使用 压缩程序（minifier） 对其进行压缩 —— 一个特殊的程序，通过删除多余的注释和空格等压缩代码 —— 更重要的是，将局部变量命名为较短的变量。
+
+例如，如果一个函数有 let userName，压缩程序会把它替换为 let a（如果 a 已被占用了，那就使用其他字符），剩余的局部变量也会被进行类似的替换。一般来说这样的替换是安全的，毕竟这些变量是函数内的局部变量，函数外的任何东西都无法访问它。在函数内部，压缩程序会替换所有使用了这些变量的代码。压缩程序很聪明，它会分析代码的结构，而不是呆板地查找然后替换，因此它不会“破坏”你的程序。
+
+但是在这种情况下，如果使 new Function 可以访问自身函数以外的变量，它也很有可能无法找到重命名的 userName，这是因为新函数的创建发生在代码压缩以后，变量名已经被替换了。
+
+即使我们可以在 new Function 中访问外部词法环境，我们也会受挫于压缩程序。
+
+此外，这样的代码在架构上很差并且容易出错。
+
+当我们需要向 new Function 创建出的新函数传递数据时，我们必须显式地通过参数进行传递。
+
+## 调度：setTimeout 和 setInterval
+有时我们并不想立即执行一个函数，而是等待特定一段时间之后再执行。这就是所谓的“计划调用（scheduling a call）”。
+
+目前有两种方式可以实现：
+
+- setTimeout 允许我们将函数推迟到一段时间间隔之后再执行。
+- setInterval 允许我们重复运行一个函数，从一段时间间隔之后开始运行，之后以该时间间隔连续重复运行该函数。
+
+这两个方法并不在 JavaScript 的规范中。但是大多数运行环境都有内建的调度程序，并且提供了这些方法。目前来讲，所有浏览器以及 Node.js 都支持这两个方法。
+### setTimeout
+语法：
+``` javascript
+let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
+```
+- func|code 是要执行的函数或要执行的代码字符串，一般传入的都是函数。由于某些历史原因，支持传入代码字符串，但是不建议这样做。
+- delay 是可选的，最小的时间间隔为 4 毫秒（低于这个时间间隔的请求将被忽略）以毫秒为单位（1000 毫秒 = 1 秒），默认值是 0。
+- arg1, arg2... 是可选的，传递给函数 func 的参数。
+
+例如，在下面这个示例中，sayHi() 方法会在 1 秒后执行：
+``` javascript
+function sayHi() {
+  alert('Hello');
+}
+
+setTimeout(sayHi, 1000);
+```
+带参数的情况：
+
+``` javascript
+function sayHi(phrase, who) {
+  alert( phrase + ', ' + who );
+}
+
+setTimeout(sayHi, 1000, "Hello", "John"); // Hello, John
+```
+如果第一个参数位传入的是字符串，JavaScript 会自动为其创建一个函数。
+
+所以这么写也是可以的：
+``` javascript
+setTimeout("alert('Hello')", 1000);
+```
+但是，不建议使用字符串，我们可以使用箭头函数代替它们，如下所示：
+``` javascript
+setTimeout(() => alert('Hello'), 1000);
+```
+::: tip 传入一个函数，但不要执行它
+新手开发者有时候会误将一对括号 () 加在函数后面，这样不行，因为 setTimeout 期望得到一个对函数的引用。而这里的 sayHi() 很明显是在执行函数，所以实际上传入 setTimeout 的是 函数的执行结果。在这个例子中，sayHi() 的执行结果是 undefined（也就是说函数没有返回任何结果），所以实际上什么也没有调度。
+:::
+#### 用 clearTimeout 来取消调度
+setTimeout 在调用时会返回一个“定时器标识符（timer identifier）”，在我们的例子中是 timerId，我们可以使用它来取消执行。
+
+取消调度的语法：
+
+``` javascript
+let timerId = setTimeout(...);
+clearTimeout(timerId);
+```
+在下面的代码中，我们对一个函数进行了调度，紧接着取消了这次调度（中途反悔了）。所以最后什么也没发生：
+``` javascript
+let timerId = setTimeout(() => alert("never happens"), 1000);
+alert(timerId); // 定时器标识符
+
+clearTimeout(timerId);
+alert(timerId); // 还是这个标识符（并没有因为调度被取消了而变成 null）
+```
+从 alert 的输出来看，在浏览器中，定时器标识符是一个数字。在其他环境中，可能是其他的东西。例如 Node.js 返回的是一个定时器对象，这个对象包含一系列方法。
+
+针对浏览器环境，定时器在 HTML5 的标准中有详细描述，详见 timers section。
+
+### setInterval
+语法：
+``` javascript
+let timerId = setInterval(func|code, [delay], [arg1], [arg2], ...)
+``` 
+所有参数的意义也是相同的。不过与 setTimeout 只执行一次不同，setInterval 是每间隔给定的时间周期性执行。
+
+想要阻止后续调用，我们需要调用 clearInterval(timerId)。
+
+下面的例子将每间隔 2 秒就会输出一条消息。5 秒之后，输出停止：
+``` javascript
+// 每 2 秒重复一次
+let timerId = setInterval(() => alert('tick'), 2000);
+
+// 5 秒之后停止
+setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
+``` 
+::: tip alert 弹窗显示的时候计时器依然在进行计时
+在大多数浏览器中，包括 Chrome 和 Firefox，在显示 alert/confirm/prompt 弹窗时，内部的定时器仍旧会继续“嘀嗒”。
+
+所以，在运行上面的代码时，如果在一定时间内没有关掉 alert 弹窗，那么在你关闭弹窗后，下一个 alert 会立即显示。两次 alert 之间的时间间隔将小于 2 秒。
+:::
+
+### 嵌套的 setTimeout
+周期性调度有两种方式。
+
+一种是使用 setInterval，另外一种就是嵌套的 setTimeout，就像这样：
+
+``` javascript
+/** instead of:
+let timerId = setInterval(() => alert('tick'), 2000);
+*/
+
+let timerId = setTimeout(function tick() {
+  alert('tick');
+  timerId = setTimeout(tick, 2000); // (*)
+}, 2000);
+``` 
+上面这个 setTimeout 在当前这一次函数执行完时 (*) 立即调度下一次调用。
+
+嵌套的 setTimeout 要比 setInterval 灵活得多。采用这种方式可以根据当前执行结果来调度下一次调用，因此下一次调用可以与当前这一次不同。
+
+例如，我们要实现一个服务（server），每间隔 5 秒向服务器发送一个数据请求，但如果服务器过载了，那么就要降低请求频率，比如将间隔增加到 10、20、40 秒等。
+
+以下是伪代码：
+``` javascript
+let delay = 5000;
+
+let timerId = setTimeout(function request() {
+  ...发送请求...
+
+  if (request failed due to server overload) {
+    // 下一次执行的间隔是当前的 2 倍
+    delay *= 2;
+  }
+
+  timerId = setTimeout(request, delay);
+
+}, delay);
+```
+并且，如果我们调度的函数占用大量的 CPU，那么我们可以测量执行所需要花费的时间，并安排下次调用是应该提前还是推迟。
+
+嵌套的 setTimeout 相较于 setInterval 能够更精确地设置两次执行之间的延时。
+
+下面来比较这两个代码片段。第一个使用的是 setInterval：
 
 
 
