@@ -240,6 +240,18 @@ export default {
                 text: "函数进阶",
                 link: "/posts/FE/JavaScript/advance-function",
               },
+              {
+                text: "对象属性配置",
+                link: "/posts/FE/JavaScript/OPC",
+              },
+              {
+                text: "原型与继承",
+                link: "/posts/FE/JavaScript/prototype",
+              },
+              {
+                text: "类",
+                link: "/posts/FE/JavaScript/class",
+              },
             ],
           },
           {
