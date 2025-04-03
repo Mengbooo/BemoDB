@@ -252,6 +252,14 @@ export default {
                 text: "类",
                 link: "/posts/FE/JavaScript/class",
               },
+              {
+                text: "错误处理",
+                link: "/posts/FE/JavaScript/error-handling",
+              },
+              {
+                text: "异步",
+                link: "/posts/FE/JavaScript/async",
+              },
             ],
           },
           {
