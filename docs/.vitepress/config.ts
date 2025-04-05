@@ -128,9 +128,23 @@ export default {
       {
         text: "软件工程",
         items: [
-          { text: "导论", link: "/posts/software/base" },
-          { text: "软件过程", link: "/posts/software/process" },
-          { text: "敏捷开发", link: "/posts/software/agile-development" },
+          {
+            text: "归纳",
+            collapsed:true,
+            items:[
+              { text: "软件工程导论", link: "/posts/software/summary/base" },
+              { text: "敏捷开发", link: "/posts/software/summary/agile-development" },
+              { text: "软件过程", link: "/posts/software/summary/process" },
+            ]
+          },
+          {
+            text: "实验",
+            collapsed:true,
+            items:[
+              { text: "实验1 消除坏味道代码", link: "/posts/software/experiment/bad-code" },
+              { text: "实验2 TDD测试驱动开发", link: "/posts/software/experiment/TDD" },
+            ]
+          }
         ],
       },
       {
@@ -259,6 +273,14 @@ export default {
               {
                 text: "异步",
                 link: "/posts/FE/JavaScript/async",
+              },
+              {
+                text: "Generator",
+                link: "/posts/FE/JavaScript/generator",
+              },
+              {
+                text: "模块",
+                link: "/posts/FE/JavaScript/module",
               },
             ],
           },
