@@ -282,10 +282,14 @@ export default {
                 text: "模块",
                 link: "/posts/FE/JavaScript/module",
               },
+              {
+                text: "杂项",
+                link: "/posts/FE/JavaScript/miscellaneous",
+              },
             ],
           },
           {
-            text: "Web API",
+            text: "Web API & 浏览器",
             collapsed: true,
             items: [
               {
