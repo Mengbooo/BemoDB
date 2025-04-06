@@ -311,7 +311,12 @@ export default {
           {
             text: "DevTools",
             collapsed: true,
-            items: [],
+            items: [
+              {
+                text: "通用",
+                link: "/posts/FE/DevTools/basic",
+              },
+            ],
           },
           {
             text: "React",
@@ -326,7 +331,15 @@ export default {
           {
             text: "TypeScript",
             collapsed: true,
-            items: [],
+            items: [
+              {
+                text:"基本知识",
+                collapsed:true,
+                items:[
+
+                ]
+              }
+            ],
           },
           {
             text: "Node",
