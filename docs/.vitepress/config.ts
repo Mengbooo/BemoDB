@@ -307,10 +307,29 @@ export default {
                 collapsed:true,
                 items:[
                   {
-                    
+                    text: "关于 npm",
+                    link: "/posts/FE/package/npm/basic",
                   }
                 ]
-              }
+              },
+              {
+                text:"yarn",
+                collapsed:true,
+                items:[
+                  {
+                  
+                  }
+                ]
+              },
+              {
+                text:"pnpm",
+                collapsed:true,
+                items:[
+                  {
+                   
+                  }
+                ]
+              },
             ],
           },
           {
@@ -363,12 +382,21 @@ export default {
             collapsed: true,
             items: [
               {
-                text:"基本知识",
-                collapsed:true,
-                items:[
-
-                ]
-              }
+                text: "Intro",
+                link: "/posts/FE/typescript/intro",
+              },
+              {
+                text: "环境搭建tip",
+                link: "/posts/FE/typescript/environment",
+              },
+              {
+                text: "原始类型和对象类型",
+                link: "/posts/FE/typescript/datatype",
+              },
+              {
+                text: "函数类型与重载",
+                link: "/posts/FE/typescript/functype",
+              },
             ],
           },
           {

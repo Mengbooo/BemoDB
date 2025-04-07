@@ -18,7 +18,7 @@ Reprinted by Bolaxious , Reproduction is permitted by permission
 
 - ID声明：/usr/src/linux-6.2/include/uapi/asm-generic/unistd.h
 > **注意事项：**
-> - 本教程在[操作系统课后实践作业1](https://mengbooo.github.io/BemoDB/posts/os/Q_hw_1/Q_hw_1.html)的基础上进行
+> - 本教程在[操作系统课后实践作业1](https://mengbooo.github.io/BemoDB/posts/os/homework/Q_hw_1/Q_hw_1.html)的基础上进行
 > - 请确保在原系统内核中进行下列操作
 > - 下列操作均在/usr/src/linux-6.2文件夹的终端中进行
 > - 插入的代码均在文件底部
