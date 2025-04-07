@@ -301,7 +301,17 @@ export default {
           {
             text: "包管理器",
             collapsed: true,
-            items: [],
+            items: [
+              {
+                text:"npm",
+                collapsed:true,
+                items:[
+                  {
+                    
+                  }
+                ]
+              }
+            ],
           },
           {
             text: "模块化",
@@ -315,6 +325,26 @@ export default {
               {
                 text: "通用",
                 link: "/posts/FE/DevTools/basic",
+              },
+              {
+                text: "Console",
+                link: "/posts/FE/DevTools/console",
+              },
+              {
+                text: "Network",
+                link: "/posts/FE/DevTools/network",
+              },
+              {
+                text: "Elements",
+                link: "/posts/FE/DevTools/elements",
+              },
+              {
+                text: "Drawer",
+                link: "/posts/FE/DevTools/drawer",
+              },
+              {
+                text: "Workspace",
+                link: "/posts/FE/DevTools/workspace",
               },
             ],
           },
