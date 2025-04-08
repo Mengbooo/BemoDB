@@ -401,6 +401,26 @@ export default {
                 text: "函数类型与重载",
                 link: "/posts/FE/typescript/functype",
               },
+              {
+                text: "Class",
+                link: "/posts/FE/typescript/class",
+              },
+              {
+                text: "any、unknown类型与类型断言",
+                link: "/posts/FE/typescript/any",
+              },
+              {
+                text: "类型别名、联合类型与交叉类型",
+                link: "/posts/FE/typescript/typetip",
+              },
+              {
+                text: "泛型",
+                link: "/posts/FE/typescript/generics",
+              },
+              {
+                text: "类型声明",
+                link: "/posts/FE/typescript/typedec",
+              },
             ],
           },
           {
