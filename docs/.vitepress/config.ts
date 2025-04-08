@@ -100,7 +100,7 @@ export default {
         text: "操作系统",
         items: [
           {
-            text: "课后作业",
+            text: "作业",
             collapsed: true,
             items: [
               {
@@ -114,12 +114,16 @@ export default {
             ],
           },
           {
-            text: "实验报告",
+            text: "实验",
             collapsed: true,
             items: [
               {
                 text: "[转载] 操作系统上机实验 1",
                 link: "/posts/os/experiment/Q_ex_1/sys-1",
+              },
+              {
+                text: "[转载] 操作系统上机实验 2",
+                link: "/posts/os/experiment/Q_ex_2/sys-2",
               },
             ],
           },

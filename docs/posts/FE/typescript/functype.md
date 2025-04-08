@@ -17,6 +17,8 @@ function handler(args) { }; // 函数声明
 
 - 而函数声明则是向当前作用域做了广播：这里有一个 handler 函数，欢迎你随时随地调用我。
 
+## 函数类型标注
+
 此前，我们已经学习了如何进行原始类型与对象类型的标注，也基于此了解到了，类型其实就是对值的约束，那么对函数的值，在 TS 中又是如何进行类型约束的？
 
 要回答这个问题，不妨思考一下，我们是如何使用函数的？
@@ -47,64 +49,142 @@ const sum = function(a: number, b: number): number {
 type Sum = (a: number, b: number) => number;
 ```
 
+`type Sum =` 的语法称为类型别名，我们先不用理解它到底是个什么语法，只要了解它能用来给一个类型起一个新名字，比如：
 
+``` typescript 
+type MagicString = string; // 一个神奇字符串
+```
 
+需要注意的是，使用类型别名保存函数类型时，我们的写法是 `(a: number, b: number) => number`; 而不是 `(a: number, b: number): number`。现在我们就可以使用这个类型来作为函数表达式类型了：
 
+``` typescript 
+type Sum = (a: number, b: number) => number;
 
+const sum: Sum = function(a, b) {
+  return a + b;
+};
+```
 
+无需再为表达式中的参数和返回值标注类型，TypeScript 会自动地将类型 Sum 中的参数类型与返回值类型和后面的函数表达式匹配起来。
 
+但 TypeScript 中的函数类型并不能完全套用 JavaScript 中的概念，最明显的一个例子就是对于无返回语句的函数返回值类型描述。
 
+我们知道，在 JavaScript 的函数中，如果没有显式的 return 语句，那么这个函数的执行结果实际会是 undefined，但在 TypeScript 中，我们需要将这个函数的返回值类型标注为 void 而不是 undefined：
 
+``` typescript 
+function handler1(): void {}; // √
+function handler2(): undefined {}; // X
+```
 
+这是因为在 TypeScript 中，**undefined 也被视为一个有意义的类型**。因此如果你希望将返回值类型标注为 undefined，就需要有显式的 return 语句：
 
+``` typescript 
+function handler2(): undefined {
+  return;
+};
+```
+::: tip 
+在 5.1 版本中，TS 对这个不符直觉的问题进行了修正，即允许了 undefined 作为无显式 return 语句函数的返回值类型，但考虑到发布时间较晚，因此还是有必要了解这个问题的。
+:::
 
+## 函数重载
 
+除了类型标注以外，在 TypeScript 的函数还带来了一位新朋友-函数重载，这也是相当有必要了解的一个概念。
 
+不妨先来想象一个场景，在 JavaScript 中，如果一个函数可能存在多种入参组合，比如我们有一个 sum 函数，它接受两个参数，基于参数类型的不同，它会执行不同的逻辑并返回不同的值：
 
+- 入参均为数字类型时，相加这两个参数，如 `sum(1, 2)` 返回 3。
+- 一个参数为数字类型数组，另一个参数为数字类型时，让数组参数中的每个数字加上数字参数，再返回这个数字，如 `sum([1, 2, 3], 4)` 和 `sum(4, [1, 2, 3])` 返回 `[5, 6, 7]`
+- 如果两个参数是长度一致的数字类型数组时，依次相加每个数字，返回相加后的数组，如 `sum([1, 2, 3], [4, 5, 6])` 返回 `[5, 7, 9]`
 
+完整的实现与示例如下：
 
+``` typescript 
+function sum(x, y) {
+  if (typeof x === 'number' && typeof y === 'number') {
+    return x + y;
+  } else if (Array.isArray(x) && typeof y === 'number') {
+    return x.map((num) => num + y);
+  } else if (typeof x === 'number' && Array.isArray(y)) {
+    return y.map((num) => num + x);
+  } else if (Array.isArray(x) && Array.isArray(y)) {
+    if (x.length !== y.length) {
+      throw new Error('Arrays must have the same length');
+    }
+    return x.map((num, index) => num + y[index]);
+  } else {
+    throw new Error('Invalid arguments');
+  }
+}
 
+console.log(sum(2, 3)); // 5
+console.log(sum([1, 2, 3], 4)); // [5, 6, 7]
+console.log(sum(5, [1, 2, 3])); // [6, 7, 8]
+console.log(sum([1, 2, 3], [4, 5, 6])); // [5, 7, 9]
+console.log(sum('a', 'b')); // Error: Invalid arguments
+console.log(sum([1, 2, 3], [4, 5])); // Error: Arrays must have the same length
+```
 
+这其实就是函数重载的概念，它指的就是根据不同的入参匹配不同的实际逻辑，实现一个函数名走天下。
 
+但理想很美好，现实就比较忧伤了。在 JavaScript 中，此时为了尽可能描述清楚各个入参的作用，我们会这么写参数名：
 
+``` typescript 
+function sum(numberOrArray, numberOrArray) { }
+```
 
+这对调用方很不友好，这些参数到底接受什么类型？排列组合是怎样的？
 
+为了解决这个问题，TypeScript 支持了类型层面的重载，比如上面的例子可以这么写：
 
+``` typescript 
+function sum(base: number, incre: number): number;
+function sum(baseArray: number[], incre: number): number[];
+function sum(incre: number, baseArray: number[]): number[];
+function sum(baseArray: number[], increArray: number[]): number[];
+function sum(x: number | number[], y: number | number[]): number | number[] { }
+```
 
+需要注意的是，在标注了每一种可能的重载的方式以后，在`最后那个实际实现的函数类型标注`里，我们需要标注各个参数类型和返回值类型，使用上面所有重载可能出现的类型组成的联合类型。
 
+但实际上这最后一个函数类型标注并不会被调用方看到，在匹配到对应的调用时，我们就能够获取到与参数组合完全匹配的提示与类型保障
 
+你可能会发现，虽然类型层面做了重载，但好像函数内部还是需要自己通过朴素的 if else 判断当前是哪个参数组合...这是因为，TypeScript 中的函数重载还是属于`伪重载`，它只能在类型层面帮你实现重载的效果，而实际的逻辑运行，由于 JavaScript 不支持，它也就束手无策了。
 
+真正的函数重载应该是直接定义多个同名的函数，这些函数的内部逻辑是仅服务一套参数组合的，比如上面的例子用 Java 改写：
 
+``` java
+public class Calculator {
+    public int add(int x, int y) {
+        return x + y;
+    }
 
+    public int[] add(int[] x, int y) {
+        // 省略内部实现
+    }
 
+    public int[] add(int x, int[] y) {
+        // 省略内部实现
+    }
 
+    public int[] add(int[] x, int[] y) {
+        // 省略内部实现
+    }
 
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+        // 自动根据入参类型分发到对应的方法
+        System.out.println(calculator.add(2, 3)); // 5
+        System.out.println(Arrays.toString(calculator.add(new int[]{1, 2, 3}, 4))); // [5, 6, 7]
+        System.out.println(Arrays.toString(calculator.add(5, new int[]{1, 2, 3}))); // [6, 7, 8]
+        System.out.println(Arrays.toString(calculator.add(new int[]{1, 2, 3}, new int[]{4, 5, 6}))); // [5, 7, 9]
+    }
+}
+```
 
+我们了解了 TypeScript 中的函数，包括如何对函数进行类型标注，包括函数声明与函数表达式这两种定义方式，实现函数调用部分的类型保障。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+以及函数重载这么一个全新的概念，虽然我们用的还是伪重载，但至少能够提供类型层面的重载支持了，这对于底层工具库同样是一个不可忽视的助力。
 
 
 
