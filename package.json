@@ -1,5 +1,5 @@
 {
-  "name": "Blog",
+  "name": "blog",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -20,6 +20,7 @@
     "busuanzi.pure.js": "^1.0.3",
     "esbuild": "^0.24.2",
     "vite": "^6.0.7",
+    "vitepress-plugin-image-viewer": "^1.1.6",
     "vitepress-plugin-rss": "^0.3.0"
   }
 }

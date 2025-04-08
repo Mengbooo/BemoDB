@@ -17,3 +17,7 @@
   --vp-c-brand-2: #2af2ca;
   --vp-c-brand-3: #12ffa0;
 }
+
+img:hover{
+  cursor: pointer;
+}

@@ -1,6 +1,6 @@
 # 操作系统原理上机试验 2
 ::: tip 文章信息
-Written by [Q-thrive](https://github.com/Qthrive) in 2025.3.27
+Written by [Q-thrive](https://github.com/Qthrive) in 2025.4.8
 
 Reprinted by Bolaxious , Reproduction is permitted by permission
 :::
