@@ -410,16 +410,32 @@ export default {
                 link: "/posts/FE/typescript/any",
               },
               {
-                text: "类型别名、联合类型与交叉类型",
-                link: "/posts/FE/typescript/typetip",
-              },
-              {
                 text: "泛型",
                 link: "/posts/FE/typescript/generics",
               },
               {
                 text: "类型声明",
                 link: "/posts/FE/typescript/typedec",
+              },
+              {
+                text: "类型别名、联合类型与交叉类型",
+                link: "/posts/FE/typescript/typealias",
+              },
+              {
+                text: "内置工具类型",
+                link: "/posts/FE/typescript/utiltype",
+              },
+              {
+                text: "模板字符串类型",
+                link: "/posts/FE/typescript/temstring",
+              },
+              {
+                text: "从 JS 迁移到 TS",
+                link: "/posts/FE/typescript/migration",
+              },
+              {
+                text: "使用 TS 开发 npm 包",
+                link: "/posts/FE/typescript/npmdev",
               },
             ],
           },
