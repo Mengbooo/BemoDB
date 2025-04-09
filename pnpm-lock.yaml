@@ -20,6 +20,9 @@ importers:
       vite:
         specifier: ^6.0.7
         version: 6.0.7(jiti@2.4.2)
+      vitepress-plugin-image-viewer:
+        specifier: ^1.1.6
+        version: 1.1.6
       vitepress-plugin-rss:
         specifier: ^0.3.0
         version: 0.3.0(vitepress@1.5.0(@algolia/client-search@5.19.0)(postcss@8.5.1)(search-insights@2.17.3)(typescript@5.8.2))
@@ -1153,6 +1156,9 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
+  viewerjs@1.11.7:
+    resolution: {integrity: sha512-0JuVqOmL5v1jmEAlG5EBDR3XquxY8DWFQbFMprOXgaBB0F7Q/X9xWdEaQc59D8xzwkdUgXEMSSknTpriq95igg==, tarball: https://registry.npmmirror.com/viewerjs/-/viewerjs-1.11.7.tgz}
+
   vite@5.4.11:
     resolution: {integrity: sha512-c7jFQRklXua0mTzneGW9QVyxFjUgwcihC4bXEtujIo2ouWCe1Ajt/amn2PCxYnhYfd5k09JX3SB7OYWFKYqj8Q==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -1223,6 +1229,9 @@ packages:
         optional: true
       yaml:
         optional: true
+
+  vitepress-plugin-image-viewer@1.1.6:
+    resolution: {integrity: sha512-ZfYy1s/bXju6vGVsE/5gPXT449+KaXZ6ZIPAvcmPM07VmC7Bv57bCvFar2II7C2EjexxfPQsxUh70vSBbe14kQ==, tarball: https://registry.npmmirror.com/vitepress-plugin-image-viewer/-/vitepress-plugin-image-viewer-1.1.6.tgz}
 
   vitepress-plugin-rss@0.3.0:
     resolution: {integrity: sha512-pK8HepzkfB9RnA+KMFKIs1XxA4EMcDxXgiZ86mJitqb41LS/dWcleOXYmjCFP7sCUgitDFrBt74+rQgkceer4g==}
@@ -2355,6 +2364,8 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
+  viewerjs@1.11.7: {}
+
   vite@5.4.11:
     dependencies:
       esbuild: 0.21.5
@@ -2371,6 +2382,10 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
       jiti: 2.4.2
+
+  vitepress-plugin-image-viewer@1.1.6:
+    dependencies:
+      viewerjs: 1.11.7
 
   vitepress-plugin-rss@0.3.0(vitepress@1.5.0(@algolia/client-search@5.19.0)(postcss@8.5.1)(search-insights@2.17.3)(typescript@5.8.2)):
     dependencies:
