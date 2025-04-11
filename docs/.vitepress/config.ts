@@ -452,7 +452,7 @@ export default {
             collapsed: true,
             items: [
               {
-                text: "浅尝VitePress🤗",
+                text: "VitePress Easyuse",
                 link: "/posts/FE/SSG/vitepress_easyUse",
               },
             ],
