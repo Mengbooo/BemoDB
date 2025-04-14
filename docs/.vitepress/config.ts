@@ -300,6 +300,10 @@ export default {
                 text: "交互：alert、prompt 和 confirm",
                 link: "/posts/FE/webAPI/interaction",
               },
+              {
+                text: "Dom",
+                link: "/posts/FE/webAPI/dom",
+              },
             ],
           },
           {
