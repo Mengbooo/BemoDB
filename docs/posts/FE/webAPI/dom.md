@@ -2375,16 +2375,53 @@ JavaScript 中有许多属性可让我们读取有关元素宽度、高度和其
 
 这些属性的值在技术上讲是数字，但这些数字其实是“像素（pixel）”，因此它们是像素测量值。
 
-让我们从元素外部开始探索属性。
+元素具有以下几何属性：
 
+- `offsetParent` —— 是最接近的 CSS 定位的祖先，或者是 td，th，table，body。
+- `offsetLeft/offsetTop` —— 是相对于 offsetParent 的左上角边缘的坐标。
+- `offsetWidth/offsetHeight` —— 元素的“外部” width/height，边框（border）尺寸计算在内。
+- `clientLeft/clientTop` —— 从元素左上角外角到左上角内角的距离。对于从左到右显示内容的操作系统来说，它们始终是左侧/顶部 border 的宽度。而对于从右到左显示内容的操作系统来说，垂直滚动条在左边，所以 clientLeft 也包括滚动条的宽度。
+- `clientWidth/clientHeight` —— 内容的 width/height，包括 padding，但不包括滚动条（scrollbar）。
+- `scrollWidth/scrollHeight` —— 内容的 width/height，就像 clientWidth/- - clientHeight 一样，但还包括元素的滚动出的不可见的部分。
+- `scrollLeft/scrollTop` —— 从元素的左上角开始，滚动出元素的上半部分的 width/- height。
+  
+除了 `scrollLeft/scrollTop` 外，所有属性都是只读的。如果我们修改 scrollLeft/- scrollTop，浏览器会滚动对应的元素。
 
+## Window 大小和滚动
 
+### 几何：
 
+文档可见部分的 width/height（内容区域的 width/height）：document.documentElement.clientWidth/clientHeight
 
+整个文档的 width/height，其中包括滚动出去的部分：
 
+```js
+let scrollHeight = Math.max(
+  document.body.scrollHeight, document.documentElement.scrollHeight,
+  document.body.offsetHeight, document.documentElement.offsetHeight,
+  document.body.clientHeight, document.documentElement.clientHeight
+);
+```
+### 滚动：
 
+读取当前的滚动：window.pageYOffset/pageXOffset。
 
+更改当前的滚动：
 
+window.scrollTo(pageX,pageY) —— 绝对坐标，
+window.scrollBy(x,y) —— 相对当前位置进行滚动，
+elem.scrollIntoView(top) —— 滚动以使 elem 可见（elem 与窗口的顶部/底部对齐）。
+
+## 坐标
+
+页面上的任何点都有坐标：
+
+- 相对于窗口的坐标 —— elem.getBoundingClientRect()。
+- 相对于文档的坐标 —— elem.getBoundingClientRect() 加上当前页面滚动。
+
+窗口坐标非常适合和 position:fixed 一起使用，文档坐标非常适合和 position:absolute 一起使用。
+
+这两个坐标系统各有利弊。有时我们需要其中一个或另一个，就像 CSS position 的 absolute 和 fixed 一样。
 
 
 

@@ -304,6 +304,10 @@ export default {
                 text: "Dom",
                 link: "/posts/FE/webAPI/dom",
               },
+              {
+                text: "Event",
+                link: "/posts/FE/webAPI/event",
+              },
             ],
           },
           {
