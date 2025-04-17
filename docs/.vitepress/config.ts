@@ -39,12 +39,13 @@ export default {
         items: [{ text: "2024:Teenager Forever", link: "/posts/annals/2024" }],
       },
       {
-        text: "随记",
+        text: "DiaryGo",
         items: [
-          { text: "构建之法", link: "/posts/notes/goujianzhifa" },
-          { text: "AI与中年人", link: "/posts/notes/AI&MiddleAged" },
-          { text: "元宵夜游", link: "/posts/notes/fireFlower/fireFlower" },
-          { text: "玉兰开了", link: "/posts/notes/yuLan/yuLan" },
+          { text: "250207 构建之法", link: "/posts/notes/goujianzhifa" },
+          { text: "250208 AI与中年人", link: "/posts/notes/AI&MiddleAged" },
+          { text: "250313 元宵夜游", link: "/posts/notes/fireFlower/fireFlower" },
+          { text: "250313 玉兰开了", link: "/posts/notes/yuLan/yuLan" },
+          { text: "250417 广度与精度", link: "/posts/notes/width-depth" },
         ],
       },
       {
@@ -139,6 +140,7 @@ export default {
               { text: "软件工程导论", link: "/posts/software/summary/base" },
               { text: "敏捷开发", link: "/posts/software/summary/agile-development" },
               { text: "软件过程", link: "/posts/software/summary/process" },
+              { text: "需求工程", link: "/posts/software/summary/demand" },
             ]
           },
           {
@@ -307,6 +309,22 @@ export default {
               {
                 text: "Event",
                 link: "/posts/FE/webAPI/event",
+              },
+              {
+                text: "UI事件",
+                link: "/posts/FE/webAPI/UI-event",
+              },
+              {
+                text: "表单和控件",
+                link: "/posts/FE/webAPI/form-event",
+              },
+              {
+                text: "加载资源和生命周期",
+                link: "/posts/FE/webAPI/load",
+              },
+              {
+                text: "事件循环：微任务和宏任务",
+                link: "/posts/FE/webAPI/event-loop",
               },
             ],
           },
@@ -479,7 +497,16 @@ export default {
       },
       {
         text: "Frontalk",
-        items: [],
+        items: [
+          {
+            text: "Frontalk 首页",
+            link: "/posts/frontalk/index",
+          },
+          {
+            text: "Frame 和 window",
+            link: "/posts/frontalk/frame",
+          },
+        ],
       },
       {
         text: "Problems & Solutions",

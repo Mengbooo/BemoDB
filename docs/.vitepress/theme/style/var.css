@@ -22,3 +22,24 @@
 img:hover{
   cursor: pointer;
 }
+
+/* 隐藏 WebKit 浏览器的滚动条 */
+html::-webkit-scrollbar {
+  display: none;
+}
+/* 隐藏 IE 浏览器的滚动条 */
+html {
+  -ms-overflow-style: none;
+  /* 隐藏 Firefox 浏览器的滚动条 */
+  scrollbar-width: none;
+}
+
+.VPSidebar[data-v-315c3d5a]::-webkit-scrollbar{
+  display: none;
+}
+
+.VPSidebar[data-v-315c3d5a]{
+  -ms-overflow-style: none;
+  /* 隐藏 Firefox 浏览器的滚动条 */
+  scrollbar-width: none;
+}
