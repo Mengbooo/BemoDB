@@ -140,7 +140,7 @@ export default {
               { text: "软件工程导论", link: "/posts/software/summary/base" },
               { text: "敏捷开发", link: "/posts/software/summary/agile-development" },
               { text: "软件过程", link: "/posts/software/summary/process" },
-              { text: "需求工程", link: "/posts/software/summary/demand" },
+              { text: "需求工程", link: "/posts/software/summary/demand`" },
             ]
           },
           {
@@ -505,6 +505,22 @@ export default {
           {
             text: "Frame 和 window",
             link: "/posts/frontalk/frame",
+          },
+          {
+            text: "处理二进制数据/文件",
+            link: "/posts/frontalk/binary",
+          },
+          {
+            text: "动画",
+            link: "/posts/frontalk/animation",
+          },
+          {
+            text: "浏览器存储",
+            link: "/posts/frontalk/cache",
+          },
+          {
+            text: "Web Components",
+            link: "/posts/frontalk/web-components",
           },
         ],
       },

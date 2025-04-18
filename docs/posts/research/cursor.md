@@ -32,3 +32,7 @@ irm https://raw.githubusercontent.com/yuaotian/go-cursor-help/master/scripts/ins
 ::: details For Linux\MacOS
 curl -fsSL https://raw.githubusercontent.com/yuaotian/go-cursor-help/master/scripts/install.sh | sudo bash
 :::
+
+::: danger Updated 250418
+嘻嘻，被封号了
+:::
