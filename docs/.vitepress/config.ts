@@ -36,10 +36,12 @@ export default {
       { text: "导航", link: "/nav" },
       {
         text: "年记",
+        collapsed: true,
         items: [{ text: "2024:Teenager Forever", link: "/posts/annals/2024" }],
       },
       {
         text: "DiaryGo",
+        collapsed: true,
         items: [
           { text: "250207 构建之法", link: "/posts/notes/goujianzhifa" },
           { text: "250208 AI与中年人", link: "/posts/notes/AI&MiddleAged" },
@@ -50,6 +52,7 @@ export default {
       },
       {
         text: "转载",
+        collapsed: true,
         items: [
           {
             text: "70% 问题：关于 AI 辅助编码的残酷真相",
@@ -64,6 +67,7 @@ export default {
       },
       {
         text: "小研究",
+        collapsed: true,
         items: [
           {
             text: "Hello Halo —— 使用Halo搭建个人博客",
@@ -75,6 +79,7 @@ export default {
       },
       {
         text: "算法",
+        collapsed: true,
         items: [
           { text: "算法篇", link: "/posts/algorithm/index" },
           {
@@ -91,6 +96,7 @@ export default {
       },
       {
         text: "计算机网络",
+        collapsed: true,
         items: [
           { text: "网络篇", link: "/posts/csnet/index" },
           { text: "OSI七层模型简介", link: "/posts/csnet/OSI" },
@@ -99,6 +105,7 @@ export default {
       },
       {
         text: "操作系统",
+        collapsed: true,
         items: [
           {
             text: "作业",
@@ -132,6 +139,7 @@ export default {
       },
       {
         text: "软件工程",
+        collapsed: true,
         items: [
           {
             text: "归纳",
@@ -155,6 +163,7 @@ export default {
       },
       {
         text: "FrontEnd",
+        collapsed: true,
         items: [
           {
             text: "HTML",
@@ -497,6 +506,7 @@ export default {
       },
       {
         text: "Frontalk",
+        collapsed: true,
         items: [
           {
             text: "Frontalk 首页",
@@ -522,10 +532,19 @@ export default {
             text: "Web Components",
             link: "/posts/frontalk/web-components",
           },
+          {
+            text: "网络请求",
+            link: "/posts/frontalk/requests",
+          },
+          {
+            text: "正则表达式",
+            link: "/posts/frontalk/reg-expression",
+          },
         ],
       },
       {
         text: "Problems & Solutions",
+        collapsed: true,
         items: [
           {
             text: "SSG",

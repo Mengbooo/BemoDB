@@ -974,6 +974,471 @@ shadow DOM 可以包含 `<style>` 和 `<link rel="stylesheet" href="…">` 标�
 
 一般来说，局部样式只在 shadow 树内起作用，文档样式在 shadow 树外起作用。但也有少数例外。
 
+### :host
+
+:host 选择器允许选择 shadow 宿主（包含 shadow 树的元素）。
+
+例如，我们正在创建 `<custom-dialog>` 元素，并且想使它居中。为此，我们需要对 `<custom-dialog>` 元素本身设置样式。
+
+这正是 :host 所能做的：
+
+``` html
+<template id="tmpl">
+  <style>
+    /* 这些样式将从内部应用到 custom-dialog 元素上 */
+    :host {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-block;
+      border: 1px solid red;
+      padding: 10px;
+    }
+  </style>
+  <slot></slot>
+</template>
+
+<script>
+customElements.define('custom-dialog', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'}).append(tmpl.content.cloneNode(true));
+  }
+});
+</script>
+
+<custom-dialog>
+  Hello!
+</custom-dialog>
+```
+
+### 级联
+
+shadow 宿主（ `<custom-dialog>` 本身）驻留在 light DOM 中，因此它受到文档 CSS 规则的影响。
+
+如果在局部的 :host 和文档中都给一个属性设置样式，那么文档样式优先。
+
+例如，如果在文档中我们有如下样式：
+
+``` html
+<style>
+custom-dialog {
+  padding: 0;
+}
+</style>
+```
+
+那么 `<custom-dialog>` 将没有 padding。
+
+这是非常有利的，因为我们可以在其 `:host` 规则中设置 “默认” 组件样式，然后在文档中轻松地覆盖它们。
+
+唯一的例外是当局部属性被标记 `!important` 时，对于这样的属性，局部样式优先。
+
+### :host(selector)
+
+与 :host 相同，但仅在 shadow 宿主与 selector 匹配时才应用样式。
+
+例如，我们希望仅当 `<custom-dialog>` 具有 centered 属性时才将其居中:
+
+``` html
+<template id="tmpl">
+  <style>
+    :host([centered]) {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-color: blue;
+    }
+
+    :host {
+      display: inline-block;
+      border: 1px solid red;
+      padding: 10px;
+    }
+  </style>
+  <slot></slot>
+</template>
+
+<script>
+customElements.define('custom-dialog', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'}).append(tmpl.content.cloneNode(true));
+  }
+});
+</script>
+
+
+<custom-dialog centered>
+  Centered!
+</custom-dialog>
+
+<custom-dialog>
+  Not centered.
+</custom-dialog>
+```
+
+现在附加的居中样式只应用于第一个对话框：`<custom-dialog centered>`。
+
+### :host-context(selector)
+
+与 `:host` 相同，但仅当外部文档中的 shadow 宿主或它的任何祖先节点与 selector 匹配时才应用样式。
+
+例如，`:host-context(.dark-theme)` 只有在 `<custom-dialog>` 或者 `<custom-dialog>` 的任何祖先节点上有 dark-theme 类时才匹配：
+
+``` html
+
+<body class="dark-theme">
+  <!--
+    :host-context(.dark-theme) 只应用于 .dark-theme 内部的 custom-dialog
+  -->
+  <custom-dialog>...</custom-dialog>
+</body>
+
+```
+
+总之，我们可以使用 `:host-family` 系列的选择器来对组件的主元素进行样式设置，具体取决于上下文。这些样式（除 `!important` 外）可以被文档样式覆盖。
+
+### 给占槽（ slotted ）内容添加样式
+
+现在让我们考虑有插槽的情况。
+
+占槽元素来自 light DOM，所以它们使用文档样式。局部样式不会影响占槽内容。
+
+在下面的例子中，按照文档样式，占槽的 `<span>` 是粗体，但是它不从局部样式中获取 background：
+
+``` html
+<style>
+  span { font-weight: bold }
+</style>
+
+<user-card>
+  <div slot="username"><span>John Smith</span></div>
+</user-card>
+
+<script>
+customElements.define('user-card', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.innerHTML = `
+      <style>
+      span { background: red; }
+      </style>
+      Name: <slot name="username"></slot>
+    `;
+  }
+});
+</script>
+```
+
+结果是粗体，但不是红色。
+
+如果我们想要在我们的组件中设置占槽元素的样式，有两种选择。
+
+首先，我们可以对 `<slot>` 本身进行样式化，并借助 CSS 继承：
+
+``` html
+<user-card>
+  <div slot="username"><span>John Smith</span></div>
+</user-card>
+
+<script>
+customElements.define('user-card', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.innerHTML = `
+      <style>
+      slot[name="username"] { font-weight: bold; }
+      </style>
+      Name: <slot name="username"></slot>
+    `;
+  }
+});
+</script>
+```
+
+这里 `<p>John Smith</p>` 变成粗体，因为 CSS 继承在 `<slot>` 和它的内容之间有效。但是在 CSS 中，并不是所有的属性都是继承的。
+
+另一个选项是使用 `::slotted(selector)` 伪类。它根据两个条件来匹配元素：
+
+1. 这是一个占槽元素，来自于 light DOM。插槽名并不重要，任何占槽元素都可以，但只能是元素本身，而不是它的子元素 。
+2. 该元素与 `selector` 匹配。
+
+在我们的例子中，`::slotted(div)` 正好选择了 `<div slot="username">` ，但是没有选择它的子元素：
+
+``` html
+<user-card>
+  <div slot="username">
+    <div>John Smith</div>
+  </div>
+</user-card>
+
+<script>
+customElements.define('user-card', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.innerHTML = `
+      <style>
+      ::slotted(div) { border: 1px solid red; }
+      </style>
+      Name: <slot name="username"></slot>
+    `;
+  }
+});
+</script>
+```
+
+请注意，`::slotted` 选择器不能用于任何插槽中更深层的内容。下面这些选择器是无效的：
+
+``` css
+::slotted(div span) {
+  /* 我们插入的 <div> 不会匹配这个选择器 */
+}
+
+::slotted(div) p {
+  /* 不能进入 light DOM 中选择元素 */
+}
+```
+
+此外，`::sloated` 只能在 CSS 中使用，不能在 `querySelector` 中使用。
+
+### 用自定义 CSS 属性作为勾子
+
+如何在主文档中设置组件的内建元素的样式?
+
+像 `:host` 这样的选择器应用规则到 `<custom-dialog>` 元素或 `<user-card>`，但是如何设置在它们内部的 shadow DOM 元素的样式呢？
+
+没有选择器可以从文档中直接影响 shadow DOM 样式。但是，正如我们暴露用来与组件交互的方法那样，我们也可以暴露 CSS 变量（自定义 CSS 属性）来对其进行样式设置。
+
+**自定义 CSS 属性存在于所有层次，包括 light DOM 和 shadow DOM。**
+
+例如，在 shadow DOM 中，我们可以使用 `--user-card-field-color` CSS 变量来设置字段的样式，而外部文档可以设置它的值：
+
+``` html
+<style>
+  .field {
+    color: var(--user-card-field-color, black);
+    /* 如果 --user-card-field-color 没有被声明过，则取值为 black */
+  }
+</style>
+<div class="field">Name: <slot name="username"></slot></div>
+<div class="field">Birthday: <slot name="birthday"></slot></div>
+</style>
+```
+
+然后，我们可以在外部文档中为 `<user-card>` 声明此属性：
+
+``` css
+user-card {
+  --user-card-field-color: green;
+}
+```
+
+自定义 CSS 属性穿透 shadow DOM，它们在任何地方都可见，因此内部的 `.field` 规则将使用它。
+
+以下是完整的示例：
+
+``` html
+<style>
+  user-card {
+    --user-card-field-color: green;
+  }
+</style>
+
+<template id="tmpl">
+  <style>
+    .field {
+      color: var(--user-card-field-color, black);
+    }
+  </style>
+  <div class="field">Name: <slot name="username"></slot></div>
+  <div class="field">Birthday: <slot name="birthday"></slot></div>
+</template>
+
+<script>
+customElements.define('user-card', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.append(document.getElementById('tmpl').content.cloneNode(true));
+  }
+});
+</script>
+
+<user-card>
+  <span slot="username">John Smith</span>
+  <span slot="birthday">01.01.2001</span>
+</user-card>
+```
+
+## Shadow DOM 和事件（events）
+
+Shadow tree 背后的思想是封装组件的内部实现细节。
+
+假设，在 `<user-card>` 组件的 shadow DOM 内触发一个点击事件。但是主文档内部的脚本并不了解 shadow DOM 内部，尤其是当组件来自于第三方库。
+
+所以，为了保持细节简单，浏览器会重新定位（retarget）事件。
+
+**当事件在组件外部捕获时，shadow DOM 中发生的事件将会以 host 元素作为目标。**
+
+这里有个简单的例子：
+
+``` html
+<user-card></user-card>
+
+<script>
+customElements.define('user-card', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.innerHTML = `<p>
+      <button>Click me</button>
+    </p>`;
+    this.shadowRoot.firstElementChild.onclick =
+      e => alert("Inner target: " + e.target.tagName);
+  }
+});
+
+document.onclick =
+  e => alert("Outer target: " + e.target.tagName);
+</script>
+```
+
+如果你点击了 button，就会出现以下信息：
+
+1. Inner target: `BUTTON` —— 内部事件处理程序获取了正确的目标，即 shadow DOM 中的元素。
+2. Outer target: `USER-CARD` —— 文档事件处理程序以 shadow host 作为目标。
+
+事件重定向是一件很棒的事情，因为外部文档并不需要知道组件的内部情况。从它的角度来看，事件是发生在 `<user-card>`。
+
+如果事件发生在 slotted 元素上，实际存在于 light DOM 上，则不会发生重定向。
+
+例如，在下面的例子中，如果用户点击了 `<span slot="username">`，那么对于 shadow 和 light 处理程序来说，事件目标就是当前这个 span 元素。
+
+``` html
+<user-card id="userCard">
+  <span slot="username">John Smith</span>
+</user-card>
+
+<script>
+customElements.define('user-card', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.innerHTML = `<div>
+      <b>Name:</b> <slot name="username"></slot>
+    </div>`;
+
+    this.shadowRoot.firstElementChild.onclick =
+      e => alert("Inner target: " + e.target.tagName);
+  }
+});
+
+userCard.onclick = e => alert(`Outer target: ${e.target.tagName}`);
+</script>
+
+```
+
+如果单击事件发生在 "John Smith" 上，则对于内部和外部处理程序来说，其目标是 `<span slot="username">`。这是 light DOM 中的元素，所以没有重定向。
+
+另一方面，如果单击事件发生在源自 shadow DOM 的元素上，例如，在 `<b>Name</b>` 上，然后当它冒泡出 shadow DOM 后，其 event.target 将重置为 `<user-card>`。
+
+### 冒泡（bubbling）, event.composedPath()
+
+出于事件冒泡的目的，使用扁平 DOM（flattened DOM）。
+
+所以，如果我们有一个 slot 元素，并且事件发生在它的内部某个地方，那么它就会冒泡到 `<slot>` 并继续向上。
+
+使用 event.composedPath() 获得原始事件目标的完整路径以及所有 shadow 元素。正如我们从方法名称中看到的那样，该路径是在组合（composition）之后获取的。
+
+在上面的例子中，扁平 DOM 是：
+
+``` html
+<user-card id="userCard">
+  #shadow-root
+    <div>
+      <b>Name:</b>
+      <slot name="username">
+        <span slot="username">John Smith</span>
+      </slot>
+    </div>
+</user-card>
+```
+
+因此，对于 `<span slot="username">` 上的点击事件，会调用 event.composedPath() 并返回一个数组：`[span, slot, div, shadow-root, user-card, body, html, document, window]`。在组合之后，这正是扁平 DOM 中目标元素的父链。
+
+### event.composed
+
+大多数事件能成功冒泡到 shadow DOM 边界。很少有事件不能冒泡到 shadow DOM 边界。
+
+这由 composed 事件对象属性控制。如果 composed 是 true，那么事件就能穿过边界。否则它仅能在 shadow DOM 内部捕获。
+
+如果你浏览一下 [UI 事件规范](https://www.w3.org/TR/uievents) 就知道，大部分事件都是 composed: true
+
+所有触摸事件（touch events）及指针事件（pointer events）都是 composed: true。
+
+但也有些事件是 composed: false 的.
+
+### 自定义事件（Custom events）
+
+当我们发送（dispatch）自定义事件，我们需要设置 bubbles 和 composed 属性都为 true 以使其冒泡并从组件中冒泡出来。
+
+例如，我们在 div#outer shadow DOM 内部创建 div#inner 并在其上触发两个事件。只有 composed: true 的那个自定义事件才会让该事件本身冒泡到文档外面：
+
+``` html
+<div id="outer"></div>
+
+<script>
+outer.attachShadow({mode: 'open'});
+
+let inner = document.createElement('div');
+outer.shadowRoot.append(inner);
+
+/*
+div(id=outer)
+  #shadow-dom
+    div(id=inner)
+*/
+
+document.addEventListener('test', event => alert(event.detail));
+
+inner.dispatchEvent(new CustomEvent('test', {
+  bubbles: true,
+  composed: true,
+  detail: "composed"
+}));
+
+inner.dispatchEvent(new CustomEvent('test', {
+  bubbles: true,
+  composed: false,
+  detail: "not composed"
+}));
+</script>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
