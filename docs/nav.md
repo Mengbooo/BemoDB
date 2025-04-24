@@ -92,14 +92,6 @@ const members = [
       { icon: 'rss', link: 'https://magren.cc/' },
     ]
   },
-  {
-    avatar: 'https://avatars.githubusercontent.com/u/93815242?v=4',
-    name: 'Liushen',
-    links: [
-      { icon: 'github', link: 'https://github.com/willow-god' },
-      { icon: 'rss', link: 'https://blog.liushen.fun/' },
-    ]
-  },
 ]
 </script>
 
