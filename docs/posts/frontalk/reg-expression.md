@@ -1,157 +1,148 @@
 # 正则表达式
 
-正则表达式是一个查找和替换字符串的强有力的方式。
+正则表达式是一个查找和替换字符串的强有力的方式。它在前端的使用场景很广，但是它的语法比较复杂，要想完全记住不太现实，故而在这里给出一些参考链接/工具，以及一些它在前端中的情景案例。
 
-## 模式（Patterns）和修饰符（flags）
 
-正则表达式是提供了一种在文本中进行搜索和替换的强大的方式的模式。
+## 参考链接：
 
-在 JavaScript 中，我们可以通过 [RegExp](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/RegExp) 对象使用它们，也可以与字符串方法结合使用。
+- https://www.cnblogs.com/baozhengrui/p/18631791
+- https://www.runoob.com/regexp/regexp-syntax.html
+- https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_expressions
+- https://zh.javascript.info/regexp-introduction
 
-### 正则表达式
+## 工具：
 
-正则表达式（可叫作 “regexp”，或 “reg”）由 `模式` 和可选的 `修饰符` 组成。
+- https://www.sojson.com/regex/generate
 
-有两种创建正则表达式对象的语法。
+## 案例：
 
-较长一点的语法：
+以下是一些前端使用正则表达式的常见场景及代码示例：
 
-```js
-regexp = new RegExp("pattern", "flags");
-```
+1. **验证用户名**：用户名通常由字母、数字、下划线组成，长度在 3 到 20 个字符之间。
 
-较短一点的语法，使用斜线 "/"：
-
-```js
-regexp = /pattern/; // 没有修饰符
-regexp = /pattern/gim; // 带有修饰符 g、m 和 i（后面会讲到）
-```
-
-斜线 `/.../` 告诉 JavaScript 我们正在创建一个正则表达式。它的作用与字符串的引号作用相同。
-
-在这两种情况下，`regexp` 都会成为内建类 `RegExp` 的一个实例。
-
-这两种语法之间的主要区别在于，使用斜线 `/.../` 的模式不允许插入表达式（如带有 `${...}` 的字符串模板）。它是完全静态的。
-
-在我们写代码时就知道正则表达式时则会使用斜线的方式 —— 这是最常见的情况。而当我们需要从动态生成的字符串创建一个正则表达式时，更常使用 new RegExp。例如：
-
-```js
-let tag = prompt("What tag do you want to find?", "h2");
-​
-let regexp = new RegExp(`<${tag}>`); // 如果在上方输入到 prompt 中的答案是 "h2"，则与 /<h2>/ 相同
-```
-
-### 修饰符
-
-正则表达式可能有影响搜索结果的修饰符。
-
-在 JavaScript 中，只有 6 个修饰符：
-
-- `i` 使用此修饰符后，搜索时不区分大小写：A 和 a 之间没有区别（请参见下面的示例）。
-- `g` 使用此修饰符后，搜索时会寻找所有的匹配项 —— 没有它，则仅返回第一个匹配项。
-- `m` 多行模式（详见 锚点 ^ $ 的多行模式，修饰符 "m"）。
-- `s` 启用 “dotall” 模式，允许点 . 匹配换行符 \n（在 字符类 中有详细介绍）。
-- `u` 开启完整的 Unicode 支持。该修饰符能够正确处理代理对。详见 Unicode：修饰符 "u" 和类 \p{...}。
-- `y` 粘滞（Sticky）模式，在文本中的确切位置搜索（详见 粘性修饰符 "y"，在位置处搜索）
-
-### 搜索：str.match
-
-正如前面所提到的，将正则表达式和字符串方法结合一起使用。
-
-`str.match(regexp)` 方法在字符串 `str` 中寻找 `regexp` 的所有匹配项。
-
-它有 3 种工作模式：
-
-1. 如果正则表达式具有修饰符 `g`，它返回一个由所有匹配项所构成的数组：
-
-```js
-let str = "We will, we will rock you";
-
-alert(str.match(/we/gi)); // We,we（由两个匹配的子字符串构成的数组）
-```
-
-请注意，`We` 和 `we` 都被找到了，因为修饰符 i 使得正则表达式在进行搜索时不区分大小写。
-
-2. 如果没有这样的修饰符，它则会以数组形式返回第一个匹配项，索引 0 处保存着完整的匹配项，返回的结果的属性中还有一些其他详细信息：
-
-```js
-let str = "We will, we will rock you";
-
-let result = str.match(/we/i); // 没有修饰符 g
-
-alert(result[0]); // We（第一个匹配项）
-alert(result.length); // 1
-
-// 详细信息：
-alert(result.index); // 0（匹配项的位置）
-alert(result.input); // We will, we will rock you（源字符串）
-```
-
-如果正则表达式中有一部分内容被包在括号里，那么返回的数组可能会有 0 以外的索引。我们将在 捕获组 中学习这部分相关内容。
-
-3. 最后，如果没有匹配项，则返回 null（无论是否有修饰符 `g`）。
-
-这是一个非常重要的细微差别。如果没有匹配项，我们不会收到一个空数组，而是会收到 null。忘了这一点可能会导致错误，例如：
-
-```js
-let matches = "JavaScript".match(/HTML/); // = null
-
-if (!matches.length) {
-  // Error: Cannot read property 'length' of null
-  alert("Error in the line above");
+```javascript
+function validateUsername(username) {
+    const regex = /^[a-zA-Z0-9_]{3,20}$/;
+    return regex.test(username);
 }
+
+const username1 = "user_123";
+const username2 = "ab";
+console.log(validateUsername(username1)); // true
+console.log(validateUsername(username2)); // false
 ```
 
-如果我们希望结果始终是一个数组，我们可以这样写：
+2. **验证密码**：密码要求至少 8 个字符，包含至少一个大写字母、一个小写字母、一个数字和一个特殊字符（如 `!@#$%^&*` 等）。
 
-```js
-let matches = "JavaScript".match(/HTML/) || [];
-
-if (!matches.length) {
-  alert("No matches"); // 现在可以了
+```javascript
+function validatePassword(password) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
 }
+
+const password1 = "Abc123!@#";
+const password2 = "abc123";
+console.log(validatePassword(password1)); // true
+console.log(validatePassword(password2)); // false
 ```
 
-### 替换：str.replace
+3. **提取 URL 中的参数**：从 URL 中提取指定的参数值。
 
-str.replace(regexp, replacement) 方法使用 replacement 替换在字符串 str 中找到的 regexp 的匹配项（如果带有修饰符 g 则替换所有匹配项，否则只替换第一个）。
+```javascript
+function getUrlParameter(url, paramName) {
+    const regex = new RegExp('[?&]' + paramName + '=([^&]*)', 'i');
+    const match = url.match(regex);
+    return match? decodeURIComponent(match[1]) : null;
+}
 
-例如：
-
-```js
-// 没有修饰符 g
-alert("We will, we will".replace(/we/i, "I")); // I will, we will
-
-// 带有修饰符 g
-alert("We will, we will".replace(/we/gi, "I")); // I will, I will
+const url = "https://example.com/?name=John&age=30";
+console.log(getUrlParameter(url, "name")); // John
+console.log(getUrlParameter(url, "age"));  // 30
 ```
 
-第二个参数是字符串 replacement。我们可以在其中使用特殊的字符组合来对匹配项进行插入：
+4. **验证 IP 地址**：验证输入的字符串是否是合法的 IP 地址（IPv4）。
 
-| 符号      | 在替换字符串中的行为                                             |
-| --------- | ---------------------------------------------------------------- |
-| `$&`        | 插入整个匹配项                                                   |
-| $`        | 插入字符串中匹配项之前的字符串部分                               |
-| `$'`        | 插入字符串中匹配项之后的字符串部分                               |
-| `$n`        | 如果 n 是一个 1-2 位的数字，则插入第 n 个分组的内容，详见 捕获组 |
-| `$<name>` | 插入带有给定 name 的括号内的内容，详见 捕获组                    |
-| `$$`        | 插入字符 $                                                       |
+```javascript
+function validateIPAddress(ip) {
+    const regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    return regex.test(ip);
+}
 
-带有 $& 的一个示例：
-
-``` js
-alert( "I love HTML".replace(/HTML/, "$& and JavaScript") ); // I love HTML and JavaScript
+const ip1 = "192.168.1.1";
+const ip2 = "192.168.1.256";
+console.log(validateIPAddress(ip1)); // true
+console.log(validateIPAddress(ip2)); // false
 ```
 
-### 测试：regexp.test
+5. **去除字符串中的 HTML 标签**：将字符串中的 HTML 标签去除，只保留文本内容。
 
-`regexp.test(str)` 方法寻找至少一个匹配项，如果找到了，则返回 true，否则返回 false。
+```javascript
+function removeHTMLTags(text) {
+    const regex = /<[^>]*>/g;
+    return text.replace(regex, '');
+}
 
-``` js
-let str = "I love JavaScript";
-let regexp = /LOVE/i;
-
-alert( regexp.test(str) ); // true
+const htmlText = "<p>这是一段包含 <b>加粗</b> 标签的文本。</p>";
+console.log(removeHTMLTags(htmlText)); 
+// 输出：这是一段包含 加粗 标签的文本。
 ```
+
+6. **匹配信用卡号格式**：验证信用卡号是否符合常见的格式（以 4、5、6 开头，长度为 16 位数字，每 4 位数字之间可以用空格分隔）。
+
+```javascript
+function validateCreditCardNumber(cardNumber) {
+    const regex = /^(4|5|6)\d{3}(?:\s?\d{4}){3}$/;
+    return regex.test(cardNumber);
+}
+
+const cardNumber1 = "4111 1111 1111 1111";
+const cardNumber2 = "1234567890123456";
+console.log(validateCreditCardNumber(cardNumber1)); // true
+console.log(validateCreditCardNumber(cardNumber2)); // false
+``` 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

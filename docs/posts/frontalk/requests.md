@@ -1,6 +1,9 @@
 # 网络请求
 
-
+::: tip 
+- [前端请求进化史 | 从 Form 到 Server Actions](https://www.bilibili.com/video/BV1PQdUYZEAG/?spm_id_from=333.337.search-card.all.click&vd_source=ae63c2d5c481a66256b954757a997831)
+- https://zh.javascript.info/network
+:::
 
 
 
