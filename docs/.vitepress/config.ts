@@ -547,6 +547,16 @@ export default {
         collapsed: true,
         items: [
           {
+            text: "Javascript",
+            collapsed: true,
+            items: [
+              {
+                text: "Sushi JavaScript",
+                link: "/posts/problems/Javascript/sushi-JS",
+              },
+            ],
+          },
+          {
             text: "SSG",
             collapsed: true,
             items: [
