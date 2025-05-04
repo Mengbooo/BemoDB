@@ -47,7 +47,7 @@ export default {
           { text: "250208 AI与中年人", link: "/posts/notes/AI&MiddleAged" },
           { text: "250313 元宵夜游", link: "/posts/notes/fireFlower/fireFlower" },
           { text: "250313 玉兰开了", link: "/posts/notes/yuLan/yuLan" },
-          { text: "250417 广度与精度", link: "/posts/notes/width-depth" },
+          { text: "250504 金榜题名之后", link: "/posts/notes/JBTM" },
         ],
       },
       {

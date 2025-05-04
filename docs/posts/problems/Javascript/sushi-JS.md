@@ -771,6 +771,116 @@ MyPromise.prototype.then = function (thenCallback, catchCallback) {
 
 ## 异步控制并发数
 
+前端异步控制请求并发数是一种优化技术，它能限制在同一时间发起的异步请求数量，避免因过多请求同时进行而对服务器和网络造成过大压力，防止请求超时或失败，保证页面性能和流畅度，适用于批量文件上传、图片懒加载、数据批量拉取等多种场景。 
+
+为了实现它，我们的设想是：
+
+1. 首先我们定义一个函数，这个函数会有 2 个参数，分别是请求的数组，以及最大并发数
+2. 这个函数会返回一个 Promise
+3. 我们会定义一个 len,len 就是请求 url 数组的长度；还有 1 个 count 变量，初始值为 0；如果后续 len 的长度和 count 的值一样就表示请求完了
+4. 然后我们需要定义一个 start 函数，用来去执行请求。
+5. 这个函数会从数组中拿出第一个 url 去请求，然后无论成功失败，都会进行一次判断 count 是不是和长度-1 相同，因为 count 是从 0 开始加的，如果相同就表示数组中的请求都请求完了，然后 promise 变成 fullfiled 的状态，否则 count 自增，继续执行 start 去取 url 请求。
+6. 这时我们需要使用 while 启动 limit 数量的任务，每个任务内部会自调用 start 函数
+
+```js
+function limitRequest(urls = [], limit = 3) {
+  return new Promise((resolve, reject) => {
+    const len = urls.length;
+    let count = 0;
+
+    // 同时启动limit个任务
+    while (limit > 0) {
+      start();
+      limit -= 1;
+    }
+
+    function start() {
+      const url = urls.shift(); // 从数组中拿取第一个任务
+      if (url) {
+        axios
+          .post(url)
+          .then((res) => {
+            // todo
+          })
+          .catch((err) => {
+            // todo
+          })
+          .finally(() => {
+            if (count == len - 1) {
+              // 最后一个任务完成
+              resolve();
+            } else {
+              // 完成之后，启动下一个任务
+              count++;
+              start();
+            }
+          });
+      }
+    }
+  });
+}
+```
+
+AI写的：
+
+```js
+function asyncControl(tasks, concurrency) {
+    let index = 0;
+    let running = 0;
+    const results = [];
+
+    return new Promise((resolve, reject) => {
+        function runNext() {
+            // 当所有任务都完成且没有正在运行的任务时，返回结果
+            if (index === tasks.length && running === 0) {
+                resolve(results);
+                return;
+            }
+
+            // 在并发数限制内，持续取出任务执行
+            while (running < concurrency && index < tasks.length) {
+                const currentIndex = index++;
+                running++;
+                const task = tasks[currentIndex];
+
+                task()
+                   .then((result) => {
+                        results[currentIndex] = result;
+                    })
+                   .catch((error) => {
+                        results[currentIndex] = error;
+                    })
+                   .finally(() => {
+                        running--;
+                        runNext();
+                    });
+            }
+        }
+
+        runNext();
+    });
+}
+
+// 示例使用
+// 模拟异步请求
+function createAsyncTask(id) {
+    return () =>
+        new Promise((resolve) => {
+            setTimeout(() => {
+                console.log(`Task ${id} completed`);
+                resolve(id);
+            }, Math.random() * 1000);
+        });
+}
+
+const tasks = Array.from({ length: 10 }, (_, i) => createAsyncTask(i + 1));
+const concurrency = 3;
+
+asyncControl(tasks, concurrency).then((results) => {
+    console.log('All tasks completed:', results);
+});
+```
+
 ## instanceof
 
 ## 数组扁平化
