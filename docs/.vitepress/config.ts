@@ -54,6 +54,13 @@ export default {
         ],
       },
       {
+        text: "#Game",
+        collapsed: true,
+        items: [
+          { text: "2025的摸金潮", link: "/posts/game/01" },
+        ],
+      },
+      {
         text: "转载",
         collapsed: true,
         items: [
