@@ -45,7 +45,10 @@ export default {
         items: [
           { text: "250207 构建之法", link: "/posts/notes/goujianzhifa" },
           { text: "250208 AI与中年人", link: "/posts/notes/AI&MiddleAged" },
-          { text: "250313 元宵夜游", link: "/posts/notes/fireFlower/fireFlower" },
+          {
+            text: "250313 元宵夜游",
+            link: "/posts/notes/fireFlower/fireFlower",
+          },
           { text: "250313 玉兰开了", link: "/posts/notes/yuLan/yuLan" },
           { text: "250504 金榜题名之后", link: "/posts/notes/JBTM" },
         ],
@@ -143,22 +146,47 @@ export default {
         items: [
           {
             text: "归纳",
-            collapsed:true,
-            items:[
+            collapsed: true,
+            items: [
               { text: "软件工程导论", link: "/posts/software/summary/base" },
-              { text: "敏捷开发", link: "/posts/software/summary/agile-development" },
+              {
+                text: "敏捷开发",
+                link: "/posts/software/summary/agile-development",
+              },
               { text: "软件过程", link: "/posts/software/summary/process" },
               { text: "需求工程", link: "/posts/software/summary/demand`" },
-            ]
+            ],
           },
           {
             text: "实验",
-            collapsed:true,
-            items:[
-              { text: "实验1 消除坏味道代码", link: "/posts/software/experiment/bad-code" },
-              { text: "实验2 TDD测试驱动开发", link: "/posts/software/experiment/TDD" },
-            ]
-          }
+            collapsed: true,
+            items: [
+              {
+                text: "实验1 消除坏味道代码",
+                link: "/posts/software/experiment/bad-code",
+              },
+              {
+                text: "实验2 TDD测试驱动开发",
+                link: "/posts/software/experiment/TDD",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: "数学建模",
+        collapsed: true,
+        items: [
+          {
+            text: "归纳",
+            collapsed: true,
+            items: [{ text: "Index", link: "/posts/modeling/sum/index" }],
+          },
+          {
+            text: "实验",
+            collapsed: true,
+            items: [{ text: "2023级数学建模大作业", link: "/posts/modeling/exp/hw" }],
+          },
         ],
       },
       {
@@ -342,32 +370,24 @@ export default {
             collapsed: true,
             items: [
               {
-                text:"npm",
-                collapsed:true,
-                items:[
+                text: "npm",
+                collapsed: true,
+                items: [
                   {
                     text: "关于 npm",
                     link: "/posts/FE/package/npm/basic",
-                  }
-                ]
+                  },
+                ],
               },
               {
-                text:"yarn",
-                collapsed:true,
-                items:[
-                  {
-                  
-                  }
-                ]
+                text: "yarn",
+                collapsed: true,
+                items: [{}],
               },
               {
-                text:"pnpm",
-                collapsed:true,
-                items:[
-                  {
-                   
-                  }
-                ]
+                text: "pnpm",
+                collapsed: true,
+                items: [{}],
               },
             ],
           },
