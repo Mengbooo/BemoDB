@@ -1,4 +1,5 @@
 import { RssPlugin, RSSOptions } from "vitepress-plugin-rss";
+import llmstxt from 'vitepress-plugin-llms'
 
 const baseUrl = "https://mengbooo.github.io";
 const base = "/BemoDB/";
@@ -10,7 +11,7 @@ const RSS: RSSOptions = {
 
 export default {
   vite: {
-    plugins: [RssPlugin(RSS)],
+    plugins: [RssPlugin(RSS),llmstxt()],
   },
   // 基础路径
   base,
