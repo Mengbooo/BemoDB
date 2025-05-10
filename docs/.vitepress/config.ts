@@ -92,6 +92,7 @@ export default {
         collapsed: true,
         items: [
           { text: "算法篇", link: "/posts/algorithm/index" },
+          { text: "250508 实验一 分治法", link: "/posts/algorithm/exp-1/exp-1" },
           {
             text: "其它题目",
             collapsed: true,

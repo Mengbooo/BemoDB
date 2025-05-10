@@ -92,6 +92,14 @@ const members = [
       { icon: 'rss', link: 'https://magren.cc/' },
     ]
   },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/74645100?v=4',
+    name: "Rekord's Blog",
+    links: [
+      { icon: 'github', link: 'https://github.com/Crazyokd' },
+      { icon: 'rss', link: 'https://sxrekord.com/' },
+    ]
+  },
 ]
 </script>
 
