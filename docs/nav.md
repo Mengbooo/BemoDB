@@ -118,7 +118,8 @@ const members = [
 ```txt
 name: 博客名字
 link: 博客地址
-desc: 站点的描述
+avator: 头像图片
+github: github账号名
 
 此外，希望你的博客：
 - 无广告，无政治敏感及违法内容
