@@ -146,6 +146,10 @@ export default {
               },
             ],
           },
+          {
+            text: "index",
+            link: "/posts/os/index/index",
+          },
         ],
       },
       {
