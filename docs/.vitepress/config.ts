@@ -139,7 +139,7 @@ export default {
             ],
           },
           {
-            text: "index",
+            text: "复习纲要",
             link: "/posts/os/index/index",
           },
         ],
