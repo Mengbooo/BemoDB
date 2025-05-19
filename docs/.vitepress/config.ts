@@ -136,6 +136,14 @@ export default {
                 text: "[转载] 操作系统上机实验 2",
                 link: "/posts/os/experiment/Q_ex_2/sys-2",
               },
+              {
+                text: "[转载] 操作系统上机实验 3",
+                link: "/posts/os/experiment/Q_ex_3/sys-3",
+              },
+              {
+                text: "[转载] 操作系统上机实验 4",
+                link: "/posts/os/experiment/Q_ex_4/sys-4",
+              },
             ],
           },
           {
