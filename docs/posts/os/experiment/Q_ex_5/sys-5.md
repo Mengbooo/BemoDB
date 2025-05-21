@@ -5,4 +5,4 @@ Written by [Q-thrive](https://github.com/Qthrive) in 2025.5.19
 Reprinted by Bolaxious , Reproduction is permitted by permission
 ::: 
 
-<embed src="./sys-5.pdf" type="application/pdf" width="100%" height="1200px" />
+<embed src="/BemoDB/sys-5.pdf" type="application/pdf" width="100%" height="1200px" />

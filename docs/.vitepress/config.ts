@@ -12,6 +12,7 @@ export default {
   vite: {
     plugins: [RssPlugin(RSS)],
   },
+  assetsInclude: ['**/*.pdf'],
   // 基础路径
   base,
   // 站点级选项
