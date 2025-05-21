@@ -144,6 +144,10 @@ export default {
                 text: "[转载] 操作系统上机实验 4",
                 link: "/posts/os/experiment/Q_ex_4/sys-4",
               },
+              {
+                text: "[转载] 操作系统课程设计",
+                link: "/posts/os/experiment/Q_ex_5/sys-5",
+              },
             ],
           },
           {
