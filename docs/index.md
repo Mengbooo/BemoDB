@@ -18,6 +18,9 @@ hero:
     - theme: brand
       text: Bemosite
       link: https://bemosite.fun/
+    - theme: alt
+      text: Portfolio
+      link: https://portfolio-mengbooos-projects.vercel.app/
 features:
   - icon: 🛠️
     title: 关于网站

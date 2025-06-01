@@ -192,7 +192,7 @@ export default {
             collapsed: true,
             items: [
               { text: "复习材料", link: "/posts/algorithm/review/review" },
-              { text: "归纳", link: "/posts/algorithm/review/induction" },
+              { text: "AI归纳", link: "/posts/algorithm/review/induction" },
             ],
           },
           {
