@@ -1,5 +1,93 @@
 import { RssPlugin, RSSOptions } from "vitepress-plugin-rss";
+import markdownItKatex from 'markdown-it-katex'
 
+const customElements = [
+  'math',
+  'maction',
+  'maligngroup',
+  'malignmark',
+  'menclose',
+  'merror',
+  'mfenced',
+  'mfrac',
+  'mi',
+  'mlongdiv',
+  'mmultiscripts',
+  'mn',
+  'mo',
+  'mover',
+  'mpadded',
+  'mphantom',
+  'mroot',
+  'mrow',
+  'ms',
+  'mscarries',
+  'mscarry',
+  'mscarries',
+  'msgroup',
+  'mstack',
+  'mlongdiv',
+  'msline',
+  'mstack',
+  'mspace',
+  'msqrt',
+  'msrow',
+  'mstack',
+  'mstack',
+  'mstyle',
+  'msub',
+  'msup',
+  'msubsup',
+  'mtable',
+  'mtd',
+  'mtext',
+  'mtr',
+  'munder',
+  'munderover',
+  'semantics',
+  'math',
+  'mi',
+  'mn',
+  'mo',
+  'ms',
+  'mspace',
+  'mtext',
+  'menclose',
+  'merror',
+  'mfenced',
+  'mfrac',
+  'mpadded',
+  'mphantom',
+  'mroot',
+  'mrow',
+  'msqrt',
+  'mstyle',
+  'mmultiscripts',
+  'mover',
+  'mprescripts',
+  'msub',
+  'msubsup',
+  'msup',
+  'munder',
+  'munderover',
+  'none',
+  'maligngroup',
+  'malignmark',
+  'mtable',
+  'mtd',
+  'mtr',
+  'mlongdiv',
+  'mscarries',
+  'mscarry',
+  'msgroup',
+  'msline',
+  'msrow',
+  'mstack',
+  'maction',
+  'semantics',
+  'annotation',
+  'annotation-xml'
+];
 const baseUrl = "https://mengbooo.github.io";
 const base = "/BemoDB/";
 const RSS: RSSOptions = {
@@ -12,7 +100,19 @@ export default {
   vite: {
     plugins: [RssPlugin(RSS)],
   },
-  assetsInclude: ['**/*.pdf'],
+  markdown: {
+    config: (md) => {
+      md.use(markdownItKatex)
+    }
+  },
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: (tag) => customElements.includes(tag)
+      }
+    },
+  },
+  assetsInclude: ["**/*.pdf"],
   // 基础路径
   base,
   // 站点级选项
@@ -31,6 +131,8 @@ export default {
       { text: "主页", link: "/" },
       { text: "文档", link: "/doc" },
       { text: "导航", link: "/nav" },
+      // { text: "归档", link: "/pages/archives" },
+      // { text: "标签", link: "/pages/tags" },
     ],
     sidebar: [
       { text: "你好", link: "/doc" },
@@ -54,9 +156,7 @@ export default {
       },
       {
         text: "#Game",
-        items: [
-          { text: "2025的摸金潮", link: "/posts/game/01" },
-        ],
+        items: [{ text: "2025的摸金潮", link: "/posts/game/01" }],
       },
       {
         text: "转载",
@@ -87,8 +187,24 @@ export default {
         text: "算法",
         items: [
           { text: "算法篇", link: "/posts/algorithm/index" },
-          { text: "250508 实验一 分治法", link: "/posts/algorithm/exp-1/exp-1" },
-          { text: "复习", link: "/posts/algorithm/review" },
+          {
+            text: "复习",
+            collapsed: true,
+            items: [
+              { text: "复习材料", link: "/posts/algorithm/review/review" },
+              { text: "归纳", link: "/posts/algorithm/review/induction" },
+            ],
+          },
+          {
+            text: "实验",
+            collapsed: true,
+            items: [
+              {
+                text: "250508 实验一 分治法",
+                link: "/posts/algorithm/exp/exp-1/exp-1",
+              },
+            ],
+          },
           {
             text: "其它题目",
             collapsed: true,
@@ -201,7 +317,9 @@ export default {
           {
             text: "实验",
             collapsed: true,
-            items: [{ text: "2023级数学建模大作业", link: "/posts/modeling/exp/hw" }],
+            items: [
+              { text: "2023级数学建模大作业", link: "/posts/modeling/exp/hw" },
+            ],
           },
         ],
       },

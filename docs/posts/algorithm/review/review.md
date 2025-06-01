@@ -1,4 +1,4 @@
-# 操作系统课程设计
+# 算法设计与分析 复习资料
 ::: tip 文章信息
 Written by [Q-thrive](https://github.com/Qthrive) in 2025.5.28
 

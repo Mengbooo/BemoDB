@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vitepress dev docs",
@@ -20,6 +21,7 @@
     "@theojs/lumen": "^5.4.0",
     "busuanzi.pure.js": "^1.0.3",
     "esbuild": "^0.24.2",
+    "markdown-it-katex": "^2.0.3",
     "vite": "^6.0.7",
     "vitepress-plugin-image-viewer": "^1.1.6",
     "vitepress-plugin-rss": "^0.3.0",
