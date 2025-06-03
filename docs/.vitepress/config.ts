@@ -138,27 +138,6 @@ export default {
       { text: "你好", link: "/doc" },
       { text: "导航", link: "/nav" },
       {
-        text: "年记",
-        items: [{ text: "2024:Teenager Forever", link: "/posts/annals/2024" }],
-      },
-      {
-        text: "DiaryGo",
-        items: [
-          { text: "250207 构建之法", link: "/posts/notes/goujianzhifa" },
-          { text: "250208 AI与中年人", link: "/posts/notes/AI&MiddleAged" },
-          {
-            text: "250313 元宵夜游",
-            link: "/posts/notes/fireFlower/fireFlower",
-          },
-          { text: "250313 玉兰开了", link: "/posts/notes/yuLan/yuLan" },
-          { text: "250504 金榜题名之后", link: "/posts/notes/JBTM" },
-        ],
-      },
-      {
-        text: "#Game",
-        items: [{ text: "2025的摸金潮", link: "/posts/game/01" }],
-      },
-      {
         text: "转载",
         items: [
           {
@@ -718,6 +697,20 @@ export default {
             ],
           },
         ],
+      },
+      {
+        text: "WeeklyGo",
+        items: [
+
+        ],
+      },
+      {
+        text: "#Game",
+        items: [{ text: "2025的摸金潮", link: "/posts/game/01" }],
+      },
+      {
+        text: "年记",
+        items: [{ text: "2024:Teenager Forever", link: "/posts/annals/2024" }],
       },
     ],
     socialLinks: [
