@@ -1509,271 +1509,1392 @@ $$
 | 矩阵链相乘 | $m[i][j]$：$A_i...A_j$ 的最小乘法次数 | 枚举分割点 $k$ | $O(n^3)$ | $O(n^2)$ |
 | 最长公共子序列 | $c[i][j]$：$X[1..i]$ 和 $Y[1..j]$ 的 LCS 长度 | 比较字符是否相等 | $O(mn)$ | $O(mn)$ |
 
+## 贪心算法
 
+贪心算法是一种在每一步选择中都采取当前状态下最好或最优（即局部最优）的选择，从而希望导致结果是全局最优的算法策略。
 
+### 贪心算法的基本思想
 
+贪心算法的核心思想非常简单：
 
+1. 将问题分解为一系列子问题
+2. 对每个子问题做出局部最优的选择（贪心选择）
+3. 希望这些局部最优选择能导致全局最优解
 
+虽然贪心算法看似简单，但要正确使用需要满足两个关键性质：
 
+#### 1. 贪心选择性质
 
+问题的整体最优解可以通过一系列局部最优的选择来达到。换句话说，做出的每个贪心选择最终能导致全局最优解。
 
+#### 2. 最优子结构性质
 
+问题的最优解包含其子问题的最优解。这意味着做出一个选择后，只需要解决剩下的一个子问题。
 
+### 贪心算法与动态规划的区别
 
+| 特征 | 贪心算法 | 动态规划 |
+|------|---------|----------|
+| 最优性 | 不一定能得到全局最优解 | 总是能得到全局最优解 |
+| 效率 | 通常更高效 | 通常需要更多时间和空间 |
+| 决策过程 | 一旦做出选择，不再更改 | 考虑所有可能的选择，然后选择最优的 |
+| 适用条件 | 贪心选择性质和最优子结构 | 只需要最优子结构 |
 
+### 作业选择问题
 
+#### 问题描述
 
+有 $n$ 个作业，每个作业 $i$ 有一个开始时间 $s_i$ 和结束时间 $f_i$。两个作业如果时间重叠，则不能同时处理。目标是选择最大数量的互不冲突的作业。
 
+#### 贪心策略
 
+按照作业的**结束时间**从早到晚排序，然后每次选择当前不冲突的结束最早的作业。
 
+#### 算法步骤
 
+1. 将所有作业按照结束时间 $f_i$ 排序
+2. 选择第一个作业（结束最早的）
+3. 遍历排序后的作业，如果当前作业的开始时间不早于最近选择的作业的结束时间，则选择该作业
 
+#### 算法正确性证明
 
+我们可以通过交换论证来证明贪心选择的正确性：
 
+假设存在一个包含作业 $j$ 的最优解 $A$，而 $j$ 不是结束最早的作业。设作业 $i$ 是结束最早的作业。
 
+我们可以构造一个新解 $A'$，用作业 $i$ 替换作业 $j$。由于 $i$ 的结束时间早于 $j$，因此替换后不会产生新的冲突。所以 $A'$ 也是一个最优解。
 
+通过这种方式，我们可以不断调整解，最终得到一个包含结束最早的作业的最优解。这证明了选择结束最早的作业是安全的。
 
+#### 示例
 
+作业列表：[(1,3), (2,5), (4,7), (6,9), (5,8)]，表示 (开始时间, 结束时间)
 
+1. 排序后：[(1,3), (2,5), (4,7), (5,8), (6,9)]
+2. 选择 (1,3)
+3. 选择 (4,7)
+4. 选择 (6,9) 或 (8,10)
 
+最终选择的作业为 3 个。
 
+#### 时间复杂度
 
+- 排序：$O(n \log n)$
+- 贪心选择：$O(n)$
+- 总体：$O(n \log n)$
 
+### 哈夫曼编码
 
+#### 问题描述
 
+给定一组字符及其出现频率，为每个字符设计一个变长前缀码，使得编码后的总长度最小。前缀码是指没有任何码字是另一个码字的前缀的编码方式，这保证了解码的唯一性。
 
+#### 贪心策略
 
+反复合并两个频率最低的节点，构建一棵二叉树，最终树的带权路径长度最小。
 
+#### 算法步骤
 
+1. 将所有字符及其频率作为单节点放入优先队列
+2. 每次从队列中取出两个频率最小的节点，创建一个新节点作为它们的父节点，新节点的频率是两个子节点频率之和
+3. 将新节点放回队列
+4. 重复步骤 2-3，直到队列中只剩一个节点，这个节点就是哈夫曼树的根节点
+5. 从根到叶子的路径决定了每个字符的编码（左边为 0，右边为 1）
 
+#### 正确性证明
 
+对于哈夫曼编码的贪心策略，我们可以证明：
 
+1. **引理**：在最优编码树中，频率最低的两个字符一定在树的最底层，且它们是兄弟节点。
+2. 基于此引理，合并频率最低的两个节点是安全的贪心选择。
 
+证明利用了交换论证和剪切粘贴论证，显示如果最优解不符合这个特性，我们总能通过调整得到一个更优的解，从而导致矛盾。
 
+#### 示例
 
+字符及频率：A(5), B(9), C(12), D(13), E(16), F(45)
 
+构建过程：
+1. 初始优先队列：[A(5), B(9), C(12), D(13), E(16), F(45)]
+2. 取出并合并最小的两个节点 A(5) 和 B(9)，得到新节点 AB(14)
+   - 队列变为：[C(12), D(13), AB(14), E(16), F(45)]
+3. 取出并合并最小的两个节点 C(12) 和 D(13)，得到新节点 CD(25)
+   - 队列变为：[AB(14), E(16), CD(25), F(45)]
+4. 取出并合并最小的两个节点 AB(14) 和 E(16)，得到新节点 ABE(30)
+   - 队列变为：[CD(25), ABE(30), F(45)]
+5. 取出并合并最小的两个节点 CD(25) 和 ABE(30)，得到新节点 CDABE(55)
+   - 队列变为：[F(45), CDABE(55)]
+6. 取出并合并最小的两个节点 F(45) 和 CDABE(55)，得到根节点 FCDABE(100)
 
+最终哈夫曼树构建完成。通过从根到叶子的路径，左分支为0，右分支为1，可以得到编码：
+- A: 0010
+- B: 0011
+- C: 100
+- D: 101
+- E: 010
+- F: 11
 
+这种编码方式保证了频率高的字符（如F）编码较短，频率低的字符（如A）编码较长，从而使得编码总长度最小。
 
+#### 时间复杂度
 
+- 建立优先队列：$O(n)$
+- 合并操作：每次需要 $O(\log n)$，共进行 $n-1$ 次
+- 总体：$O(n \log n)$
 
+### 背包问题
 
+背包问题是一类经典的组合优化问题。有以下几种常见变种：
 
+#### 1. 0-1 背包问题
 
+每个物品只能选择放或不放，不能部分选择。这个问题通常使用动态规划而非贪心算法解决，因为贪心策略在这种情况下不能保证最优解。
 
+#### 2. 分数背包问题
 
+物品可以部分选择，即可以拿走物品的一部分。这个问题可以用贪心算法解决。
 
+##### 问题描述
 
+有 $n$ 个物品，每个物品有重量 $w_i$ 和价值 $v_i$。背包容量为 $W$。可以拿走物品的一部分，目标是使背包中物品的总价值最大。
 
+##### 贪心策略
 
+按照物品的**价值密度**（价值/重量）从高到低排序，然后依次尽可能多地装入背包。
 
+##### 算法步骤
 
+1. 计算每个物品的价值密度 $v_i/w_i$
+2. 按照价值密度从高到低排序
+3. 依次将物品装入背包，直到背包装满或物品用完
+4. 如果当前物品不能完全装入背包，则装入该物品的一部分，使背包恰好装满
 
+##### 正确性证明
 
+假设最优解不是按照价值密度排序的，那么存在两个物品 $i$ 和 $j$，满足 $v_i/w_i > v_j/w_j$，但在最优解中物品 $j$ 的选择比例高于物品 $i$。
 
+我们可以通过减少物品 $j$ 的选择，增加物品 $i$ 的选择，在保持总重量不变的情况下增加总价值，这与最优解的假设矛盾。因此，按照价值密度排序是正确的贪心策略。
 
+##### 示例
 
+物品：[(10,60), (20,100), (30,120)]，表示 (重量, 价值)
 
+价值密度：[6, 5, 4]
 
+背包容量：50
 
+贪心选择：
+1. 选择物品 1，剩余容量 40
+2. 选择物品 2，剩余容量 20
+3. 选择 2/3 的物品 3，背包装满
 
+总价值：60 + 100 + 120 * (2/3) = 240
 
+##### 时间复杂度
 
+- 计算价值密度：$O(n)$
+- 排序：$O(n \log n)$
+- 贪心选择：$O(n)$
+- 总体：$O(n \log n)$
 
+### 贪心算法的应用场景
 
+贪心算法适用于以下场景：
 
+1. **最优子结构**：问题的最优解包含子问题的最优解
+2. **贪心选择性质**：局部最优选择能导致全局最优解
+3. **无后效性**：之前的选择不会影响后续的子问题
 
+常见的应用：
 
+- **最小生成树**：Kruskal 算法和 Prim 算法
+- **单源最短路径**：Dijkstra 算法
+- **集合覆盖问题**：近似算法
+- **霍夫曼编码**：数据压缩
+- **作业调度问题**：最小化完成时间
 
+### 贪心算法的限制
 
+贪心算法虽然高效，但也有明显的局限性：
 
+1. **不保证全局最优**：在许多问题中，贪心选择无法得到全局最优解
+2. **适用性有限**：只有特定问题满足贪心选择性质
+3. **证明困难**：证明贪心算法的正确性通常比较复杂
 
+因此，在应用贪心算法前，需要仔细分析问题是否满足贪心算法的适用条件。如果不确定，可能需要考虑其他算法策略，如动态规划或回溯法。
 
+## 图论
 
+图是一种由节点（顶点）和边组成的数据结构，用于表示元素之间的关系。图论是研究图的数学理论，在计算机科学中有广泛的应用。
 
+### 图的基础
 
+#### 图的定义与术语
 
+图 $G = (V, E)$ 由以下元素组成：
+- **顶点集** $V$：图中所有节点的集合
+- **边集** $E$：连接顶点的边的集合，可表示为顶点对 $(u, v)$
 
+重要概念：
+- **相邻顶点**：由边直接连接的两个顶点
+- **度**：与某顶点相连的边的数量
+- **路径**：从一个顶点到另一个顶点经过的边的序列
+- **环**：起点和终点相同的路径
+- **连通图**：任意两个顶点之间都存在路径的图
+- **连通分量**：图中的极大连通子图
 
+#### 图的分类
 
+1. **无向图**：边没有方向，$(u, v)$ 和 $(v, u)$ 表示同一条边
+2. **有向图**：边有方向，从 $u$ 到 $v$ 的边表示为 $(u, v)$ 或 $u \rightarrow v$
+3. **加权图**：每条边都有一个权值，表示距离、成本等
+4. **无权图**：边没有权值，或所有边的权值相同
+5. **稠密图**：边的数量接近于 $|V|^2$ 的图
+6. **稀疏图**：边的数量远小于 $|V|^2$ 的图
+7. **完全图**：任意两个顶点之间都有边的图
+8. **二分图**：顶点可以分为两个互不相交的集合，每条边连接的两个顶点分别来自这两个集合
 
+#### 图的表示方法
 
+1. **邻接矩阵**：
+   - 使用 $|V| \times |V|$ 的矩阵 $A$
+   - 若 $u$ 和 $v$ 之间有边，则 $A[u][v] = 1$（或权值），否则 $A[u][v] = 0$
+   - 优点：查询边是否存在的时间为 $O(1)$
+   - 缺点：空间复杂度为 $O(|V|^2)$，对于稀疏图不高效
 
+2. **邻接表**：
+   - 对每个顶点 $u$，存储与其相邻的顶点列表
+   - 优点：空间复杂度为 $O(|V| + |E|)$，适合稀疏图
+   - 缺点：查询边是否存在的时间为 $O(d)$，其中 $d$ 是顶点的度
 
+选择表示方法的准则：
+- 稠密图或需要快速查询边时，选择邻接矩阵
+- 稀疏图或需要遍历所有边时，选择邻接表
 
+### 图的遍历
 
+图的遍历是指访问图中所有顶点的过程，主要有两种方式：深度优先搜索（DFS）和广度优先搜索（BFS）。
+
+#### 深度优先搜索 (DFS)
+
+DFS 是一种通过递归或栈实现的图遍历算法，其特点是尽可能深地探索图的分支。
+
+**算法步骤**：
+1. 选择一个起始顶点，标记为已访问
+2. 递归地访问与当前顶点相邻的未访问顶点
+3. 如果当前顶点的所有相邻顶点都已访问，则回溯到上一个顶点
+4. 重复步骤 2-3，直到所有顶点都已访问
+
+**实现（递归）**：
+```python
+def dfs(graph, vertex, visited):
+    visited[vertex] = True
+    print(vertex, end=' ')  # 处理当前顶点
+    
+    for neighbor in graph[vertex]:
+        if not visited[neighbor]:
+            dfs(graph, neighbor, visited)
+
+def dfs_traversal(graph, start_vertex):
+    visited = [False] * len(graph)
+    dfs(graph, start_vertex, visited)
+    
+    # 处理非连通图的情况
+    for v in range(len(graph)):
+        if not visited[v]:
+            dfs(graph, v, visited)
+```
+
+**实现（栈）**：
+```python
+def dfs_iterative(graph, start_vertex):
+    visited = [False] * len(graph)
+    stack = [start_vertex]
+    
+    while stack:
+        vertex = stack.pop()
+        
+        if not visited[vertex]:
+            visited[vertex] = True
+            print(vertex, end=' ')  # 处理当前顶点
+            
+            # 注意这里要倒序加入，以保持与递归版本相同的访问顺序
+            for neighbor in reversed(graph[vertex]):
+                if not visited[neighbor]:
+                    stack.append(neighbor)
+```
 
+**时间复杂度**：
+- 邻接表表示：$O(|V| + |E|)$
+- 邻接矩阵表示：$O(|V|^2)$
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+**应用**：
+- 寻找图中的连通分量
+- 检测环
+- 拓扑排序
+- 寻找路径
+- 求解迷宫问题
+
+#### 广度优先搜索 (BFS)
+
+BFS 是一种通过队列实现的图遍历算法，其特点是先访问距离起始顶点近的顶点，再访问距离远的顶点。
+
+**算法步骤**：
+1. 选择一个起始顶点，标记为已访问，并将其加入队列
+2. 从队列中取出一个顶点，访问其所有未访问的相邻顶点，标记它们为已访问，并加入队列
+3. 重复步骤 2，直到队列为空
+
+**实现**：
+```python
+from collections import deque
+
+def bfs(graph, start_vertex):
+    visited = [False] * len(graph)
+    queue = deque([start_vertex])
+    visited[start_vertex] = True
+    
+    while queue:
+        vertex = queue.popleft()
+        print(vertex, end=' ')  # 处理当前顶点
+        
+        for neighbor in graph[vertex]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+                
+    # 处理非连通图的情况
+    for v in range(len(graph)):
+        if not visited[v]:
+            queue.append(v)
+            visited[v] = True
+            while queue:
+                # 重复上述过程
+                vertex = queue.popleft()
+                print(vertex, end=' ')
+                
+                for neighbor in graph[vertex]:
+                    if not visited[neighbor]:
+                        visited[neighbor] = True
+                        queue.append(neighbor)
+```
+
+**时间复杂度**：
+- 邻接表表示：$O(|V| + |E|)$
+- 邻接矩阵表示：$O(|V|^2)$
+
+**应用**：
+- 寻找最短路径（无权图）
+- 寻找距离起始顶点特定距离的所有顶点
+- 寻找图中的层次结构
+- 寻找网络中的所有节点
+- 解决特定问题（如最小生成树的 Prim 算法）
+
+#### DFS 与 BFS 的比较
+
+| 特性 | DFS | BFS |
+|------|-----|-----|
+| 实现方式 | 递归或栈 | 队列 |
+| 空间复杂度 | $O(h)$，$h$ 是图的高度 | $O(w)$，$w$ 是图的宽度 |
+| 适用场景 | 探索所有可能路径<br>寻找连通分量<br>检测环 | 寻找最短路径<br>层序遍历<br>寻找特定距离的顶点 |
+| 遍历顺序 | 深度优先 | 广度优先 |
+| 完备性 | 可能不完备（在无限图中） | 完备（总能找到解，如果存在） |
+
+### 拓扑排序
+
+拓扑排序是对有向无环图 (DAG) 的顶点进行排序，使得对于图中的每条有向边 $(u, v)$，顶点 $u$ 在排序中都出现在顶点 $v$ 之前。
+
+#### 应用场景
+
+- 任务调度：确定任务的执行顺序
+- 编译依赖：确定编译顺序
+- 课程安排：确定先修课程和后续课程的顺序
+- 事件调度：确定事件的时间先后关系
+
+#### 算法实现
+
+拓扑排序有两种常见的实现方式：Kahn 算法（基于 BFS）和 DFS 算法。
+
+##### Kahn 算法（BFS 实现）
+
+**算法步骤**：
+1. 计算图中每个顶点的入度
+2. 将所有入度为 0 的顶点加入队列
+3. 从队列中取出一个顶点，将其加入拓扑排序的结果中
+4. 减少该顶点的所有邻接顶点的入度，如果减少后入度为 0，则将该邻接顶点加入队列
+5. 重复步骤 3-4，直到队列为空
+
+**实现**：
+```python
+from collections import deque
+
+def topological_sort_bfs(graph):
+    in_degree = [0] * len(graph)
+    
+    # 计算每个顶点的入度
+    for u in range(len(graph)):
+        for v in graph[u]:
+            in_degree[v] += 1
+    
+    # 将所有入度为 0 的顶点加入队列
+    queue = deque()
+    for u in range(len(graph)):
+        if in_degree[u] == 0:
+            queue.append(u)
+    
+    # 拓扑排序结果
+    topo_order = []
+    
+    # BFS
+    while queue:
+        u = queue.popleft()
+        topo_order.append(u)
+        
+        for v in graph[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                queue.append(v)
+    
+    # 检查是否存在环
+    if len(topo_order) != len(graph):
+        return None  # 存在环，无法进行拓扑排序
+    
+    return topo_order
+```
+
+##### DFS 实现
+
+**算法步骤**：
+1. 对图进行 DFS 遍历
+2. 在 DFS 的过程中，当一个顶点的所有邻接顶点都已访问完成后，将该顶点加入结果
+3. 最后，将结果反转
+
+**实现**：
+```python
+def topological_sort_dfs(graph):
+    visited = [False] * len(graph)
+    temp = [False] * len(graph)  # 用于检测环
+    topo_order = []
+    
+    def dfs(u):
+        if temp[u]:  # 存在环
+            return False
+        if visited[u]:
+            return True
+        
+        temp[u] = True
+        
+        for v in graph[u]:
+            if not dfs(v):
+                return False
+        
+        temp[u] = False
+        visited[u] = True
+        topo_order.append(u)
+        return True
+    
+    for u in range(len(graph)):
+        if not visited[u]:
+            if not dfs(u):
+                return None  # 存在环，无法进行拓扑排序
+    
+    topo_order.reverse()  # 反转结果
+    return topo_order
+```
+
+#### 时间复杂度
+
+- Kahn 算法：$O(|V| + |E|)$
+- DFS 实现：$O(|V| + |E|)$
+
+#### 注意事项
+
+- 拓扑排序只适用于有向无环图 (DAG)
+- 如果图中存在环，则无法进行拓扑排序
+- 一个图可能有多个有效的拓扑排序结果
+
+### 强连通分量
+
+强连通分量（Strongly Connected Component, SCC）是有向图中的一个子图，其中任意两个顶点之间都存在路径。
+
+#### 定义与性质
+
+- **强连通图**：任意两个顶点之间都存在路径的有向图。
+- **强连通分量**：有向图中的极大强连通子图。
+- **性质**：一个有向图可以分解为多个强连通分量，这些强连通分量之间形成一个有向无环图。
+
+#### Kosaraju 算法
+
+Kosaraju 算法是一种基于两次 DFS 的强连通分量算法。
+
+**算法步骤**：
+1. 对原图进行 DFS，记录顶点的完成时间（或使用栈记录顶点的访问顺序）
+2. 构造原图的转置图（将所有边的方向反转）
+3. 按照第一步中顶点完成时间的逆序，对转置图进行 DFS
+4. 第二次 DFS 中，每次 DFS 遍历到的顶点集合就是一个强连通分量
+
+**实现**：
+```python
+def kosaraju(graph):
+    n = len(graph)
+    visited = [False] * n
+    stack = []
+    
+    # 第一次 DFS，记录顶点的完成顺序
+    def dfs1(u):
+        visited[u] = True
+        for v in graph[u]:
+            if not visited[v]:
+                dfs1(v)
+        stack.append(u)
+    
+    for u in range(n):
+        if not visited[u]:
+            dfs1(u)
+    
+    # 构造转置图
+    transpose = [[] for _ in range(n)]
+    for u in range(n):
+        for v in graph[u]:
+            transpose[v].append(u)
+    
+    # 第二次 DFS，寻找强连通分量
+    visited = [False] * n
+    scc = []
+    
+    def dfs2(u, component):
+        visited[u] = True
+        component.append(u)
+        for v in transpose[u]:
+            if not visited[v]:
+                dfs2(v, component)
+    
+    while stack:
+        u = stack.pop()
+        if not visited[u]:
+            component = []
+            dfs2(u, component)
+            scc.append(component)
+    
+    return scc
+```
+
+#### Tarjan 算法
+
+Tarjan 算法是一种基于单次 DFS 的强连通分量算法，它利用了低链值（low-link value）的概念。
+
+**算法步骤**：
+1. 对图进行 DFS，为每个顶点分配一个唯一的索引（发现时间）
+2. 同时计算每个顶点的低链值，即从该顶点出发通过树边和最多一条回边可以到达的最小索引
+3. 当一个顶点的索引等于其低链值时，该顶点是强连通分量的根
+4. 使用栈来收集当前 DFS 树中的顶点，以便在找到强连通分量时将其弹出
+
+**实现**：
+```python
+def tarjan(graph):
+    n = len(graph)
+    index_counter = [0]
+    index = [-1] * n  # -1 表示未访问
+    lowlink = [0] * n
+    onstack = [False] * n
+    stack = []
+    scc = []
+    
+    def strongconnect(u):
+        index[u] = index_counter[0]
+        lowlink[u] = index_counter[0]
+        index_counter[0] += 1
+        stack.append(u)
+        onstack[u] = True
+        
+        for v in graph[u]:
+            if index[v] == -1:  # 邻接顶点未访问
+                strongconnect(v)
+                lowlink[u] = min(lowlink[u], lowlink[v])
+            elif onstack[v]:  # 邻接顶点在栈中，形成环
+                lowlink[u] = min(lowlink[u], index[v])
+        
+        # 如果 u 是强连通分量的根
+        if lowlink[u] == index[u]:
+            component = []
+            while True:
+                v = stack.pop()
+                onstack[v] = False
+                component.append(v)
+                if v == u:
+                    break
+            scc.append(component)
+    
+    for u in range(n):
+        if index[u] == -1:
+            strongconnect(u)
+    
+    return scc
+```
+
+#### 时间复杂度
+
+- Kosaraju 算法：$O(|V| + |E|)$
+- Tarjan 算法：$O(|V| + |E|)$
+
+虽然两种算法的渐近时间复杂度相同，但 Tarjan 算法通常更高效，因为它只需要一次 DFS。
+
+#### 应用
+
+- 社交网络分析：识别紧密相连的社区
+- 电路分析：识别逻辑电路中的循环
+- 计算机网络：分析网络拓扑结构
+- 程序分析：识别程序中的循环依赖
+
+### 最小生成树
+
+最小生成树（Minimum Spanning Tree, MST）是连通加权无向图中一棵权值和最小的生成树。
+
+#### 基本概念
+
+- **生成树**：包含图中所有顶点的一棵树（无环连通子图）
+- **最小生成树**：所有可能的生成树中，边权之和最小的那棵
+- **性质**：
+  - MST 包含 $|V|-1$ 条边
+  - MST 是唯一的，当且仅当图中所有边的权值都不相同
+  - MST 满足最小权值原则：对于图中的任意切分，MST 使用了跨越该切分的最小权边
+
+#### 贪心策略
+
+最小生成树算法通常基于贪心策略，有两种经典算法：Kruskal 算法和 Prim 算法。
+
+#### Kruskal 算法
+
+Kruskal 算法基于边的贪心策略，按照边权从小到大的顺序，依次添加不形成环的边。
+
+**算法步骤**：
+1. 将图中所有边按权值从小到大排序
+2. 初始化 MST 为空集
+3. 按顺序考察每条边：如果添加当前边不会在 MST 中形成环，则将其添加到 MST 中
+4. 当 MST 中的边数达到 $|V|-1$ 时，算法结束
+
+**环检测**：通常使用并查集（Disjoint Set）来高效检测环的形成。
+
+**实现**：
+```python
+def kruskal(graph, n):
+    # 构建边列表
+    edges = []
+    for u in range(n):
+        for v, weight in graph[u]:
+            if u < v:  # 避免重复边
+                edges.append((weight, u, v))
+    
+    # 按权值排序
+    edges.sort()
+    
+    # 初始化并查集
+    parent = list(range(n))
+    
+    def find(x):
+        if parent[x] != x:
+            parent[x] = find(parent[x])
+        return parent[x]
+    
+    def union(x, y):
+        parent[find(x)] = find(y)
+    
+    # Kruskal 算法
+    mst = []
+    total_weight = 0
+    
+    for weight, u, v in edges:
+        if find(u) != find(v):  # 不形成环
+            union(u, v)
+            mst.append((u, v, weight))
+            total_weight += weight
+            
+            if len(mst) == n - 1:  # MST 已完成
+                break
+    
+    return mst, total_weight
+```
+
+**时间复杂度**：
+- 排序：$O(|E| \log |E|)$
+- 并查集操作：$O(|E| \log |V|)$
+- 总体：$O(|E| \log |E|)$ 或 $O(|E| \log |V|)$，因为 $|E| \leq |V|^2$，所以 $\log |E| \leq 2\log |V|$
+
+**适用场景**：
+- 稀疏图（边数远小于 $|V|^2$）
+- 边按权值顺序处理的场景
+
+#### Prim 算法
+
+Prim 算法基于顶点的贪心策略，从一个起始顶点开始，逐步将与当前树相连的最小权边加入树中。
+
+**算法步骤**：
+1. 选择一个起始顶点，将其加入 MST
+2. 初始化一个优先队列，包含所有与当前 MST 中顶点相邻的边
+3. 每次从优先队列中取出权值最小的边，如果该边连接的顶点尚未在 MST 中，则将边和顶点加入 MST
+4. 更新优先队列，加入与新顶点相邻的边
+5. 重复步骤 3-4，直到 MST 包含所有顶点
+
+**实现**：
+```python
+import heapq
+
+def prim(graph, n, start=0):
+    # 初始化
+    visited = [False] * n
+    mst = []
+    total_weight = 0
+    
+    # 优先队列，存储 (权值, 顶点, 父顶点)
+    pq = [(0, start, -1)]  # 初始顶点的权值为 0，父顶点为 -1
+    
+    while pq:
+        weight, u, parent = heapq.heappop(pq)
+        
+        if visited[u]:
+            continue
+        
+        visited[u] = True
+        
+        if parent != -1:  # 非起始顶点
+            mst.append((parent, u, weight))
+            total_weight += weight
+        
+        for v, w in graph[u]:
+            if not visited[v]:
+                heapq.heappush(pq, (w, v, u))
+    
+    return mst, total_weight
+```
+
+**时间复杂度**：
+- 使用二叉堆：$O(|E| \log |V|)$
+- 使用斐波那契堆：$O(|E| + |V| \log |V|)$
+
+**适用场景**：
+- 稠密图（边数接近 $|V|^2$）
+- 需要从特定顶点开始构建 MST 的场景
+
+#### Kruskal 与 Prim 比较
+
+| 特性 | Kruskal | Prim |
+|------|---------|------|
+| 基本策略 | 按边权排序，选择不构成环的边 | 从一个顶点开始，逐步扩展 |
+| 数据结构 | 并查集 | 优先队列 |
+| 适用图类型 | 稀疏图 | 稠密图 |
+| 时间复杂度 | $O(|E| \log |E|)$ | $O(|E| \log |V|)$ |
+| 实现难度 | 中等 | 中等 |
+| 适用场景 | 边按权值排序的场景 | 从特定顶点开始的场景 |
+
+### 单源最短路径问题
+
+单源最短路径问题是指，给定一个带权图和一个源顶点，求源顶点到图中所有其他顶点的最短路径。
+
+#### Bellman-Ford 算法
+
+Bellman-Ford 算法可以处理带有负权边的图，能够检测负权环。
+
+**算法步骤**：
+1. 初始化：源顶点到自身的距离为 0，到其他顶点的距离为无穷大
+2. 进行 $|V|-1$ 次迭代，每次迭代对图中的每条边 $(u, v)$ 进行松弛操作：
+   - 如果 $dist[u] + w(u, v) < dist[v]$，则更新 $dist[v] = dist[u] + w(u, v)$
+3. 再进行一次迭代，如果仍有边可以松弛，则图中存在负权环
+
+**松弛操作**：尝试通过一个中间顶点来缩短两点间的距离。
+
+**实现**：
+```python
+def bellman_ford(graph, n, source):
+    # 初始化距离
+    dist = [float('inf')] * n
+    dist[source] = 0
+    
+    # 前驱节点，用于重建路径
+    predecessor = [None] * n
+    
+    # 主循环，进行 |V|-1 次迭代
+    for _ in range(n - 1):
+        for u in range(n):
+            for v, weight in graph[u]:
+                if dist[u] != float('inf') and dist[u] + weight < dist[v]:
+                    dist[v] = dist[u] + weight
+                    predecessor[v] = u
+    
+    # 检测负权环
+    for u in range(n):
+        for v, weight in graph[u]:
+            if dist[u] != float('inf') and dist[u] + weight < dist[v]:
+                return None, None  # 存在负权环
+    
+    return dist, predecessor
+```
+
+**时间复杂度**：$O(|V| \cdot |E|)$
+
+**适用场景**：
+- 图中可能存在负权边
+- 需要检测负权环
+- 图比较稀疏
+
+#### 有向无环图 (DAG) 中的单源最短路径
+
+在 DAG 中，可以使用拓扑排序来简化最短路径的计算。
+
+**算法步骤**：
+1. 对 DAG 进行拓扑排序
+2. 按拓扑排序的顺序处理每个顶点，对其所有出边进行松弛操作
+
+**实现**：
+```python
+def dag_shortest_path(graph, n, source):
+    # 拓扑排序
+    def topological_sort():
+        visited = [False] * n
+        topo_order = []
+        
+        def dfs(u):
+            visited[u] = True
+            for v, _ in graph[u]:
+                if not visited[v]:
+                    dfs(v)
+            topo_order.append(u)
+        
+        for u in range(n):
+            if not visited[u]:
+                dfs(u)
+        
+        topo_order.reverse()
+        return topo_order
+    
+    # 获取拓扑排序
+    topo_order = topological_sort()
+    
+    # 初始化距离
+    dist = [float('inf')] * n
+    dist[source] = 0
+    
+    # 前驱节点，用于重建路径
+    predecessor = [None] * n
+    
+    # 按拓扑顺序处理每个顶点
+    for u in topo_order:
+        if dist[u] != float('inf'):
+            for v, weight in graph[u]:
+                if dist[u] + weight < dist[v]:
+                    dist[v] = dist[u] + weight
+                    predecessor[v] = u
+    
+    return dist, predecessor
+```
+
+**时间复杂度**：$O(|V| + |E|)$
+
+**适用场景**：
+- 图是有向无环图
+- 需要高效计算单源最短路径
+
+#### Dijkstra 算法
+
+Dijkstra 算法用于求解非负权图的单源最短路径问题，是一种贪心算法。
+
+**算法步骤**：
+1. 初始化：源顶点到自身的距离为 0，到其他顶点的距离为无穷大
+2. 创建一个优先队列，包含所有未访问的顶点，按照距离排序
+3. 每次从队列中取出距离最小的顶点，并对其所有未访问的邻接顶点进行松弛操作
+4. 重复步骤 3，直到队列为空
+
+**实现**：
+```python
+import heapq
+
+def dijkstra(graph, n, source):
+    # 初始化距离
+    dist = [float('inf')] * n
+    dist[source] = 0
+    
+    # 前驱节点，用于重建路径
+    predecessor = [None] * n
+    
+    # 优先队列，存储 (距离, 顶点)
+    pq = [(0, source)]
+    
+    # 记录顶点是否已处理
+    processed = [False] * n
+    
+    while pq:
+        d, u = heapq.heappop(pq)
+        
+        if processed[u]:
+            continue
+        
+        processed[u] = True
+        
+        for v, weight in graph[u]:
+            if not processed[v] and dist[u] + weight < dist[v]:
+                dist[v] = dist[u] + weight
+                predecessor[v] = u
+                heapq.heappush(pq, (dist[v], v))
+    
+    return dist, predecessor
+```
+
+**时间复杂度**：
+- 使用二叉堆：$O(|E| \log |V|)$
+- 使用斐波那契堆：$O(|E| + |V| \log |V|)$
+
+**适用场景**：
+- 图中所有边权非负
+- 需要高效计算单源最短路径
+- 稠密图或稀疏图都适用
+
+#### 算法比较
+
+| 算法 | 时间复杂度 | 处理负权边 | 检测负权环 | 适用场景 |
+|------|------------|------------|------------|----------|
+| Bellman-Ford | $O(|V| \cdot |E|)$ | ✓ | ✓ | 含负权边的图 |
+| DAG 最短路径 | $O(|V| + |E|)$ | ✓ | 不适用 | 有向无环图 |
+| Dijkstra | $O(|E| \log |V|)$ | ✗ | ✗ | 非负权图 |
+
+### 所有点对最短路径
+
+所有点对最短路径问题是指，计算图中任意两个顶点之间的最短路径。
+
+#### Floyd-Warshall 算法
+
+Floyd-Warshall 算法是一种动态规划算法，用于解决所有点对最短路径问题，可以处理包含负权边的图（但不能有负权环）。
+
+**算法思想**：
+- 对于任意两点 $i$ 和 $j$，考虑经过中间点 $k$ 是否能缩短 $i$ 到 $j$ 的距离
+- 动态规划状态：$dp[k][i][j]$ 表示仅使用前 $k$ 个顶点作为中间点时，从 $i$ 到 $j$ 的最短路径长度
+
+**算法步骤**：
+1. 初始化：$dp[0][i][j]$ 为 $i$ 到 $j$ 的直接边权，如果不存在边则为无穷大
+2. 对于每个 $k$ 从 1 到 $|V|$，更新 $dp[k][i][j] = \min(dp[k-1][i][j], dp[k-1][i][k] + dp[k-1][k][j])$
+3. 最终 $dp[|V|][i][j]$ 即为 $i$ 到 $j$ 的最短路径长度
+
+**简化实现**：
+```python
+def floyd_warshall(graph, n):
+    # 初始化距离矩阵
+    dist = [[float('inf') for _ in range(n)] for _ in range(n)]
+    
+    # 设置对角线元素为 0
+    for i in range(n):
+        dist[i][i] = 0
+    
+    # 设置直接边的权值
+    for u in range(n):
+        for v, weight in graph[u]:
+            dist[u][v] = weight
+    
+    # Floyd-Warshall 算法
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] != float('inf') and dist[k][j] != float('inf'):
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    
+    # 检测负权环
+    for i in range(n):
+        if dist[i][i] < 0:
+            return None  # 存在负权环
+    
+    return dist
+```
+
+**时间复杂度**：$O(|V|^3)$
+
+**空间复杂度**：$O(|V|^2)$
+
+**适用场景**：
+- 需要计算所有点对之间的最短路径
+- 图中可能包含负权边（但不能有负权环）
+- 图比较稠密
+- 图的规模不是特别大（顶点数 $\leq 1000$）
+
+#### Johnson 算法
+
+Johnson 算法结合了 Bellman-Ford 算法和 Dijkstra 算法，用于解决所有点对最短路径问题，特别适用于稀疏图。
+
+**算法思想**：
+- 使用 Bellman-Ford 算法计算一组顶点权重，用于将图中的所有边权重重新赋值为非负值
+- 然后对每个顶点，使用 Dijkstra 算法计算其到其他所有顶点的最短路径
+
+**算法步骤**：
+1. 创建一个新图，添加一个超级源点 $s$，从 $s$ 到原图中的每个顶点添加一条权值为 0 的边
+2. 对新图运行 Bellman-Ford 算法，得到从 $s$ 到每个顶点 $v$ 的最短距离 $h(v)$
+3. 如果 Bellman-Ford 算法检测到负权环，返回错误
+4. 对原图中的每条边 $(u, v)$ 重新赋值：$w'(u, v) = w(u, v) + h(u) - h(v)$
+5. 对每个顶点 $u$，使用 Dijkstra 算法计算 $u$ 到所有其他顶点的最短路径
+6. 对于每对顶点 $(u, v)$，将最短路径长度还原：$d(u, v) = d'(u, v) - h(u) + h(v)$
+
+**实现**：
+```python
+import heapq
+
+def johnson(graph, n):
+    # 步骤 1: 添加超级源点
+    extended_graph = [[] for _ in range(n + 1)]
+    for u in range(n):
+        for v, weight in graph[u]:
+            extended_graph[u].append((v, weight))
+        extended_graph[n].append((u, 0))  # 从超级源点到所有顶点的边
+    
+    # 步骤 2: 运行 Bellman-Ford 算法
+    h = [float('inf')] * (n + 1)
+    h[n] = 0
+    
+    for _ in range(n):
+        for u in range(n + 1):
+            for v, weight in extended_graph[u]:
+                if h[u] != float('inf') and h[u] + weight < h[v]:
+                    h[v] = h[u] + weight
+    
+    # 检测负权环
+    for u in range(n + 1):
+        for v, weight in extended_graph[u]:
+            if h[u] != float('inf') and h[u] + weight < h[v]:
+                return None  # 存在负权环
+    
+    # 步骤 3-4: 重新赋值边权
+    reweighted_graph = [[] for _ in range(n)]
+    for u in range(n):
+        for v, weight in graph[u]:
+            reweighted_graph[u].append((v, weight + h[u] - h[v]))
+    
+    # 步骤 5: 对每个顶点运行 Dijkstra 算法
+    dist = [[float('inf') for _ in range(n)] for _ in range(n)]
+    
+    for source in range(n):
+        # Dijkstra 算法
+        dist[source][source] = 0
+        pq = [(0, source)]
+        
+        while pq:
+            d, u = heapq.heappop(pq)
+            
+            if d > dist[source][u]:
+                continue
+            
+            for v, weight in reweighted_graph[u]:
+                if dist[source][u] + weight < dist[source][v]:
+                    dist[source][v] = dist[source][u] + weight
+                    heapq.heappush(pq, (dist[source][v], v))
+    
+    # 步骤 6: 还原最短路径长度
+    for u in range(n):
+        for v in range(n):
+            if dist[u][v] != float('inf'):
+                dist[u][v] = dist[u][v] - h[u] + h[v]
+    
+    return dist
+```
+
+**时间复杂度**：$O(|V|^2 \log |V| + |V||E|)$
+
+**适用场景**：
+- 需要计算所有点对之间的最短路径
+- 图中可能包含负权边（但不能有负权环）
+- 图比较稀疏（$|E| \ll |V|^2$）
+
+#### Floyd-Warshall 与 Johnson 算法比较
+
+| 特性 | Floyd-Warshall | Johnson |
+|------|----------------|---------|
+| 时间复杂度 | $O(|V|^3)$ | $O(|V|^2 \log |V| + |V||E|)$ |
+| 适用图类型 | 稠密图 | 稀疏图 |
+| 处理负权边 | ✓ | ✓ |
+| 检测负权环 | ✓ | ✓ |
+| 实现难度 | 简单 | 中等 |
+| 空间复杂度 | $O(|V|^2)$ | $O(|V|^2)$ |
+
+### 最大网络流
+
+网络流问题是图论中的一类重要问题，涉及在流网络中寻找最大流量或最小割等。
+
+#### 基本概念
+
+- **流网络**：一个带权有向图 $G = (V, E)$，其中每条边 $(u, v) \in E$ 有一个非负容量 $c(u, v) \geq 0$
+- **源点 (source)**：流的起始点，通常记为 $s$
+- **汇点 (sink)**：流的终止点，通常记为 $t$
+- **流 (flow)**：函数 $f: V \times V \rightarrow \mathbb{R}$ 满足以下条件：
+  - **容量限制**：对于所有 $u, v \in V$，$0 \leq f(u, v) \leq c(u, v)$
+  - **流量守恒**：对于所有 $u \in V - \{s, t\}$，$\sum_{v \in V} f(v, u) = \sum_{v \in V} f(u, v)$
+- **网络流值**：从源点流出的流量总和：$|f| = \sum_{v \in V} f(s, v) - \sum_{v \in V} f(v, s)$
+- **最大流**：流网络中值最大的流
+
+#### 残余网络
+
+残余网络 $G_f = (V, E_f)$ 表示在当前流 $f$ 下，网络中还能容纳的额外流量。
+
+- 对于原图中的每条边 $(u, v) \in E$，如果 $f(u, v) < c(u, v)$，则在 $G_f$ 中添加一条容量为 $c(u, v) - f(u, v)$ 的边 $(u, v)$
+- 对于原图中的每条边 $(u, v) \in E$，如果 $f(u, v) > 0$，则在 $G_f$ 中添加一条容量为 $f(u, v)$ 的反向边 $(v, u)$
+
+#### 增广路径
+
+增广路径是残余网络 $G_f$ 中从源点 $s$ 到汇点 $t$ 的一条路径，表示可以增加的流量。
+
+- 增广路径的**瓶颈容量**是路径上最小的边容量
+- 沿着增广路径增加流量，可以增加网络的总流量
+
+### Ford-Fulkerson 方法
+
+Ford-Fulkerson 方法是解决最大流问题的基本框架，基于**增广路径**的思想。
+
+**算法思想**：
+- 初始时，所有边的流量为 0
+- 不断寻找残余网络中的增广路径，并沿着路径增加流量
+- 当不存在增广路径时，当前流即为最大流
+
+**算法步骤**：
+1. 初始化所有边的流量为 0
+2. 在残余网络中寻找一条从源点 $s$ 到汇点 $t$ 的增广路径
+3. 计算增广路径的瓶颈容量
+4. 沿着增广路径增加流量
+5. 更新残余网络
+6. 重复步骤 2-5，直到不存在增广路径
+
+**实现**：
+```python
+def ford_fulkerson(graph, source, sink):
+    n = len(graph)
+    flow = 0
+    
+    # 初始化流量为 0
+    residual_graph = [[0 for _ in range(n)] for _ in range(n)]
+    for u in range(n):
+        for v, capacity in graph[u]:
+            residual_graph[u][v] = capacity
+    
+    # 寻找增广路径
+    def bfs():
+        visited = [False] * n
+        queue = [source]
+        visited[source] = True
+        parent = [-1] * n
+        
+        while queue:
+            u = queue.pop(0)
+            
+            for v in range(n):
+                if not visited[v] and residual_graph[u][v] > 0:
+                    queue.append(v)
+                    visited[v] = True
+                    parent[v] = u
+        
+        # 如果汇点被访问到，则存在增广路径
+        return visited[sink], parent
+    
+    # Ford-Fulkerson 算法
+    while True:
+        path_exists, parent = bfs()
+        
+        if not path_exists:
+            break
+        
+        # 寻找增广路径的瓶颈容量
+        path_flow = float('inf')
+        v = sink
+        while v != source:
+            u = parent[v]
+            path_flow = min(path_flow, residual_graph[u][v])
+            v = u
+        
+        # 更新残余网络
+        v = sink
+        while v != source:
+            u = parent[v]
+            residual_graph[u][v] -= path_flow
+            residual_graph[v][u] += path_flow  # 反向边
+            v = u
+        
+        flow += path_flow
+    
+    return flow
+```
+
+**时间复杂度**：
+- 如果使用 BFS 寻找增广路径（Edmonds-Karp 算法）：$O(|V| \cdot |E|^2)$
+- 如果增广路径的选择是任意的：$O(|E| \cdot |f|)$，其中 $|f|$ 是最大流的值
+
+### 切割与最大流最小割定理
+
+#### 切割
+
+**切割 (s-t cut)**：将图的顶点集合 $V$ 划分为两个不相交的子集 $S$ 和 $T$，使得 $s \in S$ 且 $t \in T$。
+
+**切割容量**：从 $S$ 到 $T$ 的所有边的容量之和：
+$$\text{capacity}(S, T) = \sum_{u \in S} \sum_{v \in T} c(u, v)$$
+
+**最小割**：具有最小容量的切割。
+
+#### 最大流最小割定理
+
+**定理**：在任何流网络中，最大流的值等于最小割的容量。
+
+**证明思路**：
+1. 对于任何流 $f$ 和任何切割 $(S, T)$，流的值不超过切割的容量
+2. 在 Ford-Fulkerson 算法终止时，令 $S$ 为从源点 $s$ 在残余网络中可达的顶点集合，$T = V - S$
+3. 此时 $(S, T)$ 是一个切割，且流的值等于切割的容量
+4. 因此，最大流的值等于最小割的容量
+
+**推论**：
+- 当最大流算法终止时，从源点可达的顶点集合和不可达的顶点集合形成最小割
+- 最小割可以通过求解最大流问题来得到
+
+### Edmonds-Karp 算法
+
+Edmonds-Karp 算法是 Ford-Fulkerson 方法的一种实现，它使用**广度优先搜索 (BFS)** 来寻找增广路径。
+
+**算法特点**：
+- 每次选择**最短的**增广路径（边数最少）
+- 时间复杂度为 $O(|V| \cdot |E|^2)$，这是一个多项式时间复杂度
+- 不依赖于容量的取值，适用于任意实数容量
+
+**实现**：
+```python
+from collections import deque
+
+def edmonds_karp(graph, source, sink):
+    n = len(graph)
+    # 构建邻接矩阵表示的残余网络
+    capacity = [[0 for _ in range(n)] for _ in range(n)]
+    for u in range(n):
+        for v, cap in graph[u]:
+            capacity[u][v] = cap
+    
+    flow = 0
+    
+    while True:
+        # 使用 BFS 寻找增广路径
+        parent = [-1] * n
+        parent[source] = -2  # 特殊标记，表示已访问
+        queue = deque([source])
+        
+        while queue and parent[sink] == -1:
+            u = queue.popleft()
+            
+            for v in range(n):
+                if parent[v] == -1 and capacity[u][v] > 0:
+                    parent[v] = u
+                    queue.append(v)
+        
+        # 如果没有找到增广路径，算法终止
+        if parent[sink] == -1:
+            break
+        
+        # 计算增广路径的瓶颈容量
+        path_flow = float('inf')
+        v = sink
+        while v != source:
+            u = parent[v]
+            path_flow = min(path_flow, capacity[u][v])
+            v = u
+        
+        # 更新残余网络
+        v = sink
+        while v != source:
+            u = parent[v]
+            capacity[u][v] -= path_flow
+            capacity[v][u] += path_flow  # 反向边
+            v = u
+        
+        flow += path_flow
+    
+    return flow
+```
+
+**时间复杂度分析**：
+- 每次 BFS 的时间为 $O(|E|)$
+- 最多有 $O(|V| \cdot |E|)$ 次增广操作
+- 总时间复杂度为 $O(|V| \cdot |E|^2)$
+
+### 最大二分匹配
+
+二分匹配问题是网络流的一个重要应用，可以通过最大流算法来解决。
+
+#### 基本概念
+
+- **二分图**：顶点集合可以划分为两个互不相交的子集 $L$ 和 $R$，使得每条边连接的两个顶点分别来自 $L$ 和 $R$
+- **匹配**：边的一个子集，其中任意两条边不共享顶点
+- **最大匹配**：具有最大边数的匹配
+
+#### 转化为最大流问题
+
+二分匹配问题可以转化为最大流问题：
+1. 创建一个源点 $s$ 和一个汇点 $t$
+2. 对于二分图中的每个左侧顶点 $u \in L$，添加一条容量为 1 的边 $(s, u)$
+3. 对于二分图中的每个右侧顶点 $v \in R$，添加一条容量为 1 的边 $(v, t)$
+4. 对于二分图中的每条边 $(u, v)$，添加一条容量为 1 的边 $(u, v)$
+5. 求解该流网络的最大流，最大流的值即为最大匹配的大小
+
+**实现**：
+```python
+def maximum_bipartite_matching(graph, left_size, right_size):
+    # 构建流网络
+    n = left_size + right_size + 2
+    source = 0
+    sink = n - 1
+    flow_graph = [[] for _ in range(n)]
+    
+    # 源点到左侧顶点的边
+    for i in range(1, left_size + 1):
+        flow_graph[source].append((i, 1))
+    
+    # 二分图中的边
+    for u, neighbors in enumerate(graph):
+        for v in neighbors:
+            flow_graph[u + 1].append((left_size + v + 1, 1))
+    
+    # 右侧顶点到汇点的边
+    for i in range(1, right_size + 1):
+        flow_graph[left_size + i].append((sink, 1))
+    
+    # 求解最大流
+    max_flow = edmonds_karp(flow_graph, source, sink)
+    
+    return max_flow
+```
+
+#### 匈牙利算法
+
+匈牙利算法是一种专门用于解决二分匹配问题的算法，基于**增广路径**的思想。
+
+**算法步骤**：
+1. 初始时，匹配为空集
+2. 对于每个未匹配的左侧顶点 $u$，尝试寻找增广路径，如果找到则更新匹配
+3. 重复步骤 2，直到所有左侧顶点都尝试过
+
+**实现**：
+```python
+def hungarian(graph, left_size, right_size):
+    # 初始化匹配
+    match = [-1] * right_size
+    
+    def dfs(u, visited):
+        for v in graph[u]:
+            if not visited[v]:
+                visited[v] = True
+                if match[v] == -1 or dfs(match[v], visited):
+                    match[v] = u
+                    return True
+        return False
+    
+    # 寻找增广路径
+    max_matching = 0
+    for u in range(left_size):
+        visited = [False] * right_size
+        if dfs(u, visited):
+            max_matching += 1
+    
+    return max_matching
+```
+
+**时间复杂度**：$O(|V| \cdot |E|)$，比使用最大流算法更高效
+
+#### 应用场景
+
+最大二分匹配问题在实际应用中非常广泛：
+- **任务分配**：将任务分配给合适的工人
+- **学生与课程匹配**：根据学生的选课志愿进行课程分配
+- **求职者与职位匹配**：根据求职者的技能和职位要求进行匹配
+- **网络连接**：优化网络中的连接分配
