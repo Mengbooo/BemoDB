@@ -1,3 +1,10 @@
+---
+title: JavaScript 篇
+date: '2025-06-07'
+tags:
+- FE
+---
+
 # JavaScript 篇
 
 ::: tip Todo

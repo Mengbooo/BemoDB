@@ -1,4 +1,4 @@
-<!-- ---
+---
 layout: page
 title: 归档
 sidebar: false
@@ -6,7 +6,7 @@ sidebar: false
 
 <script setup>
 import { computed } from 'vue'
-import { data } from '../.vitepress/theme/posts.data.js'
+import { data } from '../.vitepress/theme/posts.data'
 
 const { yearMap, postMap } = data
 const yearList = Object.keys(yearMap).sort((a, b) => b - a); // 按年份降序排序
@@ -85,4 +85,4 @@ const computedYearMap = computed(() => {
   color: var(--vp-c-text-2);
   font-size: 0.9em;
 }
-</style>  -->
+</style>

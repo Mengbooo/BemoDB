@@ -1,3 +1,10 @@
+---
+title: 总是将你的估算乘以 π
+date: '2025-06-07'
+tags:
+- recording
+---
+
 # 总是将你的估算乘以 π
 ::: tip 文章信息
 Origin url : http://www.altdevblogaday.com/2013/11/15/always-multiply-estimates-by-pi/

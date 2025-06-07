@@ -1,3 +1,10 @@
+---
+title: Sushi JavaScript
+date: '2025-06-07'
+tags:
+- problems
+---
+
 # Sushi JavaScript
 
 ::: details 碎碎念

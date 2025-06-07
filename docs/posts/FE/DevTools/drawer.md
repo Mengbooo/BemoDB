@@ -1,3 +1,10 @@
+---
+title: Drawer
+date: '2025-06-07'
+tags:
+- FE
+---
+
 # Drawer
 
 说到 Drawer 大部分的朋友可能都很陌生，那 Drawer 是个什么东西？ Chrome DevTools 有很多部分，被分为9个 tab (俗称选项卡) ( Elements ， Console ， Sources ， Network ， 等等...)

@@ -1,3 +1,10 @@
+---
+title: Console
+date: '2025-06-07'
+tags:
+- FE
+---
+
 # Console
 
 这节主要介绍和 console 相关的技巧

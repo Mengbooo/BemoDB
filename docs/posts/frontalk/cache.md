@@ -1,3 +1,10 @@
+---
+title: 浏览器存储
+date: '2025-06-07'
+tags:
+- frontalk
+---
+
 # 浏览器存储
 
 在浏览器中存储数据，我们有以下几种方法：cookie、localstorage、sessionstorage、indexedDB

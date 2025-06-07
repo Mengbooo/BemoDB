@@ -1,3 +1,10 @@
+---
+title: Vitepress 内含 deadlink 导致部署失败
+date: '2025-06-07'
+tags:
+- problems
+---
+
 # Vitepress 内含 deadlink 导致部署失败
 ![deaddead](./imgs/vitepressDeadLink.png)
 

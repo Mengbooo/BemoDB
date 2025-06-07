@@ -1,4 +1,4 @@
-<!-- ---
+---
 layout: page
 title: 标签
 sidebar: false
@@ -6,7 +6,7 @@ sidebar: false
 
 <script setup>
 import { ref, unref, computed, onMounted } from 'vue'
-import { data } from '../.vitepress/theme/posts.data.js'
+import { data } from '../.vitepress/theme/posts.data'
 
 const { tagMap, postMap } = data
 const tags = Object.keys(tagMap)
@@ -139,4 +139,4 @@ onMounted(() => {
   color: var(--vp-c-text-2);
   font-size: 0.9em;
 }
-</style>  -->
+</style>

@@ -1,3 +1,10 @@
+---
+title: 动画
+date: '2025-06-07'
+tags:
+- frontalk
+---
+
 # 动画
 
 简单了解CSS 和 JavaScript 动画的实现。

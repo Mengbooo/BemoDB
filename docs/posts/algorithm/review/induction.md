@@ -1,15 +1,15 @@
 ---
 head:
-  - - link
-    - rel: stylesheet
-      href: https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css
+- - link
+  - rel: stylesheet
+    href: https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css
 title: 算法设计与分析归纳
-date: 2024-06-01
+date: 2025-06-01
 tags:
-  - 算法
-  - 学习笔记
+- 算法
+- 学习笔记
+- algorithm
 ---
-
 # 算法设计与分析归纳
 
 参考资料为算法黑皮书和红皮书第四版，任教老师为邱德红，作者Bolaxious。这门课的重点并不在于讲为了实现某种算法要怎么去写代码，而是讲一讲算法背后的设计和考虑。课程主要内容都在上一篇文章复习材料中提到并做了扩展，这里则进一步简化
@@ -2511,6 +2511,45 @@ def floyd_warshall(graph, n):
 - 图比较稠密
 - 图的规模不是特别大（顶点数 $\leq 1000$）
 
+**实例**：
+考虑下面的带权有向图，边上的数字表示权值：
+```
+    0 --3-> 1
+    |       |
+    4       2
+    |       |
+    v       v
+    2 <-1-- 3
+```
+
+初始距离矩阵：
+```
+    0   3   ∞   ∞
+    ∞   0   ∞   2
+    ∞   ∞   0   ∞
+    ∞   ∞   1   0
+```
+
+Floyd-Warshall 算法的执行过程：
+1. 以顶点 0 为中间点，更新距离矩阵（没有变化）
+2. 以顶点 1 为中间点，更新：
+   - dist[0][3] = min(∞, 3 + 2) = 5
+3. 以顶点 2 为中间点，更新：
+   - 没有变化
+4. 以顶点 3 为中间点，更新：
+   - dist[1][2] = min(∞, 2 + 1) = 3
+   - dist[0][2] = min(∞, 5 + 1) = 6
+
+最终距离矩阵：
+```
+    0   3   6   5
+    ∞   0   3   2
+    ∞   ∞   0   ∞
+    ∞   ∞   1   0
+```
+
+这表示从顶点 0 到顶点 2 的最短距离是 6，路径是 0 → 1 → 3 → 2。
+
 #### Johnson 算法
 
 Johnson 算法结合了 Bellman-Ford 算法和 Dijkstra 算法，用于解决所有点对最短路径问题，特别适用于稀疏图。
@@ -2716,97 +2755,33 @@ def ford_fulkerson(graph, source, sink):
 - 如果使用 BFS 寻找增广路径（Edmonds-Karp 算法）：$O(|V| \cdot |E|^2)$
 - 如果增广路径的选择是任意的：$O(|E| \cdot |f|)$，其中 $|f|$ 是最大流的值
 
-### 切割与最大流最小割定理
-
-#### 切割
-
-**切割 (s-t cut)**：将图的顶点集合 $V$ 划分为两个不相交的子集 $S$ 和 $T$，使得 $s \in S$ 且 $t \in T$。
-
-**切割容量**：从 $S$ 到 $T$ 的所有边的容量之和：
-$$\text{capacity}(S, T) = \sum_{u \in S} \sum_{v \in T} c(u, v)$$
-
-**最小割**：具有最小容量的切割。
-
-#### 最大流最小割定理
-
-**定理**：在任何流网络中，最大流的值等于最小割的容量。
-
-**证明思路**：
-1. 对于任何流 $f$ 和任何切割 $(S, T)$，流的值不超过切割的容量
-2. 在 Ford-Fulkerson 算法终止时，令 $S$ 为从源点 $s$ 在残余网络中可达的顶点集合，$T = V - S$
-3. 此时 $(S, T)$ 是一个切割，且流的值等于切割的容量
-4. 因此，最大流的值等于最小割的容量
-
-**推论**：
-- 当最大流算法终止时，从源点可达的顶点集合和不可达的顶点集合形成最小割
-- 最小割可以通过求解最大流问题来得到
-
-### Edmonds-Karp 算法
-
-Edmonds-Karp 算法是 Ford-Fulkerson 方法的一种实现，它使用**广度优先搜索 (BFS)** 来寻找增广路径。
-
-**算法特点**：
-- 每次选择**最短的**增广路径（边数最少）
-- 时间复杂度为 $O(|V| \cdot |E|^2)$，这是一个多项式时间复杂度
-- 不依赖于容量的取值，适用于任意实数容量
-
-**实现**：
-```python
-from collections import deque
-
-def edmonds_karp(graph, source, sink):
-    n = len(graph)
-    # 构建邻接矩阵表示的残余网络
-    capacity = [[0 for _ in range(n)] for _ in range(n)]
-    for u in range(n):
-        for v, cap in graph[u]:
-            capacity[u][v] = cap
-    
-    flow = 0
-    
-    while True:
-        # 使用 BFS 寻找增广路径
-        parent = [-1] * n
-        parent[source] = -2  # 特殊标记，表示已访问
-        queue = deque([source])
-        
-        while queue and parent[sink] == -1:
-            u = queue.popleft()
-            
-            for v in range(n):
-                if parent[v] == -1 and capacity[u][v] > 0:
-                    parent[v] = u
-                    queue.append(v)
-        
-        # 如果没有找到增广路径，算法终止
-        if parent[sink] == -1:
-            break
-        
-        # 计算增广路径的瓶颈容量
-        path_flow = float('inf')
-        v = sink
-        while v != source:
-            u = parent[v]
-            path_flow = min(path_flow, capacity[u][v])
-            v = u
-        
-        # 更新残余网络
-        v = sink
-        while v != source:
-            u = parent[v]
-            capacity[u][v] -= path_flow
-            capacity[v][u] += path_flow  # 反向边
-            v = u
-        
-        flow += path_flow
-    
-    return flow
+**实例**：
+考虑下面的流网络，边上的数字表示容量：
+```
+         (2)
+      0 ----> 2
+     / \     / \
+(3) /   \(3)/   \ (2)
+   /     \/     v
+  s       1 ----> t
+   \     /       ^
+(3) \   /(2)     / (3)
+     v v        /
+      3 -------
 ```
 
-**时间复杂度分析**：
-- 每次 BFS 的时间为 $O(|E|)$
-- 最多有 $O(|V| \cdot |E|)$ 次增广操作
-- 总时间复杂度为 $O(|V| \cdot |E|^2)$
+其中 s 是源点，t 是汇点。
+
+Ford-Fulkerson 算法的执行过程：
+1. 找到增广路径 s → 0 → 2 → t，流量为 min(3, 2, 2) = 2
+   - 更新残余网络，总流量 = 2
+2. 找到增广路径 s → 0 → 1 → t，流量为 min(3-2, 3, 2) = 1
+   - 更新残余网络，总流量 = 2 + 1 = 3
+3. 找到增广路径 s → 3 → t，流量为 min(3, 3) = 3
+   - 更新残余网络，总流量 = 3 + 3 = 6
+4. 没有更多的增广路径，算法终止
+
+最大流的值为 6。
 
 ### 最大二分匹配
 
@@ -2827,74 +2802,79 @@ def edmonds_karp(graph, source, sink):
 4. 对于二分图中的每条边 $(u, v)$，添加一条容量为 1 的边 $(u, v)$
 5. 求解该流网络的最大流，最大流的值即为最大匹配的大小
 
-**实现**：
-```python
-def maximum_bipartite_matching(graph, left_size, right_size):
-    # 构建流网络
-    n = left_size + right_size + 2
-    source = 0
-    sink = n - 1
-    flow_graph = [[] for _ in range(n)]
-    
-    # 源点到左侧顶点的边
-    for i in range(1, left_size + 1):
-        flow_graph[source].append((i, 1))
-    
-    # 二分图中的边
-    for u, neighbors in enumerate(graph):
-        for v in neighbors:
-            flow_graph[u + 1].append((left_size + v + 1, 1))
-    
-    # 右侧顶点到汇点的边
-    for i in range(1, right_size + 1):
-        flow_graph[left_size + i].append((sink, 1))
-    
-    # 求解最大流
-    max_flow = edmonds_karp(flow_graph, source, sink)
-    
-    return max_flow
+**实例**：
+考虑下面的二分图，左侧是工人，右侧是任务：
+```
+       任务0
+      /    \
+    工人0   工人2
+      \    /
+       任务1
+        |
+       工人1
+        |
+       任务2
 ```
 
-#### 匈牙利算法
-
-匈牙利算法是一种专门用于解决二分匹配问题的算法，基于**增广路径**的思想。
-
-**算法步骤**：
-1. 初始时，匹配为空集
-2. 对于每个未匹配的左侧顶点 $u$，尝试寻找增广路径，如果找到则更新匹配
-3. 重复步骤 2，直到所有左侧顶点都尝试过
-
-**实现**：
-```python
-def hungarian(graph, left_size, right_size):
-    # 初始化匹配
-    match = [-1] * right_size
-    
-    def dfs(u, visited):
-        for v in graph[u]:
-            if not visited[v]:
-                visited[v] = True
-                if match[v] == -1 or dfs(match[v], visited):
-                    match[v] = u
-                    return True
-        return False
-    
-    # 寻找增广路径
-    max_matching = 0
-    for u in range(left_size):
-        visited = [False] * right_size
-        if dfs(u, visited):
-            max_matching += 1
-    
-    return max_matching
+邻接表表示（每个工人可以执行的任务）：
+```
+graph = [
+    [0, 1],  # 工人0可以执行任务0和任务1
+    [1, 2],  # 工人1可以执行任务1和任务2
+    [0, 1]   # 工人2可以执行任务0和任务1
+]
 ```
 
-**时间复杂度**：$O(|V| \cdot |E|)$，比使用最大流算法更高效
+将二分匹配问题转化为最大流问题：
+1. 创建源点s和汇点t
+2. 从源点s连接到所有工人（容量为1）
+3. 从所有任务连接到汇点t（容量为1）
+4. 根据工人能力添加从工人到任务的边（容量为1）
 
-#### 应用场景
+使用Ford-Fulkerson算法求解最大流，找到以下增广路径：
+1. s → 工人0 → 任务0 → t，流量为1
+2. s → 工人1 → 任务2 → t，流量为1
+3. s → 工人2 → 任务1 → t，流量为1
 
-最大二分匹配问题在实际应用中非常广泛：
-- **任务分配**：将任务分配给合适的工人
-- **学生与课程匹配**：根据学生的选课志愿进行课程分配
-- **求职者与职位匹配**：根据求职者的技能和职位要求进行匹配
-- **网络连接**：优化网络中的连接分配
+最终匹配结果：
+- 工人0 ↔ 任务0
+- 工人1 ↔ 任务2
+- 工人2 ↔ 任务1
+
+最大匹配大小为3。
+
+**实现**：
+```
+
+### 图论算法实例小结
+
+本文为各种图论算法提供了详细的实例，帮助理解算法的工作原理：
+
+1. **图的遍历**：
+   - DFS：通过递归深入探索图的分支，展示了遍历顺序和回溯过程
+   - BFS：通过队列按层次访问顶点，展示了距离起点不同距离的顶点访问顺序
+
+2. **拓扑排序**：
+   - 使用Kahn算法处理课程依赖关系的有向无环图，展示了顶点的合法排序顺序
+
+3. **强连通分量**：
+   - 使用Kosaraju算法识别有向图中的循环依赖组，展示了两次DFS的执行过程
+
+4. **最小生成树**：
+   - Kruskal算法：按边权排序，贪心选择不形成环的最小权边
+   - Prim算法：从一个顶点开始，贪心选择连接到当前树的最小权边
+
+5. **单源最短路径**：
+   - Bellman-Ford算法：通过迭代松弛操作处理带负权边的图
+   - DAG最短路径：利用拓扑排序简化最短路径计算
+   - Dijkstra算法：使用优先队列处理非负权图的单源最短路径
+
+6. **所有点对最短路径**：
+   - Floyd-Warshall算法：动态规划方法计算所有顶点对之间的最短路径
+   - Johnson算法：结合Bellman-Ford和Dijkstra算法处理稀疏图的所有点对最短路径
+
+7. **网络流**：
+   - Ford-Fulkerson方法：基于增广路径的最大流算法
+   - 最大二分匹配：将二分匹配问题转化为最大流问题求解
+
+这些实例展示了算法的实际执行过程，帮助读者更直观地理解算法的工作原理和应用场景。

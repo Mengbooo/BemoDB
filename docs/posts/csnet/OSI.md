@@ -1,3 +1,10 @@
+---
+title: OSI七层模型详解
+date: '2025-06-07'
+tags:
+- csnet
+---
+
 # OSI七层模型详解
 
 OSI（Open Systems Interconnection）七层模型是国际标准化组织（ISO）制定的一个网络通信参考模型，它将计算机网络体系结构分为七层。这个模型帮助我们更好地理解网络通信的过程。

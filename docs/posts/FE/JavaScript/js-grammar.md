@@ -1,3 +1,10 @@
+---
+title: JavaScript 基础
+date: '2025-06-07'
+tags:
+- FE
+---
+
 # JavaScript 基础
 
 ::: tip

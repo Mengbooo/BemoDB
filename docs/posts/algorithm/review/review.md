@@ -1,3 +1,10 @@
+---
+title: 算法设计与分析 复习资料
+date: '2025-06-07'
+tags:
+- algorithm
+---
+
 # 算法设计与分析 复习资料
 ::: tip 文章信息
 Written by [Q-thrive](https://github.com/Qthrive) in 2025.5.28

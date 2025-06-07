@@ -131,8 +131,8 @@ export default {
       { text: "主页", link: "/" },
       { text: "文档", link: "/doc" },
       { text: "导航", link: "/nav" },
-      // { text: "归档", link: "/pages/archives" },
-      // { text: "标签", link: "/pages/tags" },
+      { text: "归档", link: "/pages/archives" },
+      { text: "标签", link: "/pages/tags" },
     ],
     sidebar: [
       { text: "你好", link: "/doc" },
@@ -171,7 +171,7 @@ export default {
             collapsed: true,
             items: [
               { text: "复习材料", link: "/posts/algorithm/review/review" },
-              { text: "AI归纳", link: "/posts/algorithm/review/induction" },
+              { text: "归纳", link: "/posts/algorithm/review/induction" },
             ],
           },
           {

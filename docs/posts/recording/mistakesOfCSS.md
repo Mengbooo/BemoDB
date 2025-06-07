@@ -1,3 +1,10 @@
+---
+title: CSS设计中的缺陷列表
+date: '2025-06-07'
+tags:
+- recording
+---
+
 # CSS设计中的缺陷列表
 ::: tip 文章信息
 Origin url : https://wiki.csswg.org/ideas/mistakes

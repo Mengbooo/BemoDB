@@ -1,3 +1,10 @@
+---
+title: iframe 与 frame
+date: '2025-06-07'
+tags:
+- FE
+---
+
 # iframe 与 frame
 
 内联框架（iframe）和框架（frame）都是用于在网页中嵌入其他内容的HTML元素。本文将详细介绍这两种元素的使用方法和最佳实践。

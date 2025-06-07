@@ -1,3 +1,10 @@
+---
+title: Vitepress EasyUse
+date: '2025-06-07'
+tags:
+- FE
+---
+
 # Vitepress EasyUse
 
 VitePress 是一个静态站点生成器 (SSG)，专为构建快速、以内容为中心的站点而设计。我自己的博客也是基于它来搭建的，这里分享一下如何快速搭建Vitepress的开发环境。

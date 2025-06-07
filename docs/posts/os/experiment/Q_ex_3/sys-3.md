@@ -1,3 +1,10 @@
+---
+title: 操作系统原理上机试验 3
+date: '2025-06-07'
+tags:
+- os
+---
+
 # 操作系统原理上机试验 3
 ::: tip 文章信息
 Written by [Q-thrive](https://github.com/Qthrive) in 2025.5.19

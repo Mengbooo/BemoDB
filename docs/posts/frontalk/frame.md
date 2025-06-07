@@ -1,3 +1,10 @@
+---
+title: Frame 和 window
+date: '2025-06-07'
+tags:
+- frontalk
+---
+
 # Frame 和 window
 
 ## 弹窗和 window 的方法
