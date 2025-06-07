@@ -1,6 +1,6 @@
 ---
 title: HTML、XHTML、HTMX、SGML、XML之间的关系
-date: '2025-06-07'
+date: '2025-02-06'
 tags:
 - FE
 ---

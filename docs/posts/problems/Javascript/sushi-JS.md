@@ -1,6 +1,6 @@
 ---
 title: Sushi JavaScript
-date: '2025-06-07'
+date: '2025-04-27'
 tags:
 - problems
 ---

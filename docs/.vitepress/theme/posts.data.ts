@@ -49,16 +49,20 @@ export default createContentLoader("posts/**/*.md", {
         return fileName !== 'index.md' && fileName !== 'index.html'
       })
       .map(({ url, frontmatter }) => {
-        // 从URL路径中提取信息
+        // 只使用顶级目录作为标签，忽略子文件夹
         const urlParts = url.split("/")
         if (urlParts.length < 3) return null // 不符合预期的URL格式
         
-        // 使用frontmatter中的标签（已经在脚本中包含了顶级目录）
-        let tags: string[] = []
+        // 顶级目录作为标签
+        let tags = [urlParts[2]]
+        
+        // 如果frontmatter中有标签，则合并
         if (frontmatter?.tags) {
-          // 确保标签没有重复
-          tags = Array.from(new Set(frontmatter.tags))
+          tags = [...tags, ...frontmatter.tags]
         }
+        
+        // 确保标签没有重复
+        tags = Array.from(new Set(tags))
         
         // 确保URL包含正确的基础路径前缀
         const fullUrl = BASE_URL + url.replace(/^\//, '')
@@ -83,6 +87,7 @@ export default createContentLoader("posts/**/*.md", {
       if (!yearMap[year]) {
         yearMap[year] = []
       }
+      
       // 确保每篇文章只添加一次
       if (!yearMap[year].includes(item.url)) {
         yearMap[year].push(item.url)
@@ -93,6 +98,7 @@ export default createContentLoader("posts/**/*.md", {
         if (!tagMap[tag]) {
           tagMap[tag] = []
         }
+        
         // 确保每个标签下每篇文章只添加一次
         if (!tagMap[tag].includes(item.url)) {
           tagMap[tag].push(item.url)

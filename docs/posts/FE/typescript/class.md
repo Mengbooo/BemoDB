@@ -1,6 +1,6 @@
 ---
 title: Typescript 中的 Class
-date: '2025-06-07'
+date: '2025-04-08'
 tags:
 - FE
 ---

@@ -1,6 +1,6 @@
 ---
 title: Vitepress 内含 deadlink 导致部署失败
-date: '2025-06-07'
+date: '2025-03-16'
 tags:
 - problems
 ---

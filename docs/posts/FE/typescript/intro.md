@@ -1,6 +1,6 @@
 ---
 title: Intro to TS
-date: '2025-06-07'
+date: '2025-04-07'
 tags:
 - FE
 ---

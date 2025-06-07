@@ -1,6 +1,6 @@
 ---
 title: JavaScript 基础
-date: '2025-06-07'
+date: '2025-02-20'
 tags:
 - FE
 ---

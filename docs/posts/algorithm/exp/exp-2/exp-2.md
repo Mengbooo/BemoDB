@@ -1,6 +1,6 @@
 ---
 title: 实验二：动态规划
-date: '2025-06-07'
+date: '2025-05-23'
 tags:
 - algorithm
 ---

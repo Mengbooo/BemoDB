@@ -1,6 +1,6 @@
 ---
 title: 使用 TS 开发 npm 包
-date: '2025-06-07'
+date: '2025-04-09'
 tags:
 - FE
 ---

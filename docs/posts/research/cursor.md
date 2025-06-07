@@ -1,6 +1,6 @@
 ---
 title: something about Cursor
-date: '2025-06-07'
+date: '2025-02-19'
 tags:
 - research
 ---

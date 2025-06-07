@@ -1,6 +1,6 @@
 ---
-title: 通用
-date: '2025-06-07'
+title: DevTools 通用
+date: '2025-04-06'
 tags:
 - FE
 ---

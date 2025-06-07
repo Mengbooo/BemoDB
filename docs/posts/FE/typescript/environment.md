@@ -1,6 +1,6 @@
 ---
 title: Typescript 开发环境搭建
-date: '2025-06-07'
+date: '2025-04-07'
 tags:
 - FE
 ---

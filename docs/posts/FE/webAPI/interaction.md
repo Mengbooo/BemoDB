@@ -1,6 +1,6 @@
 ---
 title: 交互：alert、prompt 和 confirm
-date: '2025-06-07'
+date: '2025-02-20'
 tags:
 - FE
 ---

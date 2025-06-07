@@ -1,6 +1,6 @@
 ---
 title: AI与中年人
-date: '2025-06-07'
+date: '2025-02-05'
 tags:
 - notes
 ---

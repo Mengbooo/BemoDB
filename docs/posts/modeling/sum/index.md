@@ -1,6 +1,6 @@
 ---
 title: 数学建模
-date: '2025-06-07'
+date: '2025-05-06'
 tags:
 - modeling
 ---
