@@ -38,11 +38,11 @@ html {
   scrollbar-width: none;
 }
 
-.VPSidebar[data-v-315c3d5a]::-webkit-scrollbar{
+.VPSidebar::-webkit-scrollbar{
   display: none;
 }
 
-.VPSidebar[data-v-315c3d5a]{
+.VPSidebar{
   -ms-overflow-style: none;
   /* 隐藏 Firefox 浏览器的滚动条 */
   scrollbar-width: none;
