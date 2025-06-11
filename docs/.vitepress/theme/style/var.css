@@ -23,6 +23,10 @@ img:hover{
   cursor: pointer;
 }
 
+img{
+  border-radius: 15px;
+}
+
 /* 隐藏 WebKit 浏览器的滚动条 */
 html::-webkit-scrollbar {
   display: none;
