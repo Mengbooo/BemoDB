@@ -1,10 +1,3 @@
----
-title: Typescript 中的 Class
-date: '2025-04-08'
-tags:
-- FE
----
-
 # Typescript 中的 Class
 
 不同于上一节介绍的函数，Class 虽然也是从 ES6 开始就一直陪伴着我们，但它被使用的频率就要少得多。

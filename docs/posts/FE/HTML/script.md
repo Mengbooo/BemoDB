@@ -1,10 +1,3 @@
----
-title: '`<script>` 与 `<noscript>`'
-date: '2025-02-07'
-tags:
-- FE
----
-
 # `<script>` 与 `<noscript>`
 
 `<script>` 标签用于在HTML文档中嵌入或引用JavaScript代码，而 `<noscript>` 标签用于为不支持或禁用JavaScript的用户提供替代内容。

@@ -1,10 +1,3 @@
----
-title: Typescript 开发环境搭建
-date: '2025-04-07'
-tags:
-- FE
----
-
 # Typescript 开发环境搭建
 
 我们只需要非常简单的配置就能完成 TypeScript 开发环境的搭建。

@@ -1,10 +1,3 @@
----
-title: Generator，高级 iteration
-date: '2025-04-05'
-tags:
-- FE
----
-
 # Generator，高级 iteration
 
 ## generator

@@ -1,10 +1,3 @@
----
-title: HTML、XHTML、HTMX、SGML、XML之间的关系
-date: '2025-02-06'
-tags:
-- FE
----
-
 # HTML、XHTML、HTMX、SGML、XML之间的关系
 
 ## 1. SGML：万物起源

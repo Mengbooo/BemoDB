@@ -1,10 +1,3 @@
----
-title: 关于 npm
-date: '2025-04-07'
-tags:
-- FE
----
-
 # 关于 npm
 
 NPM（Node Package Manager）是一个 javascript 包管理工具，也是 Node.js 的默认包管理器。

@@ -1,10 +1,3 @@
----
-title: 加载文档和其他资源
-date: '2025-04-17'
-tags:
-- FE
----
-
 # 加载文档和其他资源
 
 ## 页面生命周期：DOMContentLoaded，load，beforeunload，unload

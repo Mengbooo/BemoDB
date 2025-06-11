@@ -1,10 +1,3 @@
----
-title: 交互：alert、prompt 和 confirm
-date: '2025-02-20'
-tags:
-- FE
----
-
 # 交互：alert、prompt 和 confirm
 在浏览器中，我们可以通过这三个 webAPI 与用户进行交互
 ## alert

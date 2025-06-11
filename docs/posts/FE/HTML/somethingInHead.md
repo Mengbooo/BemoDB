@@ -1,10 +1,3 @@
----
-title: “头”里面有什么—— HTML meta
-date: '2025-01-22'
-tags:
-- FE
----
-
 # “头”里面有什么—— HTML meta
 
 HTML里的meta标签是用来提供网页元数据（metadata）的，功能非常强大。

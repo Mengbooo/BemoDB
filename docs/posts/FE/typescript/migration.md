@@ -1,10 +1,3 @@
----
-title: 从 JS 迁移到 TS
-date: '2025-04-09'
-tags:
-- FE
----
-
 # 从 JS 迁移到 TS
 
 要提升实际场景中的 TypeScript 应用，自己操刀进行一次 JavaScript 到 TypeScript 的迁移，应该是效率最高的方式之一。

@@ -1,10 +1,3 @@
----
-title: DevTools 通用
-date: '2025-04-06'
-tags:
-- FE
----
-
 # 通用
 
 记录一下DevTools的相关技巧.

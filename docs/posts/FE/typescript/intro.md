@@ -1,10 +1,3 @@
----
-title: Intro to TS
-date: '2025-04-07'
-tags:
-- FE
----
-
 # Intro to TS
 
 TypeScript（简称 TS）是微软公司开发的一种基于 JavaScript （简称 JS）语言的编程语言。

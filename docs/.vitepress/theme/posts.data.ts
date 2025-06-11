@@ -49,6 +49,11 @@ export default createContentLoader("posts/**/*.md", {
         return fileName !== 'index.md' && fileName !== 'index.html'
       })
       .map(({ url, frontmatter }) => {
+        // 如果没有frontmatter（没有Yaml前缀），则跳过该文章
+        if (!frontmatter || Object.keys(frontmatter).length === 0) {
+          return null
+        }
+        
         // 只使用顶级目录作为标签，忽略子文件夹
         const urlParts = url.split("/")
         if (urlParts.length < 3) return null // 不符合预期的URL格式

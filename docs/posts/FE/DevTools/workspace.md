@@ -1,10 +1,3 @@
----
-title: Workspace
-date: '2025-04-07'
-tags:
-- FE
----
-
 # Workspace 
 
 我们总是习惯于先在 IDE 或者文本编辑器中修改代码，然后再进入 Chorme 中进行调试，那有没有想过直接就在 Chrome 中来修改我们的代码呢？ 对于这样的想法，Chrome DevTools 提供了哪些支持呢？
