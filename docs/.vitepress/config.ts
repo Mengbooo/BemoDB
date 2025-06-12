@@ -702,7 +702,7 @@ export default {
         text: "BemoNote",
         items: [
           {
-            text: "BemoNote 首页",
+            text: "信息茧房、信息洪流与RSS",
             link: "/posts/notes/BemoNote/250612/index",
           },
         ],
