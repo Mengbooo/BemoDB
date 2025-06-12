@@ -699,9 +699,12 @@ export default {
         ],
       },
       {
-        text: "WeeklyGo",
+        text: "BemoNote",
         items: [
-
+          {
+            text: "BemoNote 首页",
+            link: "/posts/notes/BemoNote/250612/index",
+          },
         ],
       },
       {
