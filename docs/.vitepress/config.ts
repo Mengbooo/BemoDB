@@ -119,7 +119,33 @@ export default {
   lastUpdated: true,
   title: "BemoDB", // 网站标题
   description: "这是 Bolaxious 的文档库，用于各种文章的存放",
-  head: [["link", { rel: "icon", href: `${base}/webhook.ico` }]],
+  head: [
+    ["link", { rel: "icon", href: `${base}/webhook.ico` }],
+    [
+      'script',
+      {},
+      `
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?26e553a9b8336681d45c57b321a42761";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      `
+    ],
+    [
+      'script',
+      {},
+      `
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "s0vgdtqj21");
+      `
+    ]
+  ],
   themeConfig: {
     outline: [2, 4], // 显示 h2, h3, h4 标题
     search: {
