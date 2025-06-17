@@ -128,7 +128,7 @@ export default {
       var _hmt = _hmt || [];
       (function() {
         var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?26e553a9b8336681d45c57b321a42761";
+        hm.src = "https://hm.baidu.com/hm.js?f124d3a58be33afc53f66bf19d464bab";
         var s = document.getElementsByTagName("script")[0]; 
         s.parentNode.insertBefore(hm, s);
       })();

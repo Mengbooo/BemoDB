@@ -9,7 +9,7 @@
 > [!note]
 > Copyright © 2025 Bolaxious. All rights reserved.
 > 
-> ALL POSTS\CODES **MIT** Licensed.
+> ALL POSTS\CODES **Apache 2.0** Licensed.
 
 
 ::: tip 建站TODO
