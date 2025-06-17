@@ -55,3 +55,9 @@ html {
   /* 隐藏 Firefox 浏览器的滚动条 */
   scrollbar-width: none;
 }
+
+p img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
