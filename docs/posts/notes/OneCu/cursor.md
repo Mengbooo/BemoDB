@@ -1,11 +1,11 @@
 ---
-title: something about Cursor
-date: '2025-02-19'
+title: '一卒#001 | something about Cursor'
+date: '2025-06-07'
 tags:
-- research
+- BemoNote
 ---
 
-# something about Cursor
+# 一卒#001 | something about Cursor
 上个月，我主要使用的 IDE 从 VScode 换成了 Cursor，体感只能说是相当的无缝（于我而言就是多了一个对话框），不过Cursor本身的使用有点小门槛，这里记录一下有关 Cursor 使用的一些 tips。
 
 ## 快捷键

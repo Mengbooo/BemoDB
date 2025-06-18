@@ -178,17 +178,6 @@ export default {
         ],
       },
       {
-        text: "小研究",
-        items: [
-          {
-            text: "Hello Halo —— 使用Halo搭建个人博客",
-            link: "/posts/research/halo",
-          },
-          { text: "subtick简谈", link: "/posts/research/subtick" },
-          { text: "something about Cursor", link: "/posts/research/cursor" },
-        ],
-      },
-      {
         text: "算法",
         items: [
           { text: "算法篇", link: "/posts/algorithm/index" },
@@ -728,8 +717,24 @@ export default {
         text: "BemoNote",
         items: [
           {
+            text: "一卒#001 | something about Cursor",
+            link: "/posts/notes/OneCu/cursor",
+          },
+          {
+            text: "一卒#002 | Hello Halo",
+            link: "/posts/notes/OneCu/halo",
+          },
+          {
+            text: "一卒#003 | subtick简谈",
+            link: "/posts/notes/OneCu/subtick",
+          },
+          {
             text: "行进#001 | 信息茧房、信息洪流与RSS",
             link: "/posts/notes/BemoNote/250612/index",
+          },
+          {
+            text: "一卒#004 | Windows 上使用 taskschd.msc 托管 wakapi",
+            link: "/posts/notes/BemoNote/250618/index",
           },
         ],
       },
