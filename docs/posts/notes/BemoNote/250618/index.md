@@ -7,6 +7,8 @@ tags:
 ---
 # 一卒#004 | Windows 上使用 taskschd.msc 托管 wakapi
 
+![](2025-06-18-22-15-53.png)
+
 ~~天下~~ 我苦 Wakatime 久矣！😡
 
 - Free用户只能看 7 天内的数据，否则你需要支付 9 $/月来得到 Pro 权限
@@ -131,3 +133,4 @@ tags:
 这里的心跳间隔在 **Settings - Data - Heartbeats Timeout** 中即可设置。
 
 我发现我的 wakapi 的心跳间隔默认设置为 1 分钟，原因就在这里，因为一直在 IDE 和 PPT 之间切换。个人认为设置成 10 ~ 15 分钟差不多。
+
