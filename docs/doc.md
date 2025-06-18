@@ -5,15 +5,11 @@
 - HUST SE 大二在读，半栈开发，半桶水UI；
 - RPG、FPS 游戏爱好者，最近迷上了地平线4；
 - 瞎折腾型选手、赛博空间的流窜AI
+## tech stack
+[![My Skills](https://skillicons.dev/icons?i=js,ts,html,css,sass,less,tailwindcss,vue,react,nodejs,express,mongodb,babel,d3,electron,figma,git,github,lua,md,notion,npm,pnpm,py,java,vite,webpack&perline=9)](https://skillicons.dev)
 
-> [!note]
-> Copyright © 2025 Bolaxious. All rights reserved.
-> 
-> ALL POSTS\CODES **Apache 2.0** Licensed.
+::: tip
+Copyright © 2025 Bolaxious. All rights reserved.
 
-
-::: tip 建站TODO
-- ⛔导入 [Lumen](https://lumen.theojs.cn/) 插件
-  - 似乎并不需要Lumen提供的功能
-- ✅集成一下 vitepress-plugin-image-viewer 实现图片放大（啊Vitepress你怎么居然没有这个功能）
+ALL POSTS\CODES **[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)** Licensed.
 :::
