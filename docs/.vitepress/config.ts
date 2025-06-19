@@ -734,7 +734,11 @@ export default {
           },
           {
             text: "一卒#004 | Windows 上使用 taskschd.msc 托管 wakapi",
-            link: "/posts/notes/BemoNote/250618/index",
+            link: "/posts/notes/OneCu/250618/index",
+          },
+          {
+            text: "一卒#005 | 自动化YouTube视频搬运至Bilibili的实现思路",
+            link: "/posts/notes/OneCu/250619/index",
           },
         ],
       },
