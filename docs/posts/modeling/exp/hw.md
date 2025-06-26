@@ -331,7 +331,7 @@ print("极小点:", optimal_x)
 # 2023级数学建模大作业
 
 ::: danger A Tip
-Vitepress解析器markdown-it不支持LaTeX数学公式的渲染，所以如果你想看的话可以来看看源码:
+~~Vitepress解析器markdown-it不支持LaTeX数学公式的渲染，~~因为太懒所以不想改数学公式，所以如果你想看的话可以来看看源码:
 
 https://github.com/Mengbooo/BemoDB/tree/main/docs/posts/modeling/exp/hw.md
 :::
