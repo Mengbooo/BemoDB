@@ -175,6 +175,7 @@ export default {
             link: "/posts/recording/mistakesOfCSS",
           },
           { text: "圆周估算猜想", link: "/posts/recording/Multiply" },
+          { text: "转载#004 | 程序员的提示工程实战手册", link: "/posts/recording/prompt-playbook/prompt-playbook" },
         ],
       },
       {
