@@ -216,8 +216,7 @@ export default {
         text: "计算机网络",
         items: [
           { text: "网络篇", link: "/posts/csnet/index" },
-          { text: "OSI七层模型简介", link: "/posts/csnet/OSI" },
-          { text: "HTTP 笔记", link: "/posts/csnet/http" },
+          { text: "NetWork#001 | 物理层", link: "/posts/csnet/physical-layer" },
         ],
       },
       {
