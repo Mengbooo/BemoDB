@@ -714,6 +714,25 @@ export default {
         ],
       },
       {
+        text: "FEE",
+        items: [
+          {
+            text: "FEE#001 | 前端工程化概述",
+            link: "/posts/FEE/index",
+          },
+          {
+            text: "lint",
+            collapsed: true,
+            items: [
+              {
+                text: "module",
+                link: "/posts/FEE/lint/module",
+              },
+            ],
+          },
+        ],
+      },
+      {
         text: "BemoNote",
         items: [
           {
