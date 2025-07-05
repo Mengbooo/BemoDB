@@ -725,16 +725,26 @@ export default {
             collapsed: true,
             items: [
               {
-                text: "module",
+                text: "FEE#002 - Lint | 模块规范",
                 link: "/posts/FEE/lint/module",
               },
               {
-                text: "code",
+                text: "FEE#003 - Lint | 代码规范",
                 link: "/posts/FEE/lint/code",
               },
               {
-                text: "git",
+                text: "FEE#004 - Lint | 提交规范",
                 link: "/posts/FEE/lint/git",
+              },
+            ],
+          },
+          {
+            text: "server",
+            collapsed: true,
+            items: [
+              {
+                text: "FEE#005 - server | 关于服务的二三事",
+                link: "/posts/FEE/server/server",
               },
             ],
           },
