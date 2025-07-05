@@ -728,6 +728,14 @@ export default {
                 text: "module",
                 link: "/posts/FEE/lint/module",
               },
+              {
+                text: "code",
+                link: "/posts/FEE/lint/code",
+              },
+              {
+                text: "git",
+                link: "/posts/FEE/lint/git",
+              },
             ],
           },
         ],
