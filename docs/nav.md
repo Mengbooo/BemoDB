@@ -100,6 +100,14 @@ const members = [
       { icon: 'rss', link: 'https://sxrekord.com/' },
     ]
   },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/87848488?v=4',
+    name: "Nihiler",
+    links: [
+      { icon: 'github', link: 'https://github.com/misa1000' },
+      { icon: 'rss', link: 'https://nihiler.cn/' },
+    ]
+  },
 ]
 </script>
 
